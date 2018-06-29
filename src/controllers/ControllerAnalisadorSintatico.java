@@ -90,7 +90,7 @@ public class ControllerAnalisadorSintatico {
             
             this.procedureStructDef();  
         
-        // Verifica se o token atual eh o primeiro de 
+        // Verifica se o token atual eh o primeiro de <FunctionDef>
         } else if(atual[1].trim().equals("function")) {
             
             this.procedureFunctionDef(); 
@@ -113,14 +113,14 @@ public class ControllerAnalisadorSintatico {
     private void procedureFunctionDef() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se eh token autual eh 'function'
+        // Verifica se o token atual eh 'function'
         if(atual[1].trim().equals("function")) {
             
             this.idTokenAtual++;
             this.procedureType();
             this.procedureDeclarator();
             String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se eh token autual eh '('
+            // Verifica se o token atual eh '('
             if(atual2[1].trim().equals("(")) {
              
                 this.idTokenAtual++;
@@ -141,24 +141,24 @@ public class ControllerAnalisadorSintatico {
     private void procedureFunctionDeflf() {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se eh token autual eh o primeiro de <ParameterList>
+        // Verifica se o token atual eh o primeiro de <ParameterList>
         if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
                 atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                 atual[0].contains("Identificador_")) {
             
             this.procedureParameterList();
-            // Verifica se eh token autual eh ')'
+            // Verifica se o token atual eh ')'
             if(atual[1].trim().equals(")")) {
                 
                 this.idTokenAtual++;
                 String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se eh token autual eh '{'
+                // Verifica se o token atual eh '{'
                 if(atual2[1].trim().equals("{")) {
                     
                     this.idTokenAtual++;
                     this.procedureStmtOrDeclarationList();
                     String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                    // Verifica se eh token autual eh '}'
+                    // Verifica se o token atual eh '}'
                     if(atual3[1].trim().equals("}")) {
 
                         this.idTokenAtual++;
@@ -175,18 +175,18 @@ public class ControllerAnalisadorSintatico {
                 // Erro
             }
             
-        // Verifica se eh token autual eh ')'
+        // Verifica se o token atual eh ')'
         } else if(atual[1].trim().equals(")")) {
             
             this.idTokenAtual++;
             String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            // Verifica se eh token autual eh '{'
+            // Verifica se o token atual eh '{'
             if(atual2[1].trim().equals("{")) {
 
                 this.idTokenAtual++;
                 this.procedureStmtOrDeclarationList();
                 String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se eh token autual eh '}'
+                // Verifica se o token atual eh '}'
                 if(atual3[1].trim().equals("}")) {
 
                     this.idTokenAtual++;
@@ -209,15 +209,121 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureProcedureDef() {
     
-        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+        // Verifica se o token atual eh 'procedure'
+        if(atual[1].trim().equals("procedure")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'Identifier'
+            if(atual2[0].contains("Identificador_")) {
+
+                this.idTokenAtual++;
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                // Verifica se o token atual eh '('
+                if(atual3[1].trim().equals("(")) {
+                    
+                    this.idTokenAtual++;
+                    this.procedureProcedureDeflf();
+                } else {
+                    
+                    // Erro
+                }                
+            } else {
+                
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }        
     }
     
+    /**
+     * <ProcedureDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' |  ')' '{' <StmtOrDeclarationList> '}' 
+     */
     private void procedureProcedureDeflf() {
         
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+        // Verifica se o token atual eh primeiro de <ParameterList>
+        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
+                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                atual[0].contains("Identificador_")) {
+            
+            this.procedureParameterList();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh ')'
+            if(atual2[1].trim().equals(")")) {
+                
+                this.idTokenAtual++;
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                // Verifica se o token atual eh '{'
+                if(atual3[1].trim().equals("{")) {
+
+                    this.idTokenAtual++;
+                    this.procedureStmtOrDeclarationList();
+                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh '}'
+                    if(atual4[1].trim().equals("}")) {
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                    }
+                } else {
+
+                    // Erro
+                }
+            } else {
+                
+                // Erro
+            }
+            
+        // Verifica se o token atual eh ')'    
+        } else if(atual[1].trim().equals(")")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh '{'
+            if(atual2[1].trim().equals("{")) {
+                
+                this.idTokenAtual++;
+                this.procedureStmtOrDeclarationList();
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                // Verifica se o token atual eh '}'
+                if(atual3[1].trim().equals("}")) {
+
+                    this.idTokenAtual++;
+                } else {
+
+                    // Erro
+                }
+            } else {
+                
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
     }
     
-    private void procedureTypedefDef() {}
-    private void procedureTypedefDeflf() {}
+    /**
+     * <TypedefDef> ::= 'typedef' <TypedefDeflf> 
+     */
+    private void procedureTypedefDef() {
+    
+        
+    }
+    
+    /**
+     * 
+     */
+    private void procedureTypedefDeflf() {
+    
+        
+    }
     
     /**
      * <VarDef> ::= 'var' '{' <DeclarationList> '}'
@@ -535,6 +641,8 @@ public class ControllerAnalisadorSintatico {
                  }
     
     }
+
+    
 
     
 
