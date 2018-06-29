@@ -865,13 +865,46 @@ public class ControllerAnalisadorSintatico {
     private void procedureUnaryOp() {}
     private void procedurePostfixOp() {}            
     private void procedurePostfixOplf() {}
-    private void procedureArgumentList() {}
-    private void procedureArgumentList1() {}
+    private void procedureArgumentList() {
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        //verifica se o token atual é o primeiro de <AssignExpr>
+        if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
+                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
+                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                atual[1].trim().equals("--")) {
+            
+                    this.procedureAssignExpr();
+                    this.procedureArgumentList1();
+        }
+    
+    
+    }
+    private void procedureArgumentList1() {
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        //verifica se o token atual é o primeiro de <AssignExpr>
+        if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
+                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
+                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                atual[1].trim().equals("--")) {
+        this.procedureAssignExpr();
+        this.procedureArgumentList1();
+        }//Concatenando com o conjuto Follow de <ArgumentList1> e verificando se faz parte do mesmo.
+            if(atual[1].trim().equals(")")){
+                this.idTokenAtual++;
+                
+                 }
+    
+    
+    }
     
     
     private void procedureType() {
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se o token é primeiro de Type
+        //verifica se o token é primeiro de <Type>
         //verifica se o token atual é 'int'
                  if(atual[1].trim().equals("int")) {
                  this.idTokenAtual++;
