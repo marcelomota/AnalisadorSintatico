@@ -1,10 +1,10 @@
 <S> ::= <GlobalDeclaration> <S1>    
 <S1> ::= <GlobalDeclaration> <S1> | 'vazio'
 <GlobalDeclaration> ::= <StartDef> | <VarDef> | <ConstDef> | <StructDef> | <FunctionDef> | <ProcedureDef> | <TypedefDef>
-<FunctionDef> ::= 'function' <Type> <Declarator> '(' <Function Def lf>
-<Function Def lf> ::= <Parameter List> ')' '{' <Stmt Or Declaration List> '}' | ')' '{' <Stmt Or Declaration List> '}' 
-<Procedure Def> ::= 'procedure' Identifier '(' <Procedure Def lf>
-<Procedure Def lf> ::= <Parameter List> ')' '{' <Stmt Or Declaration List> '}' |  ')' '{' <Stmt Or Declaration List> '}' 
+<FunctionDef> ::= 'function' <Type> <Declarator> '(' <FunctionDeflf>
+<FunctionDeflf> ::= <Parameter List> ')' '{' <StmtOrDeclarationList> '}' | ')' '{' <StmtOrDeclarationList> '}' 
+<ProcedureDef> ::= 'procedure' 'Identifier' '(' <ProcedureDeflf>
+<ProcedureDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' |  ')' '{' <StmtOrDeclarationList> '}' 
 <TypedefDef> ::= 'typedef' <TypedefDeflf>              
 <TypedefDeflf> ::= <Type> 'Identifier' ';' | <StructDef> 'Identifier' ';'
 <VarDef> ::= 'var' '{' <DeclarationList> '}'

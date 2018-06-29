@@ -1,28 +1,28 @@
 package controllers;
 
-import java.util.ArrayList;
-import models.Gramatica;
-import models.Producoes;
 import models.Token;
 
 public class ControllerAnalisadorSintatico {
           
-    private ArrayList<Producoes> gramatica;
     private String errosSintaticos;
     private Token tokens;
     private int idTokenAtual;
     
-
-    public ControllerAnalisadorSintatico(Gramatica gramatica) {
-        this.gramatica = gramatica.getGramatica();
+    public ControllerAnalisadorSintatico() {
+   
         this.errosSintaticos = "";
     }
     
+    /**
+     * Analisa sintaticamente a sequencia de tokens de forma preditiva e recursiva.
+     * @param tokens
+     * @return 
+     */
     public String analisar(Token tokens) {
         
         this.tokens = tokens;        
         this.idTokenAtual = 0;
-        //this.procedureS();
+        this.procedureS();
         if(this.idTokenAtual > this.tokens.getSize()) {
             
             // Sucesso
@@ -37,7 +37,7 @@ public class ControllerAnalisadorSintatico {
     /**
      * <S> ::= <GlobalDeclaration> <S1>   
      */
-    public void procedureS() {
+    private void procedureS() {
         
         this.procedureGlobalDeclaration();
         this.procedureS1();        
@@ -46,7 +46,7 @@ public class ControllerAnalisadorSintatico {
     /**
      * <S1> ::= <GlobalDeclaration> <S1> | 
      */
-    public void procedureS1() {
+    private void procedureS1() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh o primeiro de <GlobalDeclaration>
@@ -65,7 +65,7 @@ public class ControllerAnalisadorSintatico {
     /**
      * <GlobalDeclaration> ::= <StartDef> | <VarDef> | <ConstDef> | <StructDef> | <FunctionDef> | <ProcedureDef> | <TypedefDef>
      */
-    public void procedureGlobalDeclaration() {
+    private void procedureGlobalDeclaration() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh o primeiro de <StartDef>
@@ -105,15 +105,122 @@ public class ControllerAnalisadorSintatico {
         }
     }
     
-    public void procedureFunctionDef() {}
-    public void procedureProcedureDef() {}
-    public void procedureTypedefDef() {}
-    public void procedureTypedefDeflf() {}
+    /**
+     * <FunctionDef> ::= 'function' <Type> <Declarator> '(' <FunctionDeflf>
+     */
+    private void procedureFunctionDef() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+        // Verifica se eh token autual eh 'function'
+        if(atual[1].trim().equals("function")) {
+            
+            this.idTokenAtual++;
+            this.procedureType();
+            this.procedureDeclarator();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se eh token autual eh '('
+            if(atual2[1].trim().equals("(")) {
+             
+                this.idTokenAtual++;
+                this.procedureFunctionDeflf();
+            } else {
+              
+                // Erro
+            }            
+        } else {
+            
+            // Erro
+        }        
+    }
+    
+    /**
+     * <FunctionDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' | ')' '{' <StmtOrDeclarationList> '}' 
+     */
+    private void procedureFunctionDeflf() {
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+        // Verifica se eh token autual eh o primeiro de <ParameterList>
+        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
+                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                atual[0].contains("Identificador_")) {
+            
+            this.procedureParameterList();
+            // Verifica se eh token autual eh ')'
+            if(atual[1].trim().equals(")")) {
+                
+                this.idTokenAtual++;
+                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                // Verifica se eh token autual eh '{'
+                if(atual2[1].trim().equals("{")) {
+                    
+                    this.idTokenAtual++;
+                    this.procedureStmtOrDeclarationList();
+                    String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se eh token autual eh '}'
+                    if(atual3[1].trim().equals("}")) {
+
+                        this.idTokenAtual++;
+                    } else {
+                        
+                        // Erro
+                    }
+                } else {
+                    
+                    // Erro
+                }
+            } else {
+                
+                // Erro
+            }
+            
+        // Verifica se eh token autual eh ')'
+        } else if(atual[1].trim().equals(")")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se eh token autual eh '{'
+            if(atual2[1].trim().equals("{")) {
+
+                this.idTokenAtual++;
+                this.procedureStmtOrDeclarationList();
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                // Verifica se eh token autual eh '}'
+                if(atual3[1].trim().equals("}")) {
+
+                    this.idTokenAtual++;
+                } else {
+
+                    // Erro
+                }
+            } else {
+
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <ProcedureDef> ::= 'procedure' 'Identifier' '(' <ProcedureDefdlf>
+     */
+    private void procedureProcedureDef() {
+    
+        
+    }
+    
+    private void procedureProcedureDeflf() {
+        
+    }
+    
+    private void procedureTypedefDef() {}
+    private void procedureTypedefDeflf() {}
     
     /**
      * <VarDef> ::= 'var' '{' <DeclarationList> '}'
      */
-    public void procedureVarDef() {
+    private void procedureVarDef() {
        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
         // Verifica se eh token autual eh 'var'
@@ -145,17 +252,17 @@ public class ControllerAnalisadorSintatico {
         }
     }
     
-    public void procedureConstDef() {}
-    public void procedureStructDef() {}
-    public void procedureStructDeflf() {}
-    public void procedureParameterList() {}
-    public void procedureParameterList1() {}
-    public void procedureParameterDeclaration() {}
+    private void procedureConstDef() {}
+    private void procedureStructDef() {}
+    private void procedureStructDeflf() {}
+    private void procedureParameterList() {}
+    private void procedureParameterList1() {}
+    private void procedureParameterDeclaration() {}
     
     /**
      * <DeclarationList> ::= <Declaration> <DeclarationList1>  
      */
-    public void procedureDeclarationList() {
+    private void procedureDeclarationList() {
     
         this.procedureDeclaration();
         this.procedureDeclarationList1();
@@ -165,7 +272,7 @@ public class ControllerAnalisadorSintatico {
     /**
      * <Declaration> ::= <Type> <InitDeclaratorList> ';'
      */
-    public void procedureDeclaration() {
+    private void procedureDeclaration() {
     
         this.procedureType();
         this.procedureInitDeclaratorList();
@@ -184,7 +291,7 @@ public class ControllerAnalisadorSintatico {
     /**
      * <DeclarationList1> ::= <Declaration> <DeclarationList1> | 
      */
-    public void procedureDeclarationList1() {
+    private void procedureDeclarationList1() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh o primeiro de <Declaration>
@@ -202,18 +309,18 @@ public class ControllerAnalisadorSintatico {
     /**
      * <InitDeclaratorList> ::= <InitDeclarator> <InitDeclaratorList1>
      */
-    public void procedureInitDeclaratorList() {
+    private void procedureInitDeclaratorList() {
             
         this.procedureInitDeclarator();
         this.procedureInitDeclaratorList1();
     } 
     
-    public void procedureInitDeclaratorList1() {}
+    private void procedureInitDeclaratorList1() {}
     
     /**
      * <InitDeclarator> ::= <Declarator> <InitDeclaratorlf>
      */
-    public void procedureInitDeclarator() {
+    private void procedureInitDeclarator() {
     
         this.procedureDeclarator();
         this.procedureInitDeclaratorlf();
@@ -222,29 +329,29 @@ public class ControllerAnalisadorSintatico {
     /**
      * 
      */
-    public void procedureInitDeclaratorlf() {
+    private void procedureInitDeclaratorlf() {
     
         
     }
     
-    public void procedureInitializer() {}
-    public void procedureInitializerlf() {}          
-    public void procedureInitializerList() {}               
-    public void procedureInitializerList1() {}
+    private void procedureInitializer() {}
+    private void procedureInitializerlf() {}          
+    private void procedureInitializerList() {}               
+    private void procedureInitializerList1() {}
     
     /**
      * <Declarator> ::= 'Identifier' <Declarator1> 
      */
-    public void procedureDeclarator() {
+    private void procedureDeclarator() {
     
         
     } 
     
-    public void procedureDeclarator1() {}
-    public void procedureDeclarator1lf() {}
-    public void procedureStmt() {}
+    private void procedureDeclarator1() {}
+    private void procedureDeclarator1lf() {}
+    private void procedureStmt() {}
     
-    public void procedureStmtOrDeclarationList() {
+    private void procedureStmtOrDeclarationList() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         
@@ -269,12 +376,12 @@ public class ControllerAnalisadorSintatico {
         }
     } 
     
-    public void procedureStmtOrDeclarationList1() {}
+    private void procedureStmtOrDeclarationList1() {}
     
     /**
      * <StartDef> ::= 'start' '(' ')' '{' <StmtOrDeclarationList> '}'
      */
-    public void procedureStartDef() {
+    private void procedureStartDef() {
             
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
         // Verifica se o token atual eh 'start'
@@ -327,45 +434,49 @@ public class ControllerAnalisadorSintatico {
         }        
     }
     
-    public void procedurePrintStmt() {}             
-    public void procedureScanStmt() {}
-    public void procedureIterationStmt() {}
-    public void procedureIfStmt() {}    
-    public void procedureIfStmtlf() {}
-    public void procedureReturnStmt() {}
-    public void procedureCompoundStmt() {}           
-    public void procedureCompoundStmtlf() {}
-    public void procedureExprStmt() {}
-    public void procedureExpr() {}   
-    public void procedureExpr1() {}
-    public void procedureAssignExpr() {}                 
-    public void procedureAssignExpr1() {}
-    public void procedureCondExpr() {}          
-    public void procedureLogicalOrExpr() {}     
-    public void procedureLogicalOrExpr1() {}
-    public void procedureLogicalAndExpr() {}
-    public void procedureLogicalAndExpr1() {}
-    public void procedureEqualExpr() {}
-    public void procedureEqualExpr1() {}
-    public void procedureRelationalExpr() {}          
-    public void procedureRelationalExpr1() {}
-    public void procedureAdditiveExpr() {}         
-    public void procedureAdditiveExpr1() {}
-    public void procedureMultExpr() {}          
-    public void procedureMultExpr1() {}
-    public void procedureUnaryExpr() {}             
-    public void procedurePostfixExpr() {}           
-    public void procedurePostfixExpr1() {}
-    public void procedurePrimaryExpr() {}
-    public void procedureEqualOp() {}
-    public void procedureRelationalOp() {}      
-    public void procedureAdditiveOp() {}   
-    public void procedureMultOp() {}        
-    public void procedureUnaryOp() {}
-    public void procedurePostfixOp() {}            
-    public void procedurePostfixOplf() {}
-    public void procedureArgumentList() {}
-    public void procedureArgumentList1() {}
-    public void procedureType() {}
+    private void procedurePrintStmt() {}             
+    private void procedureScanStmt() {}
+    private void procedureIterationStmt() {}
+    private void procedureIfStmt() {}    
+    private void procedureIfStmtlf() {}
+    private void procedureReturnStmt() {}
+    private void procedureCompoundStmt() {}           
+    private void procedureCompoundStmtlf() {}
+    private void procedureExprStmt() {}
+    private void procedureExpr() {}   
+    private void procedureExpr1() {}
+    private void procedureAssignExpr() {}                 
+    private void procedureAssignExpr1() {}
+    private void procedureCondExpr() {}          
+    private void procedureLogicalOrExpr() {}     
+    private void procedureLogicalOrExpr1() {}
+    private void procedureLogicalAndExpr() {}
+    private void procedureLogicalAndExpr1() {}
+    private void procedureEqualExpr() {}
+    private void procedureEqualExpr1() {}
+    private void procedureRelationalExpr() {}          
+    private void procedureRelationalExpr1() {}
+    private void procedureAdditiveExpr() {}         
+    private void procedureAdditiveExpr1() {}
+    private void procedureMultExpr() {}          
+    private void procedureMultExpr1() {}
+    private void procedureUnaryExpr() {}             
+    private void procedurePostfixExpr() {}           
+    private void procedurePostfixExpr1() {}
+    private void procedurePrimaryExpr() {}
+    private void procedureEqualOp() {}
+    private void procedureRelationalOp() {}      
+    private void procedureAdditiveOp() {}   
+    private void procedureMultOp() {}        
+    private void procedureUnaryOp() {}
+    private void procedurePostfixOp() {}            
+    private void procedurePostfixOplf() {}
+    private void procedureArgumentList() {}
+    private void procedureArgumentList1() {}
+    private void procedureType() {}
+
+    
+
+    
       
 }
