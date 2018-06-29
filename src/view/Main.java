@@ -17,7 +17,7 @@ public class Main {
         
         ControllerAnalisadorLexico lexico = new ControllerAnalisadorLexico();
         Gramatica gramatica = new Gramatica(ma.carregarGramatica());
-        ControllerAnalisadorSintatico sintatico = new ControllerAnalisadorSintatico(gramatica);
+        ControllerAnalisadorSintatico sintatico = new ControllerAnalisadorSintatico();
        
         // Obtem o nome do(s) arquivo(s).
         String[] arquivos = ma.getArquivos();
