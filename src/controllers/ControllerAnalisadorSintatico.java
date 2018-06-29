@@ -867,7 +867,53 @@ public class ControllerAnalisadorSintatico {
     private void procedurePostfixOplf() {}
     private void procedureArgumentList() {}
     private void procedureArgumentList1() {}
-    private void procedureType() {}
+    
+    
+    private void procedureType() {
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        //verifica se o token é primeiro de Type
+        //verifica se o token atual é 'int'
+                 if(atual[1].trim().equals("int")) {
+                 this.idTokenAtual++;
+           
+                 String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                          //verifica se o token atual é 'string'
+                          if(atual2[1].trim().equals("string")) {
+                          this.idTokenAtual++;
+                      
+                          String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                   //verifica se o token atual é 'float'
+                                   if(atual3[1].trim().equals("float")) {
+                                   this.idTokenAtual++;
+                              
+                                   String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                            //verifica se o token atual é 'bool'
+                                            if(atual4[1].trim().equals("bool")) {
+                                            this.idTokenAtual++;
+                              
+                                            String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                                     //verifica se o token atual é identifier
+                                                     if(atual5[1].trim().equals("identifier")) {
+                                                     this.idTokenAtual++;
+                                                     } else  {
+                                                            
+                                                     }
+                                       
+                                            } else  {
+                                            
+                                            }
+                                    }else   {
+                                    
+                                    }
+                     
+                          }else   {
+                          
+                          }
+                 }else  {
+                 
+                 }
+    
+    }
 
     
 
