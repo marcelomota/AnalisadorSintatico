@@ -29,6 +29,8 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             // falha
+            String msg = "Não foi possivel analisar sintaticamente essse arquivo";
+            return msg;
         }
         
         return this.errosSintaticos;
@@ -518,24 +520,37 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             // Erro                            
+                            String[] atualAux = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                            String linha = atualAux[2].replaceAll(">", " ");
+                            this.errosSintaticos += "Erro - '}' esperado na linha "+linha.trim()+".";
                         }
                     } else {
                         
-                        // Erro                        
+                        // Erro
+                        String[] atualAux = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                        String linha = atualAux[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - '{' esperado na linha "+linha.trim()+".";
                     }
                 } else {
                     
-                    // Erro                    
+                    // Erro
+                    String[] atualAux = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    String linha = atualAux[2].replaceAll(">", " ");
+                    this.errosSintaticos += "Erro - ')' esperado na linha "+linha.trim()+".";
+                    
                 }
             } else {
                 
-                // Erro                
+                // Erro  
+                String[] atualAux = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                String linha = atualAux[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - '(' esperado na linha "+linha.trim()+".";
             }
         } else {
          
             // Erro
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            String linha = atual2[2].replaceAll(">", " ");
+            String[] atualAux = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            String linha = atualAux[2].replaceAll(">", " ");
             this.errosSintaticos += "Erro - 'Start' esperado na linha "+linha.trim()+".";
         }        
     }
