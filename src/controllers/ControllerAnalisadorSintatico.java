@@ -29,6 +29,8 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             // falha
+            String msg = "Não foi possivel analisar sintaticamente essse arquivo";
+            return msg;
         }
         
         return this.errosSintaticos;
