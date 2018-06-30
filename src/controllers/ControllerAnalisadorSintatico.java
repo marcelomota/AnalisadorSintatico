@@ -696,47 +696,178 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * 
+     * <Initializerlf> ::= '}' | ',' '}'    
      */
-    private void procedureInitializerlf() {}
+    private void procedureInitializerlf() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh '}'
+        if(atual[1].trim().equals("}")) {
+            
+            this.idTokenAtual++;   
+            
+        // Verifica se o token atual eh ','    
+        } else if(atual[0].contains("Delimitador") && atual.length == 3) {
+//************************************************************************************** VERIFICAR **************************
+            this.idTokenAtual++; 
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '}'
+            if(atual2[1].trim().equals("}")) {
+
+                this.idTokenAtual++;    
+            } 
+        } else {
+            
+            // Erro
+        }
+    }
     
     /**
-     * 
+     * <InitializerList> ::= <Initializer> <InitializerList1>    
      */
-    private void procedureInitializerList() {}
+    private void procedureInitializerList() {
+    
+        this.procedureInitializer();
+        this.procedureInitializerList1();
+    }
     
     /**
-     * 
+     * <InitializerList1> ::= ',' <Initializer> <InitializerList1> | 'vazio'
      */
-    private void procedureInitializerList1() {}
+    private void procedureInitializerList1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh ','
+        if(atual[0].contains("Delimitador") && atual.length == 3) {
+//************************************************************************************** VERIFICAR **************************
+            this.idTokenAtual++;
+        }
+        
+        // Vazio
+    }
     
     /**
      * <Declarator> ::= 'Identifier' <Declarator1> 
      */
     private void procedureDeclarator() {
     
-        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh '}'
+        if(atual[0].contains("Indetificador_")) {
+            
+            this.idTokenAtual++;
+            this.procedureDeclarator1();
+        } else {
+            
+            // Erro
+        }
     } 
     
     /**
-     * 
+     * <Declarator1> ::= '[' <Declarator1lf> | 'vazio'
      */
-    private void procedureDeclarator1() {}
-    
-    /**
-     * 
-     */
-    private void procedureDeclarator1lf() {}
-    
-    /**
-     * 
-     */
-    private void procedureStmt() {}
-    
-    private void procedureStmtOrDeclarationList() {
+    private void procedureDeclarator1() {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh '['
+        if(atual[1].trim().equals("[")) {
+            
+            this.idTokenAtual++;
+            this.procedureDeclarator1lf();
+        }
         
+        // Vazio
+    }
+    
+    /**
+     * <Declarator1lf> ::= <CondExpr> ']' <Declarator1> | ']' <Declarator1>
+     */
+    private void procedureDeclarator1lf() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh primeiro de <CondExpr>
+        if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
+                atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
+                atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
+                atual[0].contains("Identificador_")) {
+        
+                this.procedureCondExpr();
+                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                // Verifica se o token atual eh ']'
+                if(atual2[1].trim().equals("]")) {
+
+                    this.idTokenAtual++;
+                    this.procedureDeclarator1();
+                } else {
+
+                    // Erro
+                }
+            
+        // Verifica se o token atual eh ']'
+        } else if(atual[1].trim().equals("]")) {
+            
+            this.idTokenAtual++;
+            this.procedureDeclarator1();            
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <Stmt> ::= <IterationStmt> | <ExprStmt> | <CompoundStmt>  | <PrintStmt> | <ScanStmt> | <IfStmt> | <ReturnStmt>
+     */
+    private void procedureStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh primeiro de <IterationStmt>
+        if(atual[1].trim().equals("while")) {
+            
+            this.procedureIterationStmt();
+            
+        // Verifica se o token atual eh primeiro de <ExprStmt>    
+        } else if(atual[1].trim().equals("false") || atual[1].trim().equals(";") ||
+                atual[1].trim().equals("true") || atual[1].trim().equals("(") ||
+                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                atual[1].trim().equals("--") || atual[0].contains("Numero") ||
+                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+            
+            this.procedureExprStmt();
+            
+        // Verifica se o token atual eh primeiro de <CompoundStmt>      
+        } else if(atual[1].trim().equals("{")) {
+            
+            this.procedureCompoundStmt();
+            
+        // Verifica se o token atual eh primeiro de <PrintStmt>      
+        } else if(atual[1].trim().equals("print")) {
+            
+            this.procedurePrintStmt();
+            
+        // Verifica se o token atual eh primeiro de <ScanStmt>      
+        } else if(atual[1].trim().equals("scan")) {
+            
+            this.procedureScanStmt();
+            
+        // Verifica se o token atual eh primeiro de <IfStmt>      
+        } else if(atual[1].trim().equals("if")) {
+            
+            this.procedureIfStmt();
+            
+        // Verifica se o token atual eh primeiro de <ReturnStmt>      
+        } else if(atual[1].trim().equals("return")) {
+            
+            this.procedureReturnStmt();
+        }
+    }
+    
+    /**
+     * <StmtOrDeclarationList> ::= <Stmt> <StmtOrDeclarationList1> | <VarDef> <StmtOrDeclarationList1>   
+     */
+    private void procedureStmtOrDeclarationList() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
         // Verifica se o token atual eh primeiro de <Stmt>
         if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
                 || atual[1].trim().equals("return") || atual[1].trim().equals("print")
@@ -758,7 +889,34 @@ public class ControllerAnalisadorSintatico {
         }
     } 
     
-    private void procedureStmtOrDeclarationList1() {}
+    /**
+     * <StmtOrDeclarationList1> ::= <Stmt> <StmtOrDeclarationList1> | <VarDef> <StmtOrDeclarationList1> |
+     */
+    private void procedureStmtOrDeclarationList1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+        // Verifica se o token atual eh primeiro de <Stmt>
+        if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
+                || atual[1].trim().equals("return") || atual[1].trim().equals("print")
+                || atual[1].trim().equals("!") || atual[1].trim().equals("++")
+                || atual[1].trim().equals("--") || atual[0].contains("Numero")
+                || atual[1].trim().equals("if") || atual[1].trim().equals("while")
+                || atual[1].trim().equals(";") || atual[1].trim().equals("{")
+                || atual[1].trim().equals("scan") || atual[1].trim().equals("true")
+                || atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+            
+            this.procedureStmt();
+            this.procedureStmtOrDeclarationList1();
+        
+        // Verifica se o token atual eh primeiro de <VarDef>
+        } else if(atual[1].trim().equals("var")) {
+            
+            this.procedureVarDef(); 
+            this.procedureStmtOrDeclarationList1(); 
+        } 
+        
+        // Vazio    
+    }
     
     /**
      * <StartDef> ::= 'start' '(' ')' '{' <StmtOrDeclarationList> '}'
@@ -828,284 +986,806 @@ public class ControllerAnalisadorSintatico {
         }        
     }
     
-    private void procedurePrintStmt() {}             
-    private void procedureScanStmt() {}
-    private void procedureIterationStmt() {}
-    private void procedureIfStmt() {}    
-    private void procedureIfStmtlf() {}
-    private void procedureReturnStmt() {}
-    private void procedureCompoundStmt() {}           
-    private void procedureCompoundStmtlf() {}
-    private void procedureExprStmt() {}
-    private void procedureExpr() {}   
-    private void procedureExpr1() {}
-    private void procedureAssignExpr() {}                 
-    private void procedureAssignExpr1() {}
-    private void procedureCondExpr() {}          
-    private void procedureLogicalOrExpr() {}     
-    private void procedureLogicalOrExpr1() {}
-    private void procedureLogicalAndExpr() {}
-    private void procedureLogicalAndExpr1() {}
-    private void procedureEqualExpr() {}
-    private void procedureEqualExpr1() {}
-    private void procedureRelationalExpr() {}          
-    private void procedureRelationalExpr1() {}
-    private void procedureAdditiveExpr() {}         
-    private void procedureAdditiveExpr1() {}
-    private void procedureMultExpr() {}          
-    private void procedureMultExpr1() {}
-    private void procedureUnaryExpr() {}             
+    /**
+     * <PrintStmt> ::= 'print' '(' <ArgumentList> ')' ';'    
+     */
+    private void procedurePrintStmt() {
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'print'
+        if(atual[1].trim().equals("print")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '('
+            if(atual2[1].trim().equals("(")) {
+
+                this.idTokenAtual++;
+                this.procedureArgumentList();
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                // Verifica se o token atual eh ')'
+                if(atual3[1].trim().equals(")")) {
+                    
+                    this.idTokenAtual++;
+                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh ';'
+                    if(atual4[1].trim().equals(";")) {
+                        
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                    }
+                } else {
+
+                    // Erro
+                }
+            } else {
+
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    } 
+    
+    /**
+     * <ScanStmt> ::= 'scan' '(' <ArgumentList> ')' ';'
+     */
+    private void procedureScanStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'scan'
+        if(atual[1].trim().equals("scan")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '('
+            if(atual2[1].trim().equals("(")) {
+
+                this.idTokenAtual++;
+                this.procedureArgumentList();
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                // Verifica se o token atual eh ')'
+                if(atual3[1].trim().equals(")")) {
+                    
+                    this.idTokenAtual++;
+                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh ';'
+                    if(atual4[1].trim().equals(";")) {
+                        
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                    }
+                } else {
+
+                    // Erro
+                }
+            } else {
+
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <IterationStmt> ::= 'while' '(' <Expr> ')' <Stmt>
+     */
+    private void procedureIterationStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'while'
+        if(atual[1].trim().equals("while")) {
+            
+            this.idTokenAtual++;
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '('
+            if(atual2[1].trim().equals("(")) {
+
+                this.idTokenAtual++;
+                this.procedureExpr();
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                // Verifica se o token atual eh ')'
+                if(atual3[1].trim().equals(")")) {
+                    
+                    this.idTokenAtual++;
+                    this.procedureStmt();
+                } else {
+
+                    // Erro
+                }
+            } else {
+
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <IfStmt> ::= 'if' <Expr> 'then' <Stmt> <IfStmtlf>  
+     */
+    private void procedureIfStmt() {
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'while'
+        if(atual[1].trim().equals("if")) {
+            
+            this.idTokenAtual++;
+            this.procedureExpr();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'then'
+            if(atual2[1].trim().equals("then")) {
+                
+                this.idTokenAtual++;
+                this.procedureStmt();
+                this.procedureIfStmtlf();
+            } else {
+                
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }    
+    
+    /**
+     * <IfStmtlf> ::= 'else' <Stmt> |
+     */
+    private void procedureIfStmtlf() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'else'
+        if(atual[1].trim().equals("else")) {
+            
+            this.idTokenAtual++;
+            this.procedureStmt();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <ReturnStmt> ::= 'return' <Expr> ';'
+     */
+    private void procedureReturnStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh 'return'
+        if(atual[1].trim().equals("return")) {
+            
+            this.idTokenAtual++;
+            this.procedureExpr();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh ';'
+            if(atual2[1].trim().equals(";")) {
+
+                this.idTokenAtual++;
+            } else {
+                
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <CompoundStmt> ::= '{' <CompoundStmtlf> 
+     */
+    private void procedureCompoundStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh '{'
+        if(atual[1].trim().equals("{")) {
+            
+            this.idTokenAtual++;
+            this.procedureCompoundStmtlf();
+        } else {
+            
+            // Erro
+        }        
+    } 
+    
+    /**
+     * <CompoundStmtlf> ::= '}' | <StmtOrDeclarationList> '}'
+     */
+    private void procedureCompoundStmtlf() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh '}'
+        if(atual[1].trim().equals("}")) {
+            
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh primeiro de <StmtOrDeclarationList>  
+        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("(") ||
+                atual[1].trim().equals("return") || atual[1].trim().equals("print") ||
+                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                atual[1].trim().equals("--") || atual[1].trim().equals("var") ||
+                atual[1].trim().equals("if") || atual[1].trim().equals("while") ||
+                atual[1].trim().equals(";") || atual[1].trim().equals("{") || 
+                atual[1].trim().equals("scan") || atual[1].trim().equals("true") ||
+                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+                   
+                this.procedureStmtOrDeclarationList();
+                    
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '}'
+            if(atual2[1].trim().equals("}")) {
+
+                this.idTokenAtual++;
+            } else {
+                
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <ExprStmt> ::= ';' | <Expr> ';'
+     */
+    private void procedureExprStmt() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh ';'
+        if(atual[1].trim().equals(";")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh primeiro de <Expr>    
+        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
+                atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
+                atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
+                atual[0].contains("Identificador_")) {
+                    
+            this.procedureExpr();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh ';'
+            if(atual2[1].trim().equals(";")) {
+
+                this.idTokenAtual++;
+            } else {
+
+                // Erro
+            }
+        } else {
+            
+            // Erro
+        }
+    }
+    
+    /**
+     * <Expr> ::= <AssignExpr> <Expr1>     
+     */
+    private void procedureExpr() {
+    
+        this.procedureAssignExpr();
+        this.procedureExpr1();
+    }   
+    
+    /**
+     * <Expr1> ::= ',' <AssignExpr> <Expr1> | 
+     */
+    private void procedureExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh ','
+        if(atual[0].contains("Delimitador") && atual.length == 3) {
+//************************************************************************************** VERIFICAR **************************
+            this.idTokenAtual++;
+            this.procedureAssignExpr();
+            this.procedureExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <AssignExpr> ::= <CondExpr> <AssignExpr1>  
+     */
+    private void procedureAssignExpr() {
+    
+        this.procedureCondExpr();
+        this.procedureAssignExpr1();
+    }    
+    
+    /**
+     * <AssignExpr1> ::= '=' <CondExpr> <AssignExpr1> | 
+     */
+    private void procedureAssignExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh '='
+        if(atual[1].trim().equals("=")) {
+            
+            this.idTokenAtual++;
+            this.procedureCondExpr();
+            this.procedureAssignExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <CondExpr> ::= <LogicalOrExpr>   
+     */
+    private void procedureCondExpr() {
+    
+        this.procedureLogicalOrExpr();
+    }    
+    
+    /**
+     * <LogicalOrExpr> ::= <LogicalAndExpr> <LogicalOrExpr1>  
+     */
+    private void procedureLogicalOrExpr() {
+    
+        this.procedureLogicalAndExpr();
+        this.procedureLogicalOrExpr1();
+    }   
+    
+    /**
+     * <LogicalOrExpr1> ::= '||' <LogicalAndExpr> <LogicalOrExpr1> |
+     */
+    private void procedureLogicalOrExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh '||'
+        if(atual[1].trim().equals("||")) {
+            
+            this.procedureLogicalAndExpr();
+            this.procedureLogicalOrExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <LogicalAndExpr> ::= <EqualExpr> <LogicalAndExpr1>
+     */
+    private void procedureLogicalAndExpr() {
+    
+        this.procedureEqualExpr();
+        this.procedureLogicalAndExpr1();
+    }
+    
+    /**
+     * <LogicalAndExpr1> ::= '&&' <EqualExpr> <LogicalAndExpr1> | 
+     */
+    private void procedureLogicalAndExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh '&&'
+        if(atual[1].trim().equals("&&")) {
+            
+            this.procedureEqualExpr();
+            this.procedureLogicalAndExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <EqualExpr> ::= <RelationalExpr> <EqualExpr1>
+     */
+    private void procedureEqualExpr() {
+    
+        this.procedureRelationalExpr();
+        this.procedureEqualExpr1();
+    }
+    
+    /**
+     * <EqualExpr1> ::= <EqualOp> <RelationalExpr> <EqualExpr1> | 
+     */
+    private void procedureEqualExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh primeiro de <EqualOp>
+        if(atual[1].trim().equals("!=") || atual[1].trim().equals("==")) {
+            
+            this.procedureEqualOp();
+            this.procedureRelationalExpr();
+            this.procedureEqualExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <RelationalExpr> ::= <AdditiveExpr> <RelationalExpr1>  
+     */
+    private void procedureRelationalExpr() {
+    
+        this.procedureAdditiveExpr();
+        this.procedureRelationalExpr1();
+    } 
+    
+    /**
+     * <RelationalExpr1> ::= <RelationalOp> <AdditiveExpr> <RelationalExpr1> | 
+     */
+    private void procedureRelationalExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh primeiro de <RelationalOp>
+        if(atual[1].trim().equals("<") || atual[1].trim().equals("<=") ||
+                atual[1].trim().equals(">") || atual[1].trim().equals(">=")) {
+            
+            this.procedureRelationalOp();
+            this.procedureAdditiveExpr();
+            this.procedureRelationalExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <AdditiveExpr> ::= <MultExpr> <AdditiveExpr1>    
+     */
+    private void procedureAdditiveExpr() {
+    
+        this.procedureMultExpr();
+        this.procedureAdditiveExpr1();
+    }  
+    
+    /**
+     * <AdditiveExpr1> ::= <AdditiveOp> <MultExpr> <AdditiveExpr1> | 
+     */
+    private void procedureAdditiveExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh primeiro de <AdditiveOp>
+        if(atual[1].trim().equals("-") || atual[1].trim().equals("+")) {
+            
+            this.procedureAdditiveOp();
+            this.procedureMultExpr();
+            this.procedureAdditiveExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <MultExpr> ::= <UnaryExpr> <MultExpr1>  
+     */
+    private void procedureMultExpr() {
+        
+        this.procedureUnaryExpr();
+        this.procedureMultExpr1();
+    } 
+    
+    /**
+     * <MultExpr1> ::= <MultOp> <UnaryExpr> <MultExpr1> | 
+     */
+    private void procedureMultExpr1() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh primeiro de <MultOp>
+        if(atual[1].trim().equals("*") || atual[1].trim().equals("/")) {
+            
+            this.procedureMultOp();
+            this.procedureUnaryExpr();
+            this.procedureMultExpr1();
+        }
+        
+        // Vazio
+    }
+    
+    /**
+     * <UnaryExpr> ::= <UnaryOp> <UnaryExpr> | <PostfixExpr> 
+     */
+    private void procedureUnaryExpr() {
+    
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+        // Verifica se o token atual eh primeiro de <UnaryOp>
+        if(atual[1].trim().equals("!") || atual[1].trim().equals("++") || atual[1].trim().equals("--")) {
+            
+            this.procedureUnaryOp();
+            this.procedureUnaryExpr();
+            
+        // Verifica se o token atual eh primeiro de <PostfixExpr>    
+        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                atual[1].trim().equals("(") || atual[0].contains("Numero") ||
+                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+                        
+            this.procedurePostfixExpr();
+        }
+    }   
+    
     /**
      * <PostfixExpr> ::= <PrimaryExpr> <PostfixExpr1>
      */
     private void procedurePostfixExpr() {
-            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            //verifica se o token atual é primeiro de <PrimaryExpr>
-            if(atual[0].contains("Numero")||atual[0].contains("Cadeia_de_Caracteres")||atual[0].contains("Identificador_")
-               ||atual[1].trim().equals("false")||atual[1].trim().equals("true")||atual[1].trim().equals("(")){
-            this.procedurePrimaryExpr();
-            this.procedurePostfixExpr1();
-            }
-             else{
-            
-            }
         
+        this.procedurePrimaryExpr();
+        this.procedurePostfixExpr1();             
     }           
     
     /**
-     * <PostfixExpr1> ::= <PostfixOp> <PostfixExpr1> | 'vazio'
+     * <PostfixExpr1> ::= <PostfixOp> <PostfixExpr1> |
      */
     private void procedurePostfixExpr1() {
-                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se está no primeiro de <PostfixOp>
-                if(atual[1].trim().equals("[")||atual[1].trim().equals("(")||
-                   atual[1].trim().equals("++")||atual[1].trim().equals("--")||atual[1].trim().equals(".")){
-                this.procedurePostfixOp();
-                this.procedurePostfixExpr1();
-                }//verifica se faz parte do conjunto follow de <PostfixExpr1>
-                if(atual[1].trim().equals("-")||atual[1].trim().equals("+")||atual[1].trim().equals("then")||atual[1].trim().equals("*")
-                        ||atual[1].trim().equals(")")||atual[1].trim().equals("<=")||atual[1].trim().equals("||")||atual[1].trim().equals("==")
-                        ||atual[1].trim().equals("&&")||atual[1].trim().equals(">")||atual[1].trim().equals("=")||atual[1].trim().equals("]")
-                        ||atual[1].trim().equals("}")||atual[1].trim().equals("<")||atual[1].trim().equals("!=")||atual[1].trim().equals(">=")
-                        ||atual[1].trim().equals(";")||atual[1].trim().equals("/")){
-                this.idTokenAtual++;
-                }else{
                 
-                }//verifica se o token atual é igual a ','
-                if(atual[0].contains("Delimitador") && atual.length==3){
-                this.idTokenAtual++;
-                }
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        //verifica se está no primeiro de <PostfixOp>
+        if(atual[1].trim().equals("[") || atual[1].trim().equals("(") ||
+           atual[1].trim().equals("++" )|| atual[1].trim().equals("--") ||
+           atual[1].trim().equals(".")){
+            
+            this.procedurePostfixOp();
+            this.procedurePostfixExpr1();
+        }
+        
+        // Vazio
     }
+    
     /**
      * <PrimaryExpr> ::= 'Identifier' | 'Number' | 'Literal' | 'true' | 'false' | '(' <Expr> ')' 
      */
     private void procedurePrimaryExpr() {
-                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é 'Identificador_'
-                if(atual[0].contains("Identificador_")){
-                this.idTokenAtual++;
-                } else{
+        
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh 'Identifier'
+        if(atual[0].contains("Identificador_")){
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh 'Number'    
+        } else if(atual[0].contains("Numero")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh 'Literal'    
+        } else if(atual[0].contains("Cadeia_de_Caracteres")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh 'true'    
+        } else if(atual[1].trim().equals("true")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh 'false'    
+        } else if(atual[1].trim().equals("false")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh '('    
+        } else if(atual[1].trim().equals("(")) {
+            
+            this.idTokenAtual++;
+            this.procedureExpr();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh ')'
+            if(atual2[1].trim().equals(")")) {
                 
-                }//verifica se o atual é 'Numero'
-                if(atual[0].contains("Numero")){
                 this.idTokenAtual++;
-                } else{
+            } else {
                 
-                }//verifica se o token atual é 'Cadeia_de_Caracteres'
-                if(atual[0].contains("Cadeia_de_Caracteres")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é 'true'
-                if(atual[1].trim().equals("true")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o token atual é 'false'
-                if(atual[1].trim().equals("false")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '('
-                if(atual[1].trim().equals("(")){
-                this.idTokenAtual++;
-                this.procedureExpr();
-                //verifica se o token é igual a ')'
-                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                if(atual2[1].trim().equals(")")){
-                this.idTokenAtual++;
-                } else{
-                
-                }
-                } else{
-                
-                } 
+                // Erro
+            }            
+        } else {
+            
+            // Erro
+        }
     }
+    
     /**
      * <EqualOp> ::= '==' | '!='
      */
     private void procedureEqualOp() {
-            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '=='
-                if(atual[1].trim().equals("==")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é !=
-                if(atual[1].trim().equals("!=")){
-                this.idTokenAtual++;
-                } else{
-                
-                }
+            
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual eh '=='
+        if(atual[1].trim().equals("==")){
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual é '!='    
+        } else if(atual[1].trim().equals("!=")){
+            
+            this.idTokenAtual++;
+        } else{
+
+            // Erro
+        }
     }
+    
     /**
      * <RelationalOp> ::= '<' | '>' | '<=' | '>='       
      */
     private void procedureRelationalOp() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '<'
-                if(atual[1].trim().equals("<")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '>'
-                if(atual[1].trim().equals(">")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '<='
-                if(atual[1].trim().equals("<=")){
-                this.idTokenAtual++;
-                }else{
-                
-                }//verifica se o atual é '>='
-                if(atual[1].trim().equals(">=")){
-                this.idTokenAtual++;
-                }
+        // Verifica se o token atual eh '<'
+        if(atual[1].trim().equals("<")){
+        
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh '>'    
+        } else if(atual[1].trim().equals(">")){
+        
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh '<='    
+        } else if(atual[1].trim().equals("<=")){
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh '>='    
+        } else if(atual[1].trim().equals(">=")){
+            
+            this.idTokenAtual++;
+        } else {
+            
+            // Erro
+        }
     }      
+    
     /**
      * <AdditiveOp> ::= '+' | '-'
      */
     private void procedureAdditiveOp() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '+'
-                if(atual[1].trim().equals("+")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é -
-                if(atual[1].trim().equals("-")){
-                this.idTokenAtual++;
-                } else{
-                
-                }
+        // Verifica se o token atual eh '+'
+        if(atual[1].trim().equals("+")){
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh '-'    
+        } else if(atual[1].trim().equals("-")){
+            
+            this.idTokenAtual++;
+            
+        } else{
+
+            // Erro
+        }
     }   
+    
     /**
      * <MultOp> ::= '*' | '/'
      */
     private void procedureMultOp() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '*'
-                if(atual[1].trim().equals("*")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '/'
-                if(atual[1].trim().equals("/")){
-                this.idTokenAtual++;
-                } else{
-                
-                }
+        // Verifica se o token atual eh '*'
+        if(atual[1].trim().equals("*")){
+            
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh '/'
+        } else if(atual[1].trim().equals("/")){
+            
+            this.idTokenAtual++;
+        
+        } else{
+            
+            // Erro
+        }
     }        
     /**
      * <UnaryOp> ::= '++' | '--' | '!'
      */
     private void procedureUnaryOp() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '++'
-                if(atual[1].trim().equals("++")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é --
-                if(atual[1].trim().equals("--")){
-                this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '!'
-                if(atual[1].trim().equals("!")){
-                this.idTokenAtual++;
-                }
+        // Verifica se o token atual eh '++'
+        if(atual[1].trim().equals("++")){
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh '--'    
+        } else if(atual[1].trim().equals("--")){
+            
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh '!'    
+        } else if(atual[1].trim().equals("!")){
+            
+            this.idTokenAtual++;
+        } else {
+            
+            // Erro
+        }
     }
+    
     /**
      * <PostfixOp> ::= '++' | '--' | '[' <Expr> ']' | '(' <PostfixOplf> | '.' 'Identifier'              
      */
     private void procedurePostfixOp() {
-                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                //verifica se o token atual é '++'
-                if(atual[1].trim().equals("++")){
+                
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        // Verifica se o token atual é '++'
+        if(atual[1].trim().equals("++")){
+            
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual é '--'    
+        } else if(atual[1].trim().equals("--")){
+        
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual é '['    
+        } else if(atual[1].trim().equals("[")){
+            
+            this.idTokenAtual++;
+            this.procedureExpr();
+            // Verifica se o token atual é ']'
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            if(atual2[1].trim().equals("]")){
+                
                 this.idTokenAtual++;
-                } else{
+            } else {
                 
-                }//verifica se o atual é --
-                if(atual[1].trim().equals("--")){
+                // Erro
+            }
+        } else if(atual[1].trim().equals("(")){
+            
+            this.idTokenAtual++;
+            this.procedurePostfixOplf();
+            
+        } else if(atual[1].trim().equals(".")){
+            
+            this.idTokenAtual++;
+            // Verifica se o token atual é um 'Identifier'
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            if(atual2[0].contains("Identificador_")){
+                
                 this.idTokenAtual++;
-                } else{
-                
-                }//verifica se o atual é '['
-                if(atual[1].trim().equals("[")){
-                    this.idTokenAtual++;
-                    this.procedureExpr();
-                    //verifica se o token atual é ']'
-                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                    if(atual2[1].trim().equals("]")){
-                    this.idTokenAtual++;
-                    }
-                }//verifica se o token atual é '('
-                if(atual[1].trim().equals("(")){
-                    this.idTokenAtual++;
-                    this.procedurePostfixOplf();
-                } else{
-                
-                } //verifica se o token atual é '.'
-                if(atual[1].trim().equals(".")){
-                this.idTokenAtual++;
-                //verifica se o token atual é um Identificador
-                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                if(atual2[0].contains("Identificador_")){
-                    this.idTokenAtual++;
-                }
-                }else {
-                
-                }
+            }
+        } else {
+
+            // Erro
+        }
     } 
+    
     /**
      * <PostfixOplf> ::= ')' | <ArgumentList> ')'
      */
     private void procedurePostfixOplf() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se o token atual é ')'
+        // Verifica se o token atual é ')'
         if(atual[1].trim().equals(")")){
-           this.idTokenAtual++; 
-        }//verifica se o token atual é primeiro de <ArgumentList>
-           if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+           
+            this.idTokenAtual++; 
+        
+        // Verifica se o token atual eh primeiro de <ArgumentList>
+        } else if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
                 atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
                 atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
                 atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
                 atual[1].trim().equals("--")) {
                 
                 this.procedureArgumentList();
-                //verifica se o token atual é igual a ')'
+                // Verifica se o token atual eh ')'
                 String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                 if(atual2[1].trim().equals(")")){
-                this.idTokenAtual++;
+                    
+                    this.idTokenAtual++;
                 } else{
                 
-                }
-        
-        }
-        
-    
+                    // Erro
+                }        
+        } else {
+            
+            // Erro
+        }      
     }
     
     /**
@@ -1113,92 +1793,61 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureArgumentList() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se o token atual é o primeiro de <AssignExpr>
-        if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
-                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--")) {
-            
-                    this.procedureAssignExpr();
-                    this.procedureArgumentList1();
-        }
-    
-    
+        this.procedureAssignExpr();
+        this.procedureArgumentList1();   
     }
+    
     /**
      * <ArgumentList1> ::= ',' <AssignExpr> <ArgumentList1> | 'vazio'
      */
     private void procedureArgumentList1() {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se o token atual é o primeiro de <AssignExpr>
-        if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
-                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--")) {
-        this.procedureAssignExpr();
-        this.procedureArgumentList1();
-        }//Concatenando com o conjuto Follow de <ArgumentList1> e verificando se faz parte do mesmo.
-            if(atual[1].trim().equals(")")){
-                this.idTokenAtual++;
-                
-                 }
-    
-    
+        // Verifica se o token atual eh ','
+        if(atual[0].contains("Delimitador") && atual.length == 3) {
+// ************************************************************************************** VERIFICAR **************************
+        
+            this.procedureAssignExpr();
+            this.procedureArgumentList1();
+        }
+        
+        // Vazio
     }
     
     /**
      * <Type> ::= 'int' | 'string' | 'float' | 'bool'  | 'Identifier'
      */
     private void procedureType() {
+        
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se o token é primeiro de <Type>
-        //verifica se o token atual é 'int'
-                 if(atual[1].trim().equals("int")) {
-                 this.idTokenAtual++;
-           
-                 } else{
-                 
-                 }
-                 //String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                          //verifica se o token atual é 'string'
-                          if(atual[1].trim().equals("string")) {
-                          this.idTokenAtual++;
-                          } else{
-                          
-                          }
-                          //String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                                   //verifica se o token atual é 'float'
-                                   if(atual[1].trim().equals("float")) {
-                                   this.idTokenAtual++;
-                                   } else{
-                                   
-                                   }
-                                   //String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                                            //verifica se o token atual é 'bool'
-                                            if(atual[1].trim().equals("bool")) {
-                                            this.idTokenAtual++;
-                                            } else{
-                                            
-                                            }
-                                            //String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                                                     //verifica se o token atual é identifier
-                                                     if(atual[0].contains("Identificador_")) {
-                                                     this.idTokenAtual++;
-                                                     } else  {
-                                                            
-                                                     }
-                                       
-    
+        // Verifica se o token atual eh 'int'
+        if(atual[1].trim().equals("int")) {
+            
+            this.idTokenAtual++;
+
+        // Verifica se o token atual eh 'string'    
+        } else if(atual[1].trim().equals("string")) {
+            
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh 'float'        
+        } else if(atual[1].trim().equals("float")) {
+        
+            this.idTokenAtual++;
+        
+        // Verifica se o token atual eh 'bool'   
+        } else if(atual[1].trim().equals("bool")) {
+            
+            this.idTokenAtual++;
+            
+        // Verifica se o token atual eh 'Identifier'       
+        } else if(atual[0].contains("Identificador_")) {
+            
+            this.idTokenAtual++;            
+        } else  {
+
+            // Erro
+        }
     }
-
     
-
-    
-
-    
-      
 }

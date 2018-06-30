@@ -47,7 +47,7 @@
 <AssignExpr1> ::= '=' <CondExpr> <AssignExpr1> | 'vazio'
 <CondExpr> ::= <LogicalOrExpr>            
 <LogicalOrExpr> ::= <LogicalAndExpr> <LogicalOrExpr1>       
-<LogicalOrExpr1> ::= '~' <LogicalAndExpr> <LogicalOrExpr1> | 'vazio'
+<LogicalOrExpr1> ::= '||' <LogicalAndExpr> <LogicalOrExpr1> | 'vazio'
 <LogicalAndExpr> ::= <EqualExpr> <LogicalAndExpr1>
 <LogicalAndExpr1> ::= '&&' <EqualExpr> <LogicalAndExpr1> | 'vazio'
 <EqualExpr> ::= <RelationalExpr> <EqualExpr1>
