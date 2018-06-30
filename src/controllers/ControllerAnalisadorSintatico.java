@@ -862,7 +862,32 @@ public class ControllerAnalisadorSintatico {
     private void procedureRelationalOp() {}      
     private void procedureAdditiveOp() {}   
     private void procedureMultOp() {}        
-    private void procedureUnaryOp() {}
+    /**
+     * <UnaryOp> ::= '++' | '--' | '!'
+     */
+    private void procedureUnaryOp() {
+        //verifica se o token atual é igual a '++'
+    String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+    if(atual[1].trim().equals("++")){
+        this.idTokenAtual++;
+        //verifica se o token atual é igual a '--'
+        String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        if(atual2[1].trim().equals("--")){
+         this.idTokenAtual++;
+         //verifica se o token atual é igual a '!'
+         String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        if(atual3[1].trim().equals("!")){
+            this.idTokenAtual++;
+        } else{
+        
+        }
+        } else{
+        
+        }
+    } else{
+    
+    }
+    }
     /**
      * <PostfixOp> ::= '++' | '--' | '[' <Expr> ']' | '(' <PostfixOplf> | '.' 'Identifier'              
      */
