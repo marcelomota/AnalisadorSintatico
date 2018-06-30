@@ -863,8 +863,39 @@ public class ControllerAnalisadorSintatico {
     private void procedureAdditiveOp() {}   
     private void procedureMultOp() {}        
     private void procedureUnaryOp() {}
-    private void procedurePostfixOp() {}            
-    private void procedurePostfixOplf() {}
+    private void procedurePostfixOp() {} 
+    /**
+     * <PostfixOplf> ::= ')' | <ArgumentList> ')'
+     */
+    private void procedurePostfixOplf() {
+        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+        //verifica se o token atual é ')'
+        if(atual[1].trim().equals(")")){
+           this.idTokenAtual++; 
+        }//verifica se o token atual é primeiro de <ArgumentList>
+           if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
+                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
+                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                atual[1].trim().equals("--")) {
+                
+                this.procedureArgumentList();
+                //verifica se o token atual é igual a ')'
+                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                if(atual2[1].trim().equals(")")){
+                this.idTokenAtual++;
+                } else{
+                
+                }
+        
+        }
+        
+    
+    }
+    
+    /**
+     * <ArgumentList> ::= <AssignExpr> <ArgumentList1>            
+     */
     private void procedureArgumentList() {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
@@ -881,6 +912,9 @@ public class ControllerAnalisadorSintatico {
     
     
     }
+    /**
+     * <ArgumentList1> ::= ',' <AssignExpr> <ArgumentList1> | 'vazio'
+     */
     private void procedureArgumentList1() {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
@@ -901,7 +935,9 @@ public class ControllerAnalisadorSintatico {
     
     }
     
-    
+    /**
+     * <Type> ::= 'int' | 'string' | 'float' | 'bool'  | 'Identifier'
+     */
     private void procedureType() {
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         //verifica se o token é primeiro de <Type>
@@ -909,42 +945,38 @@ public class ControllerAnalisadorSintatico {
                  if(atual[1].trim().equals("int")) {
                  this.idTokenAtual++;
            
-                 String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                 } else{
+                 
+                 }
+                 //String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                           //verifica se o token atual é 'string'
-                          if(atual2[1].trim().equals("string")) {
+                          if(atual[1].trim().equals("string")) {
                           this.idTokenAtual++;
-                      
-                          String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                          } else{
+                          
+                          }
+                          //String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                                    //verifica se o token atual é 'float'
-                                   if(atual3[1].trim().equals("float")) {
+                                   if(atual[1].trim().equals("float")) {
                                    this.idTokenAtual++;
-                              
-                                   String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                   } else{
+                                   
+                                   }
+                                   //String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                                             //verifica se o token atual é 'bool'
-                                            if(atual4[1].trim().equals("bool")) {
+                                            if(atual[1].trim().equals("bool")) {
                                             this.idTokenAtual++;
-                              
-                                            String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                            } else{
+                                            
+                                            }
+                                            //String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                                                      //verifica se o token atual é identifier
-                                                     if(atual5[1].trim().equals("identifier")) {
+                                                     if(atual[1].trim().equals("Identificador_")) {
                                                      this.idTokenAtual++;
                                                      } else  {
                                                             
                                                      }
                                        
-                                            } else  {
-                                            
-                                            }
-                                    }else   {
-                                    
-                                    }
-                     
-                          }else   {
-                          
-                          }
-                 }else  {
-                 
-                 }
     
     }
 
