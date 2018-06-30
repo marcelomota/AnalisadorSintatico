@@ -855,7 +855,22 @@ public class ControllerAnalisadorSintatico {
     private void procedureMultExpr() {}          
     private void procedureMultExpr1() {}
     private void procedureUnaryExpr() {}             
-    private void procedurePostfixExpr() {}           
+    /**
+     * <PostfixExpr> ::= <PrimaryExpr> <PostfixExpr1>
+     */
+    private void procedurePostfixExpr() {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            //verifica se o token atual é primeiro de <PrimaryExpr>
+            if(atual[0].contains("Numero")||atual[0].contains("Cadeia_de_Caracteres")||atual[0].contains("Identificador_")
+               ||atual[1].trim().equals("false")||atual[1].trim().equals("true")||atual[1].trim().equals("(")){
+            this.procedurePrimaryExpr();
+            this.procedurePostfixExpr1();
+            }
+             else{
+            
+            }
+        
+    }           
     
     /**
      * <PostfixExpr1> ::= <PostfixOp> <PostfixExpr1> | 'vazio'
@@ -887,17 +902,17 @@ public class ControllerAnalisadorSintatico {
     private void procedurePrimaryExpr() {
                 String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                 //verifica se o token atual é 'Identificador_'
-                if(atual[1].contains("Identificador_")){
+                if(atual[0].contains("Identificador_")){
                 this.idTokenAtual++;
                 } else{
                 
                 }//verifica se o atual é 'Numero'
-                if(atual[1].contains("Numero")){
+                if(atual[0].contains("Numero")){
                 this.idTokenAtual++;
                 } else{
                 
                 }//verifica se o token atual é 'Cadeia_de_Caracteres'
-                if(atual[1].trim().equals("Cadeia_de_Caracteres")){
+                if(atual[0].contains("Cadeia_de_Caracteres")){
                 this.idTokenAtual++;
                 } else{
                 
@@ -1057,7 +1072,7 @@ public class ControllerAnalisadorSintatico {
                 this.idTokenAtual++;
                 //verifica se o token atual é um Identificador
                 String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                if(atual2[1].trim().equals("Identificador_")){
+                if(atual2[0].contains("Identificador_")){
                     this.idTokenAtual++;
                 }
                 }else {
@@ -1171,7 +1186,7 @@ public class ControllerAnalisadorSintatico {
                                             }
                                             //String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                                                      //verifica se o token atual é identifier
-                                                     if(atual[1].trim().equals("Identificador_")) {
+                                                     if(atual[0].contains("Identificador_")) {
                                                      this.idTokenAtual++;
                                                      } else  {
                                                             
