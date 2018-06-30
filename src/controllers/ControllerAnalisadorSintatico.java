@@ -863,7 +863,48 @@ public class ControllerAnalisadorSintatico {
     private void procedureAdditiveOp() {}   
     private void procedureMultOp() {}        
     private void procedureUnaryOp() {}
-    private void procedurePostfixOp() {} 
+    /**
+     * <PostfixOp> ::= '++' | '--' | '[' <Expr> ']' | '(' <PostfixOplf> | '.' 'Identifier'              
+     */
+    private void procedurePostfixOp() {
+                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                //verifica se o token atual é '++'
+                if(atual[1].trim().equals("++")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o atual é --
+                if(atual[1].trim().equals("--")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o atual é '['
+                if(atual[1].trim().equals("[")){
+                    this.idTokenAtual++;
+                    this.procedureExpr();
+                    //verifica se o token atual é ']'
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    if(atual2[1].trim().equals("]")){
+                    this.idTokenAtual++;
+                    }
+                }//verifica se o token atual é '('
+                if(atual[1].trim().equals("(")){
+                    this.idTokenAtual++;
+                    this.procedurePostfixOplf();
+                } else{
+                
+                } //verifica se o token atual é '.'
+                if(atual[1].trim().equals(".")){
+                this.idTokenAtual++;
+                //verifica se o token atual é um Identificador
+                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                if(atual2[1].trim().equals("Identificador_")){
+                    this.idTokenAtual++;
+                }
+                }else {
+                
+                }
+    } 
     /**
      * <PostfixOplf> ::= ')' | <ArgumentList> ')'
      */
