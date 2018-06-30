@@ -856,8 +856,76 @@ public class ControllerAnalisadorSintatico {
     private void procedureMultExpr1() {}
     private void procedureUnaryExpr() {}             
     private void procedurePostfixExpr() {}           
-    private void procedurePostfixExpr1() {}
-    private void procedurePrimaryExpr() {}
+    
+    /**
+     * <PostfixExpr1> ::= <PostfixOp> <PostfixExpr1> | 'vazio'
+     */
+    private void procedurePostfixExpr1() {
+                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                //verifica se está no primeiro de <PostfixOp>
+                if(atual[1].trim().equals("[")||atual[1].trim().equals("(")||
+                   atual[1].trim().equals("++")||atual[1].trim().equals("--")||atual[1].trim().equals(".")){
+                this.procedurePostfixOp();
+                this.procedurePostfixExpr1();
+                }//verifica se faz parte do conjunto follow de <PostfixExpr1>
+                if(atual[1].trim().equals("-")||atual[1].trim().equals("+")||atual[1].trim().equals("then")||atual[1].trim().equals("*")
+                        ||atual[1].trim().equals(")")||atual[1].trim().equals("<=")||atual[1].trim().equals("||")||atual[1].trim().equals("==")
+                        ||atual[1].trim().equals("&&")||atual[1].trim().equals(">")||atual[1].trim().equals("=")||atual[1].trim().equals("]")
+                        ||atual[1].trim().equals("}")||atual[1].trim().equals("<")||atual[1].trim().equals("!=")||atual[1].trim().equals(">=")
+                        ||atual[1].trim().equals(";")||atual[1].trim().equals("/")){
+                this.idTokenAtual++;
+                }else{
+                
+                }//verifica se o token atual é igual a ','
+                if(atual[0].contains("Delimitador") && atual.length==3){
+                this.idTokenAtual++;
+                }
+    }
+    /**
+     * <PrimaryExpr> ::= 'Identifier' | 'Number' | 'Literal' | 'true' | 'false' | '(' <Expr> ')' 
+     */
+    private void procedurePrimaryExpr() {
+                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                //verifica se o token atual é 'Identificador_'
+                if(atual[1].contains("Identificador_")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o atual é 'Numero'
+                if(atual[1].contains("Numero")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o token atual é 'Cadeia_de_Caracteres'
+                if(atual[1].trim().equals("Cadeia_de_Caracteres")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o atual é 'true'
+                if(atual[1].trim().equals("true")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o token atual é 'false'
+                if(atual[1].trim().equals("false")){
+                this.idTokenAtual++;
+                } else{
+                
+                }//verifica se o atual é '('
+                if(atual[1].trim().equals("(")){
+                this.idTokenAtual++;
+                this.procedureExpr();
+                //verifica se o token é igual a ')'
+                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                if(atual2[1].trim().equals(")")){
+                this.idTokenAtual++;
+                } else{
+                
+                }
+                } else{
+                
+                } 
+    }
     /**
      * <EqualOp> ::= '==' | '!='
      */
