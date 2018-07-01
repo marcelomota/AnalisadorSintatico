@@ -59,10 +59,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        }   
+        
+        // Vazio
     }
     
     /**
@@ -115,7 +114,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureGlobalDeclaration()");
         }        
     }
     
@@ -150,7 +149,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDef()");
                 }                        
             } else {
 
@@ -161,7 +160,7 @@ public class ControllerAnalisadorSintatico {
             } 
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDef()");
         }               
     }
     
@@ -210,7 +209,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
                                 }                    
                             } else {
 
@@ -221,7 +220,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
                         }                
                     } else {
 
@@ -232,7 +231,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
                 }            
 
             // Verifica se o token atual eh ')'
@@ -263,7 +262,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
                         }                
                     } else {
 
@@ -274,7 +273,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
                 }            
             } else {
 
@@ -285,7 +284,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
         }        
     }
     
@@ -325,7 +324,7 @@ public class ControllerAnalisadorSintatico {
                             } 
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
                         }                               
                     } else {
 
@@ -336,7 +335,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
                 }            
             } else {
 
@@ -347,7 +346,7 @@ public class ControllerAnalisadorSintatico {
             }  
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
         }              
     }
     
@@ -396,7 +395,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
                                 }                    
                             } else {
 
@@ -407,7 +406,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
                         }                
                     } else {
 
@@ -418,7 +417,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
                 }            
 
             // Verifica se o token atual eh ')'    
@@ -449,7 +448,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
                         }                
                     } else {
 
@@ -460,7 +459,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
                 }            
             } else {
 
@@ -471,7 +470,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
         }        
     }
     
@@ -497,7 +496,7 @@ public class ControllerAnalisadorSintatico {
             } 
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDef()");
         }               
     }
     
@@ -538,7 +537,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
                         }                
                     } else {
 
@@ -549,7 +548,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
                 }            
 
             // Verifica se o token atual eh primeiro de <StructDef>    
@@ -579,7 +578,7 @@ public class ControllerAnalisadorSintatico {
                             }  
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
                         }                              
                     } else {
 
@@ -590,7 +589,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
                 }            
             } else {
 
@@ -601,7 +600,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
         }        
     }
     
@@ -642,7 +641,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
                         }                
                     } else {
 
@@ -654,7 +653,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
                 }            
             } else {
 
@@ -666,7 +665,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
         }        
     }
     
@@ -706,7 +705,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
                         }                
                     } else {
 
@@ -717,7 +716,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
                 }            
             } else {
 
@@ -728,7 +727,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
         }        
     }
     
@@ -761,7 +760,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDef()");
                 }            
             } else {
 
@@ -772,7 +771,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDef()");
         }        
     }
     
@@ -805,7 +804,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
                 }
 
             // Verifica se o token atual eh 'extends'    
@@ -843,7 +842,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
                                 }                    
                             } else {
 
@@ -854,7 +853,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
                         }                
                     } else {
 
@@ -865,7 +864,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
                 }            
             } else {
 
@@ -876,7 +875,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
         }        
     }
     
@@ -906,10 +905,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio            
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         } 
+        
+        // Vazio
     }
     
     /**
@@ -948,10 +946,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -978,7 +975,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureDeclaration()");
         }          
     }
     
@@ -1008,10 +1005,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -1039,10 +1035,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -1077,7 +1072,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureInitializer()");
         }        
     }
     
@@ -1115,7 +1110,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureInitializerlf()");
                 }            
             } else {
 
@@ -1126,7 +1121,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureInitializerlf()");
         }        
     }
     
@@ -1156,10 +1151,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        }
+        
+        // Vazio
     }
     
     /**
@@ -1204,10 +1198,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -1243,7 +1236,7 @@ public class ControllerAnalisadorSintatico {
                         }
                     } else {
 
-                        this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureDeclarator1lf()");
                     }                
 
             // Verifica se o token atual eh ']'
@@ -1260,7 +1253,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureDeclarator1lf()");
         }        
     }
     
@@ -1320,7 +1313,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStmt()");
         }        
     }
     
@@ -1358,7 +1351,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStmtOrDeclarationList()");
         }        
     } 
     
@@ -1391,10 +1384,9 @@ public class ControllerAnalisadorSintatico {
             } 
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }            
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -1447,7 +1439,7 @@ public class ControllerAnalisadorSintatico {
                                             }
                                         } else {
 
-                                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStartDef()");
                                         }                        
                                     } else {
 
@@ -1458,7 +1450,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStartDef()");
                                 }                    
                             } else {
 
@@ -1469,7 +1461,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStartDef()");
                         }                
                     } else {
 
@@ -1480,7 +1472,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStartDef()");
                 }            
             } else {
 
@@ -1491,7 +1483,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStartDef()");
         }                
     }
     
@@ -1539,7 +1531,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrintStmt()");
                                 }                    
                             } else {
 
@@ -1551,7 +1543,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrintStmt()");
                         }                
                     } else {
 
@@ -1563,7 +1555,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrintStmt()");
                 }            
             } else {
 
@@ -1575,7 +1567,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrintStmt()");
         }        
     } 
     
@@ -1623,7 +1615,7 @@ public class ControllerAnalisadorSintatico {
                                     }
                                 } else {
 
-                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureScanStmt()");
                                 }                    
                             } else {
 
@@ -1635,7 +1627,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureScanStmt()");
                         }                
                     } else {
 
@@ -1647,7 +1639,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureScanStmt()");
                 }            
             } else {
 
@@ -1659,7 +1651,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureScanStmt()");
         }        
     }
     
@@ -1701,7 +1693,7 @@ public class ControllerAnalisadorSintatico {
                             }
                         } else {
 
-                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureIterationStmt()");
                         }                
                     } else {
 
@@ -1713,7 +1705,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureIterationStmt()");
                 }            
             } else {
 
@@ -1725,7 +1717,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureIterationStmt()");
         }        
     }
     
@@ -1761,7 +1753,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureIfStmt()");
                 }
             } else {
 
@@ -1773,7 +1765,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureIfStmt()");
         }        
     }    
     
@@ -1793,10 +1785,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+
+        // Vazio
     }
     
     /**
@@ -1829,7 +1820,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
                     
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureReturnStmt()");
                 }            
             } else {
 
@@ -1841,7 +1832,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureReturnStmt()");
         }        
     }
     
@@ -1867,7 +1858,8 @@ public class ControllerAnalisadorSintatico {
                         + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureCompoundStmt()");
         }                
     } 
     
@@ -1913,7 +1905,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureCompoundStmtlf()");
                 }            
             } else {
 
@@ -1925,7 +1917,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureCompoundStmtlf()");
         }       
     }
     
@@ -1967,7 +1959,7 @@ public class ControllerAnalisadorSintatico {
                     }
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureExprStmt()");
                 }            
             } else {
 
@@ -1979,7 +1971,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureExprStmt()");
         }        
     }
     
@@ -2009,10 +2001,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2041,9 +2032,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         } 
+        
+        // Vazio
     }
     
     /**
@@ -2080,9 +2071,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2111,10 +2102,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2143,10 +2133,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2176,10 +2165,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2208,10 +2196,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2240,10 +2227,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2275,7 +2261,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureUnaryExpr()");
         }        
     }   
     
@@ -2306,10 +2292,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }        
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2366,7 +2351,7 @@ public class ControllerAnalisadorSintatico {
                     }  
                 } else {
 
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrimaryExpr()");
                 }                      
             } else {
 
@@ -2377,7 +2362,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePrimaryExpr()");
         }        
     }
     
@@ -2407,7 +2392,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureEqualOp()");
         }        
     }
     
@@ -2447,7 +2432,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureRelationalOp()");
         }        
     }      
     
@@ -2477,9 +2462,8 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }
-        
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureAdditiveOp()");
+        }        
     }   
     
     /**
@@ -2509,7 +2493,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureMultOp()");
         }        
     }   
     
@@ -2544,7 +2528,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureUnaryOp()");
         }        
     }
     
@@ -2586,7 +2570,8 @@ public class ControllerAnalisadorSintatico {
                         this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -, +, then, ), ||, &&, >, ], <, [, >=, .");
                     }
                 } else {
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePostfixOp()");
                 }
 
             // Verifica se o token atual é '('      
@@ -2614,7 +2599,8 @@ public class ControllerAnalisadorSintatico {
                         this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -, +, then, ), ||, &&, >, ], <, [, >=, .");
                     }
                 } else {
-                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePostfixOp()");
                 }
             } else {
 
@@ -2625,7 +2611,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePostfixOp()");
         }   
     } 
     
@@ -2649,25 +2635,25 @@ public class ControllerAnalisadorSintatico {
                     atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
                     atual[1].trim().equals("--")) {
 
-                    this.procedureArgumentList();
-                    if(this.idTokenAtual < this.tokens.getSize()) {
+                this.procedureArgumentList();
+                if(this.idTokenAtual < this.tokens.getSize()) {
 
-                        String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                        // Verifica se o token atual eh ')'
-                        if(atual2[1].trim().equals(")")){
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual eh ')'
+                    if(atual2[1].trim().equals(")")){
 
-                            this.idTokenAtual++;
-                        } else{
+                        this.idTokenAtual++;
+                    } else{
 
-                            // Erro
-                            String linha = atual2[2].replaceAll(">", " ");
-                            this.errosSintaticos += "Erro 82 - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                            this.modalidadeDesespero2("-, +, then, *, ), (, <=, ||, ++, --, ==, &&, >, =, ], }, <, !=, [, >=, ;, /, .");
-                        } 
-                    } else {
-                        
-                        this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-                    }    
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro 82 - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero2("-, +, then, *, ), (, <=, ||, ++, --, ==, &&, >, =, ], }, <, !=, [, >=, ;, /, .");
+                    } 
+                } else {
+
+                    System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePostfixOplf()");
+                }    
             } else {
 
                 // Erro
@@ -2677,7 +2663,7 @@ public class ControllerAnalisadorSintatico {
             } 
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedurePostfixOplf()");
         }  
     }
     
@@ -2707,10 +2693,9 @@ public class ControllerAnalisadorSintatico {
             }
 
             // Vazio            
-        } else {
-            
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
-        }
+        } 
+        
+        // Vazio
     }
     
     /**
@@ -2754,7 +2739,7 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureType()");
         }        
     }
     
