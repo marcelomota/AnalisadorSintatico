@@ -2,7 +2,7 @@
 <S1> ::= <GlobalDeclaration> <S1> | 'vazio'
 <GlobalDeclaration> ::= <StartDef> | <VarDef> | <ConstDef> | <StructDef> | <FunctionDef> | <ProcedureDef> | <TypedefDef>
 <FunctionDef> ::= 'function' <Type> <Declarator> '(' <FunctionDeflf>
-<FunctionDeflf> ::= <Parameter List> ')' '{' <StmtOrDeclarationList> '}' | ')' '{' <StmtOrDeclarationList> '}' 
+<FunctionDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' | ')' '{' <StmtOrDeclarationList> '}' 
 <ProcedureDef> ::= 'procedure' 'Identifier' '(' <ProcedureDeflf>
 <ProcedureDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' |  ')' '{' <StmtOrDeclarationList> '}' 
 <TypedefDef> ::= 'typedef' <TypedefDeflf>              

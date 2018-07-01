@@ -109,7 +109,8 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Palavra Reservada não encontrada na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro - Palavra Reservada não encontrada na linha "+linha.trim()+".\n";                
+                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
             }
         } else {
             
@@ -144,6 +145,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("");
                     }
                 } else {
 
@@ -860,7 +862,7 @@ public class ControllerAnalisadorSintatico {
             if(atual[0].contains("Delimitador") && atual.length == 4) { 
 
                 this.idTokenAtual++;
-                this.procedureDeclaration();
+                this.procedureParameterDeclaration();
                 this.procedureParameterList1();
             }
 
@@ -1302,7 +1304,7 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro - Palavra reservada 'var' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
@@ -2638,6 +2640,32 @@ public class ControllerAnalisadorSintatico {
             
             this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         }        
+    }
+    
+    private void modalidadeDesespero(String follow) {
+        
+        boolean trava = true;
+        this.idTokenAtual++;
+        do {
+            
+            String[] seguintes = follow.split(",");
+            for (String seguinte : seguintes) {
+                
+                if (this.tokens.getUnicToken(this.idTokenAtual).equals(seguinte.trim())) {
+                    
+                    trava = false;
+                    break;
+                } else {
+                    
+                    this.idTokenAtual++;
+                    if(this.idTokenAtual > this.tokens.getSize()) {
+                        
+                        trava = false;
+                        break;
+                    }
+                }
+            }
+        } while(trava || this.idTokenAtual < this.tokens.getSize());        
     }
     
 }
