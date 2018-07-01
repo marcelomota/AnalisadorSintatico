@@ -19,7 +19,8 @@ public class ControllerAnalisadorSintatico {
      */
     public String analisar(Token tokens) {
         
-        this.tokens = tokens;        
+        this.tokens = tokens; 
+        this.tokens.addToken("Final", "$", 0);
         this.idTokenAtual = 0;
         this.errosSintaticos = "";
         if(this.idTokenAtual < this.tokens.getSize()) {

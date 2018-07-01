@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro - Limite da lista de tokens.
+Não foram encontrados erros Sintáticos!
