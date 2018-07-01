@@ -1589,6 +1589,7 @@ public class ControllerAnalisadorSintatico {
             } else {
                 
                 // Erro
+               
             }            
         } else {
             
@@ -1614,6 +1615,9 @@ public class ControllerAnalisadorSintatico {
         } else{
 
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Operador de Igualdade não encontrado na linha "+linha.trim()+".";
+
         }
     }
     
@@ -1645,6 +1649,9 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Operador Relacional não encontrado na linha "+linha.trim()+".";
+
         }
     }      
     
@@ -1667,6 +1674,9 @@ public class ControllerAnalisadorSintatico {
         } else{
 
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador Aritmético não encontrado na linha "+linha.trim()+".";
+
         }
     }   
     
@@ -1689,6 +1699,9 @@ public class ControllerAnalisadorSintatico {
         } else{
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Operador Aritmético não encontrado na linha "+linha.trim()+".";
+
         }
     }        
     /**
@@ -1714,6 +1727,10 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Operador não encontrado na linha "+linha.trim()+".";
+
+            
         }
     }
     
@@ -1746,6 +1763,8 @@ public class ControllerAnalisadorSintatico {
             } else {
                 
                 // Erro
+                String linha = atual2[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".";
             }
         } else if(atual[1].trim().equals("(")){
             
@@ -1764,7 +1783,12 @@ public class ControllerAnalisadorSintatico {
         } else {
 
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Sintaxe mal formulada na linha "+linha.trim()+".";
+
+            
         }
+         
     } 
     
     /**
@@ -1794,10 +1818,14 @@ public class ControllerAnalisadorSintatico {
                 } else{
                 
                     // Erro
+                    String linha = atual2[2].replaceAll(">", " ");
+                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
                 }        
         } else {
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
         }      
     }
     
@@ -1860,6 +1888,8 @@ public class ControllerAnalisadorSintatico {
         } else  {
 
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".";
         }
     }
     
