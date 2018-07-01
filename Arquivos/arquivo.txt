@@ -1,4 +1,4 @@
-CONST {
+const {
 
 	int fator = 40;
 

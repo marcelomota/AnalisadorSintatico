@@ -2,7 +2,6 @@ package view;
 
 import controllers.ControllerAnalisadorLexico;
 import controllers.ControllerAnalisadorSintatico;
-import models.Gramatica;
 import models.TabelaSimbolo;
 import models.Token;
 import persistencia.ManipulaArquivo;
@@ -16,7 +15,6 @@ public class Main {
         ManipulaArquivo ma = new ManipulaArquivo();
         
         ControllerAnalisadorLexico lexico = new ControllerAnalisadorLexico();
-        Gramatica gramatica = new Gramatica(ma.carregarGramatica());
         ControllerAnalisadorSintatico sintatico = new ControllerAnalisadorSintatico();
        
         // Obtem o nome do(s) arquivo(s).
@@ -40,7 +38,7 @@ public class Main {
                 
                 // Percorre os caracteres do texto e retorna os erros encontrados.
                 String errosLexicos = lexico.analisar(texto, tokens, simbolos); 
-                tokens.printTokens();
+                
                 // Percorre os tokens e retorna os erros encontrados.
                 String errosSintaticos = sintatico.analisar(tokens);
 

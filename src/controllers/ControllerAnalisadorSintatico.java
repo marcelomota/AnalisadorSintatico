@@ -23,15 +23,11 @@ public class ControllerAnalisadorSintatico {
         this.tokens = tokens;        
         this.idTokenAtual = 0;
         this.procedureS();
+        /*
         if(this.idTokenAtual > this.tokens.getSize()) {
             
             // Sucesso
-        } else {
-            
-            // falha
-            String msg = "Não foi possivel analisar sintaticamente essse arquivo";
-            return msg;
-        }
+        } */
         
         return this.errosSintaticos;
     }
@@ -104,6 +100,10 @@ public class ControllerAnalisadorSintatico {
         } else if(atual[1].trim().equals("typedef")) {
             
             this.procedureTypedefDef();
+        } else {
+            
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Palavra Reservada não encontrada na linha "+linha.trim()+".";
         }
     }
     
@@ -128,10 +128,14 @@ public class ControllerAnalisadorSintatico {
             } else {
               
                 // Erro
+                String linha = atual2[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".";
             }            
         } else {
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Palavra Reservada 'function' não encontrada na linha "+linha.trim()+".";
         }        
     }
     
@@ -147,32 +151,39 @@ public class ControllerAnalisadorSintatico {
                 atual[0].contains("Identificador_")) {
             
             this.procedureParameterList();
+            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
             // Verifica se o token atual eh ')'
-            if(atual[1].trim().equals(")")) {
+            if(atual2[1].trim().equals(")")) {
                 
                 this.idTokenAtual++;
-                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                 // Verifica se o token atual eh '{'
-                if(atual2[1].trim().equals("{")) {
+                if(atual3[1].trim().equals("{")) {
                     
                     this.idTokenAtual++;
                     this.procedureStmtOrDeclarationList();
-                    String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                     // Verifica se o token atual eh '}'
-                    if(atual3[1].trim().equals("}")) {
+                    if(atual4[1].trim().equals("}")) {
 
                         this.idTokenAtual++;
                     } else {
                         
                         // Erro
+                        String linha = atual4[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".";
                     }
                 } else {
                     
                     // Erro
+                    String linha = atual3[2].replaceAll(">", " ");
+                    this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".";
                 }
             } else {
                 
                 // Erro
+                String linha = atual2[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
             }
             
         // Verifica se o token atual eh ')'
@@ -201,6 +212,8 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             // Erro
+            String linha = atual[2].replaceAll(">", " ");
+            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
         }
     }
     

@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro - Palavra Reservada não encontrada na linha 1.
