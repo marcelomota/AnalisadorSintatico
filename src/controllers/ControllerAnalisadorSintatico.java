@@ -701,6 +701,7 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                             }
                         } else {
 
@@ -711,6 +712,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                     }
                 } else {
 
@@ -721,6 +723,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'const' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
             }
         } else {
             
@@ -753,6 +756,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                     }
                 } else {
 
@@ -763,6 +767,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'struct' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
             }
         } else {
             
@@ -795,6 +800,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                     }
                 } else {
 
@@ -832,6 +838,7 @@ public class ControllerAnalisadorSintatico {
                                         // Erro
                                         String linha = atual4[2].replaceAll(">", " ");
                                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                                     }
                                 } else {
 
@@ -842,6 +849,7 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                             }
                         } else {
 
@@ -852,6 +860,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                     }
                 } else {
 
@@ -862,6 +871,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
             }
         } else {
             
@@ -963,6 +973,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("}, bool, float, int, string, Identificador_");
             }
         } else {
             
@@ -1061,6 +1072,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("}, ;");
             }
         } else {
             
@@ -1097,6 +1109,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero2("}, ;");
+                        
                     }
                 } else {
 
@@ -1107,6 +1121,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("}, ;");
             }
         } else {
             
@@ -1164,6 +1179,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("=, ;, ), (");
             }
         } else {
             
@@ -1222,6 +1238,7 @@ public class ControllerAnalisadorSintatico {
                             // Erro
                             String linha = atual2[2].replaceAll(">", " ");
                             this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+                            this.modalidadeDesespero2("=, ;, ), (");
                         }
                     } else {
 
@@ -1238,6 +1255,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("=, ;, ), (");
             }
         } else {
             
@@ -1296,6 +1314,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;, "
+                        + "{, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1333,6 +1353,7 @@ public class ControllerAnalisadorSintatico {
 
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra reservada 'var' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("}");
             }
         } else {
             
@@ -1421,6 +1442,7 @@ public class ControllerAnalisadorSintatico {
                                                 // Erro                            
                                                 String linha = atual5[2].replaceAll(">", " ");
                                                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                                             }
                                         } else {
 
@@ -1431,6 +1453,7 @@ public class ControllerAnalisadorSintatico {
                                         // Erro
                                         String linha = atual4[2].replaceAll(">", " ");
                                         this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                                     }
                                 } else {
 
@@ -1440,7 +1463,8 @@ public class ControllerAnalisadorSintatico {
 
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
-                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";                    
+                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";   
+                                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                             }
                         } else {
 
@@ -1451,6 +1475,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro  
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                     }
                 } else {
 
@@ -1461,6 +1486,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'Start' esperada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
             }
         } else {
             
@@ -1507,6 +1533,8 @@ public class ControllerAnalisadorSintatico {
                                         // Erro
                                         String linha = atual4[2].replaceAll(">", " ");
                                         this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                                     }
                                 } else {
 
@@ -1517,6 +1545,8 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                             }
                         } else {
 
@@ -1527,6 +1557,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1537,6 +1569,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'print' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1583,6 +1617,8 @@ public class ControllerAnalisadorSintatico {
                                         // Erro
                                         String linha = atual4[2].replaceAll(">", " ");
                                         this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                                     }
                                 } else {
 
@@ -1593,6 +1629,8 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                             }
                         } else {
 
@@ -1603,6 +1641,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1613,6 +1653,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'scan' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1653,6 +1695,8 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if,"
+                                        + " while, ;, {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                             }
                         } else {
 
@@ -1663,6 +1707,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if,"
+                                        + " while, ;, {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1673,6 +1719,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'while' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if,"
+                                        + " while, ;, {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1707,6 +1755,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Palavra Reservada 'then' não encontrada na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;, {,"
+                                + " scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1717,6 +1767,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'if' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;, {,"
+                                + " scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1771,6 +1823,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificacor_");
                     }
                 } else {
                     
@@ -1781,6 +1835,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Palavra Reservada 'return' não encontrada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificacor_");
             }
         } else {
             
@@ -1806,6 +1862,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                        + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
@@ -1849,6 +1907,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1859,6 +1919,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -1899,6 +1961,8 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
                 } else {
 
@@ -1909,6 +1973,8 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
+                                + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
@@ -2199,6 +2265,12 @@ public class ControllerAnalisadorSintatico {
                     atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
 
                 this.procedurePostfixExpr();
+            } else {
+                
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Expressão mal formada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("-, +, then, *, ), <=, ||, ==, &&, >, =, ], }, <, !=, >=, ;, /");
             }
         } else {
             
@@ -2289,6 +2361,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -,'+, then, ), ||, &&, >, ], <, [, >=, .");
                     }  
                 } else {
 
@@ -2299,6 +2372,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Expressão mal formada na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -,'+, then, ), ||, &&, >, ], <, [, >=, .");
             }
         } else {
             
@@ -2328,6 +2402,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Operador ('==' ou '!=') não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("Numero, false, true, Cadeia_de_Caracteres, (, Identificador_, !, ++, --");
             }
         } else {
             
@@ -2367,6 +2442,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Operador ('<', '>', '<=', '>=' ou '>') não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("Numero, false, true, Cadeia_de_Caracteres, (, Identificador_, !, ++, --");
             }
         } else {
             
@@ -2396,6 +2472,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Operador ('+' ou '-') não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("then, ), <=, ||, ==, &&, >, =, ], }, <, !=, >=, ;");
             }
         } else {
             
@@ -2426,6 +2503,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Operador ('*' ou '/') não encontrado na linha "+linha.trim()+".\n";
+                
             }
         } else {
             
@@ -2670,6 +2748,10 @@ public class ControllerAnalisadorSintatico {
         }        
     }
     
+    /**
+     * Utiliza como token de sincronização, algum token do conjunto seguinte da produção atual.
+     * @param follow 
+     */
     private void modalidadeDesespero(String follow) {
         
         boolean trava = true;
@@ -2680,6 +2762,38 @@ public class ControllerAnalisadorSintatico {
             for (String seguinte : seguintes) {
                 
                 if (this.tokens.getUnicToken(this.idTokenAtual).contains(seguinte.trim())) {
+                    
+                    trava = false;
+                    break;
+                } else {
+                    
+                    this.idTokenAtual++;
+                    if(this.idTokenAtual > this.tokens.getSize()) {
+                        
+                        trava = false;
+                        break;
+                    }
+                }
+            }
+        } while(trava || this.idTokenAtual < this.tokens.getSize());        
+    }
+    
+    /**
+     * Utilizado quando simbolos que fazem parte do token, fazem parte tambem do conjunto seguinte (',', '<', '>').
+     * @param follow 
+     */
+    private void modalidadeDesespero2(String follow) {
+        
+        boolean trava = true;
+        this.idTokenAtual++;
+        do {
+            
+            String[] seguintes = follow.split(",");
+            for (String seguinte : seguintes) {
+                
+                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                if (atual[1].trim().equals(seguinte.trim()) || atual[0].contains(seguinte.trim()) ||
+                        (atual[0].contains("Delimitador") && atual.length == 4)) {
                     
                     trava = false;
                     break;
