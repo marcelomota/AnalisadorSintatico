@@ -20,7 +20,7 @@ public class ControllerAnalisadorSintatico {
     public String analisar(Token tokens) {
         
         this.tokens = tokens; 
-        this.tokens.addToken("Final", "$", 0);
+        //this.tokens.addToken("Final", "$", 0);
         this.idTokenAtual = 0;
         this.errosSintaticos = "";
         if(this.idTokenAtual < this.tokens.getSize()) {
@@ -2771,7 +2771,7 @@ public class ControllerAnalisadorSintatico {
             String[] seguintes = follow.split(",");
             for (String seguinte : seguintes) {
                 
-                if(this.idTokenAtual > this.tokens.getSize()) {
+                if(this.idTokenAtual < this.tokens.getSize()) {
                     
                     if (this.tokens.getUnicToken(this.idTokenAtual).contains(seguinte.trim())) {
 
@@ -2779,12 +2779,7 @@ public class ControllerAnalisadorSintatico {
                         break;
                     } else {
 
-                        this.idTokenAtual++;
-                        if(this.idTokenAtual > this.tokens.getSize()) {
-
-                            trava = false;
-                            break;
-                        }
+                        this.idTokenAtual++;                        
                     }
                 } else {
                     
@@ -2792,7 +2787,7 @@ public class ControllerAnalisadorSintatico {
                     break;
                 }                
             }
-        } while(trava || this.idTokenAtual < this.tokens.getSize());        
+        } while(trava);        
     }
     
     /**
@@ -2808,23 +2803,24 @@ public class ControllerAnalisadorSintatico {
             String[] seguintes = follow.split(",");
             for (String seguinte : seguintes) {
                 
-                String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                if (atual[1].trim().equals(seguinte.trim()) || atual[0].contains(seguinte.trim()) ||
-                        (atual[0].contains("Delimitador") && atual.length == 4)) {
+                if(this.idTokenAtual < this.tokens.getSize()) {
                     
-                    trava = false;
-                    break;
-                } else {
-                    
-                    this.idTokenAtual++;
-                    if(this.idTokenAtual > this.tokens.getSize()) {
-                        
-                        trava = false;
-                        break;
+                    String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    if (atual[1].trim().equals(seguinte.trim()) || atual[0].contains(seguinte.trim()) ||
+                            (atual[0].contains("Delimitador") && atual.length == 4)) {
+
+
+                    } else {
+
+                        this.idTokenAtual++;
                     }
-                }
+                } else {
+                   
+                   trava = false;
+                   break; 
+                }                
             }
-        } while(trava || this.idTokenAtual < this.tokens.getSize());        
+        } while(trava);        
     }
     
 }
