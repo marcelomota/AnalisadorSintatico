@@ -4,4 +4,29 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro - Delimitador '}' não encontrado na linha 8.Erro - Delimitador '}' não encontrado na linha 20.Erro - '}' esperado na linha 23.
+Erro - Identificador não encontrado na linha 3.
+Erro - Delimitador ';' não encontrado na linha 3.
+Erro - Identificador não encontrado na linha 3.
+Erro - Identificador não encontrado na linha 5.
+Erro - Identificador não encontrado na linha 8.
+Erro - Delimitador ';' não encontrado na linha 8.
+Erro - Delimitador '}' não encontrado na linha 8.
+Erro - Identificador não encontrado na linha 11.
+Erro - Delimitador ';' não encontrado na linha 11.
+Erro - Identificador não encontrado na linha 11.
+Erro - Identificador não encontrado na linha 13.
+Erro - Delimitador ';' não encontrado na linha 13.
+Erro - Identificador não encontrado na linha 13.
+Erro - Delimitador ';' não encontrado na linha 13.
+Erro - Identificador não encontrado na linha 13.
+Erro - Identificador não encontrado na linha 15.
+Erro - Delimitador ';' não encontrado na linha 15.
+Erro - Identificador não encontrado na linha 15.
+Erro - Delimitador ';' não encontrado na linha 15.
+Erro - Identificador não encontrado na linha 15.
+Erro - Identificador não encontrado na linha 18.
+Erro - Identificador não encontrado na linha 20.
+Erro - Delimitador ';' não encontrado na linha 20.
+Erro - Delimitador '}' não encontrado na linha 20.
+Erro - Declaração esperada não encontrada na linha 23.
+Erro - Delimitador '}' não encontrado na linha 23.
