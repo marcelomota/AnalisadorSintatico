@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro - Palavra Reservada não encontrada na linha 1.
+Erro - Delimitador '}' não encontrado na linha 8.Erro - Delimitador '}' não encontrado na linha 20.Erro - '}' esperado na linha 23.
