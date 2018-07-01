@@ -22,12 +22,10 @@ public class ControllerAnalisadorSintatico {
         
         this.tokens = tokens;        
         this.idTokenAtual = 0;
-        this.procedureS();
-        /*
-        if(this.idTokenAtual > this.tokens.getSize()) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            // Sucesso
-        } */
+            this.procedureS();
+        }        
         
         return this.errosSintaticos;
     }
@@ -46,18 +44,24 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureS1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh o primeiro de <GlobalDeclaration>
-        if(atual[1].trim().equals("struct") || atual[1].trim().equals("procedure") ||
-                atual[1].trim().equals("typedef") || atual[1].trim().equals("const") ||
-                atual[1].trim().equals("function") || atual[1].trim().equals("var") ||
-                atual[1].trim().equals("start")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureGlobalDeclaration();
-            this.procedureS1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh o primeiro de <GlobalDeclaration>
+            if(atual[1].trim().equals("struct") || atual[1].trim().equals("procedure") ||
+                    atual[1].trim().equals("typedef") || atual[1].trim().equals("const") ||
+                    atual[1].trim().equals("function") || atual[1].trim().equals("var") ||
+                    atual[1].trim().equals("start")) {
+
+                this.procedureGlobalDeclaration();
+                this.procedureS1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -65,46 +69,52 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureGlobalDeclaration() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh o primeiro de <StartDef>
-        if(atual[1].trim().equals("start")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureStartDef();  
-        
-        // Verifica se o token atual eh o primeiro de <VarDef>    
-        } else if(atual[1].trim().equals("var")) {
-            
-            this.procedureVarDef(); 
-            
-        // Verifica se o token atual eh o primeiro de <ConstDef>      
-        } else if(atual[1].trim().equals("const")) {
-            
-            this.procedureConstDef(); 
-        
-        // Verifica se o token atual eh o primeiro de <StructDef>
-        } else if(atual[1].trim().equals("struct")) {
-            
-            this.procedureStructDef();  
-        
-        // Verifica se o token atual eh o primeiro de <FunctionDef>
-        } else if(atual[1].trim().equals("function")) {
-            
-            this.procedureFunctionDef(); 
-        
-        // Verifica se o token atual eh o primeiro de <ProcedureDef>
-        } else if(atual[1].trim().equals("procedure")) {
-            
-            this.procedureProcedureDef();
-        
-        // Verifica se o token atual eh o primeiro de <TypedefDef>
-        } else if(atual[1].trim().equals("typedef")) {
-            
-            this.procedureTypedefDef();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh o primeiro de <StartDef>
+            if(atual[1].trim().equals("start")) {
+
+                this.procedureStartDef();  
+
+            // Verifica se o token atual eh o primeiro de <VarDef>    
+            } else if(atual[1].trim().equals("var")) {
+
+                this.procedureVarDef(); 
+
+            // Verifica se o token atual eh o primeiro de <ConstDef>      
+            } else if(atual[1].trim().equals("const")) {
+
+                this.procedureConstDef(); 
+
+            // Verifica se o token atual eh o primeiro de <StructDef>
+            } else if(atual[1].trim().equals("struct")) {
+
+                this.procedureStructDef();  
+
+            // Verifica se o token atual eh o primeiro de <FunctionDef>
+            } else if(atual[1].trim().equals("function")) {
+
+                this.procedureFunctionDef(); 
+
+            // Verifica se o token atual eh o primeiro de <ProcedureDef>
+            } else if(atual[1].trim().equals("procedure")) {
+
+                this.procedureProcedureDef();
+
+            // Verifica se o token atual eh o primeiro de <TypedefDef>
+            } else if(atual[1].trim().equals("typedef")) {
+
+                this.procedureTypedefDef();
+            } else {
+
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada não encontrada na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -112,31 +122,43 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureFunctionDef() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'function'
-        if(atual[1].trim().equals("function")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureType();
-            this.procedureDeclarator();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh '('
-            if(atual2[1].trim().equals("(")) {
-             
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'function'
+            if(atual[1].trim().equals("function")) {
+
                 this.idTokenAtual++;
-                this.procedureFunctionDeflf();
+                this.procedureType();
+                this.procedureDeclarator();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh '('
+                    if(atual2[1].trim().equals("(")) {
+
+                        this.idTokenAtual++;
+                        this.procedureFunctionDeflf();
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }                        
             } else {
-              
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
-            }            
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'function' não encontrada na linha "+linha.trim()+".\n";
+            } 
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'function' não encontrada na linha "+linha.trim()+".\n";
-        }        
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }               
     }
     
     /**
@@ -144,81 +166,117 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureFunctionDeflf() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh o primeiro de <ParameterList>
-        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
-                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
-                atual[0].contains("Identificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureParameterList();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
-            // Verifica se o token atual eh ')'
-            if(atual2[1].trim().equals(")")) {
-                
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se o token atual eh '{'
-                if(atual3[1].trim().equals("{")) {
-                    
-                    this.idTokenAtual++;
-                    this.procedureStmtOrDeclarationList();
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                    // Verifica se o token atual eh '}'
-                    if(atual4[1].trim().equals("}")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh o primeiro de <ParameterList>
+            if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
+                    atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                    atual[0].contains("Identificador_")) {
+
+                this.procedureParameterList();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
+                    // Verifica se o token atual eh ')'
+                    if(atual2[1].trim().equals(")")) {
 
                         this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                            // Verifica se o token atual eh '{'
+                            if(atual3[1].trim().equals("{")) {
+
+                                this.idTokenAtual++;
+                                this.procedureStmtOrDeclarationList();
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                                    // Verifica se o token atual eh '}'
+                                    if(atual4[1].trim().equals("}")) {
+
+                                        this.idTokenAtual++;
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
                     } else {
-                        
+
                         // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
-                    
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
-                }
-            } else {
-                
-                // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-            }
-            
-        // Verifica se o token atual eh ')'
-        } else if(atual[1].trim().equals(")")) {
-            
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            // Verifica se o token atual eh '{'
-            if(atual2[1].trim().equals("{")) {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
+
+            // Verifica se o token atual eh ')'
+            } else if(atual[1].trim().equals(")")) {
 
                 this.idTokenAtual++;
-                this.procedureStmtOrDeclarationList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se o token atual eh '}'
-                if(atual3[1].trim().equals("}")) {
+                if(this.idTokenAtual < this.tokens.getSize()) {
 
-                    this.idTokenAtual++;
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual eh '{'
+                    if(atual2[1].trim().equals("{")) {
+
+                        this.idTokenAtual++;
+                        this.procedureStmtOrDeclarationList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                            // Verifica se o token atual eh '}'
+                            if(atual3[1].trim().equals("}")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -226,40 +284,58 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureProcedureDef() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'procedure'
-        if(atual[1].trim().equals("procedure")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh 'Identifier'
-            if(atual2[0].contains("Identificador_")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'procedure'
+            if(atual[1].trim().equals("procedure")) {
 
                 this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh '('
-                if(atual3[1].trim().equals("(")) {
-                    
-                    this.idTokenAtual++;
-                    this.procedureProcedureDeflf();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh 'Identifier'
+                    if(atual2[0].contains("Identificador_")) {
+
+                        this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh '('
+                            if(atual3[1].trim().equals("(")) {
+
+                                this.idTokenAtual++;
+                                this.procedureProcedureDeflf();
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                            } 
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                               
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
-                    
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
-                }                
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
-            }
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'procedure' não encontrada na linha "+linha.trim()+".\n";
+            }  
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'procedure' não encontrada na linha "+linha.trim()+".\n";
-        }        
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }              
     }
     
     /**
@@ -267,81 +343,117 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureProcedureDeflf() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh primeiro de <ParameterList>
-        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
-                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
-                atual[0].contains("Identificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureParameterList();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh ')'
-            if(atual2[1].trim().equals(")")) {
-                
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh '{'
-                if(atual3[1].trim().equals("{")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh primeiro de <ParameterList>
+            if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
+                    atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                    atual[0].contains("Identificador_")) {
 
-                    this.idTokenAtual++;
-                    this.procedureStmtOrDeclarationList();
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                    // Verifica se o token atual eh '}'
-                    if(atual4[1].trim().equals("}")) {
+                this.procedureParameterList();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh ')'
+                    if(atual2[1].trim().equals(")")) {
 
                         this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh '{'
+                            if(atual3[1].trim().equals("{")) {
+
+                                this.idTokenAtual++;
+                                this.procedureStmtOrDeclarationList();
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                                    // Verifica se o token atual eh '}'
+                                    if(atual4[1].trim().equals("}")) {
+
+                                        this.idTokenAtual++;
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
                     } else {
 
                         // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
-                }
-            } else {
-                
-                // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-            }
-            
-        // Verifica se o token atual eh ')'    
-        } else if(atual[1].trim().equals(")")) {
-            
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh '{'
-            if(atual2[1].trim().equals("{")) {
-                
-                this.idTokenAtual++;
-                this.procedureStmtOrDeclarationList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh '}'
-                if(atual3[1].trim().equals("}")) {
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
 
-                    this.idTokenAtual++;
+            // Verifica se o token atual eh ')'    
+            } else if(atual[1].trim().equals(")")) {
+
+                this.idTokenAtual++;
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh '{'
+                    if(atual2[1].trim().equals("{")) {
+
+                        this.idTokenAtual++;
+                        this.procedureStmtOrDeclarationList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh '}'
+                            if(atual3[1].trim().equals("}")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -349,18 +461,24 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureTypedefDef() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'typedef'
-        if(atual[1].trim().equals("typedef")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'typedef'
+            if(atual[1].trim().equals("typedef")) {
 
-            this.idTokenAtual++;
-            this.procedureTypedefDeflf();
+                this.idTokenAtual++;
+                this.procedureTypedefDeflf();
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'typedef' não encontrada na linha "+linha.trim()+".\n";
+            } 
         } else {
-
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'typedef' não encontrada na linha "+linha.trim()+".\n";
-        }        
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }               
     }
     
     /**
@@ -368,68 +486,98 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureTypedefDeflf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh primeiro de <Type>
-        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
-                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
-                atual[0].contains("Identificador_")) {
-        
-            this.procedureType();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh 'Identifier'
-            if(atual2[0].contains("Identificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh primeiro de <Type>
+            if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
+                    atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                    atual[0].contains("Identificador_")) {
 
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh ';'
-                if(atual3[1].trim().equals(";")) {
+                this.procedureType();
+                if(this.idTokenAtual < this.tokens.getSize()) {
 
-                    this.idTokenAtual++;
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh 'Identifier'
+                    if(atual2[0].contains("Identificador_")) {
+
+                        this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh ';'
+                            if(atual3[1].trim().equals(";")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
-                }
-            } else {
-                
-                // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
-            }
-            
-        // Verifica se o token atual eh primeiro de <StructDef>    
-        } else if(atual[1].trim().equals("struct")) {
-            
-            this.procedureStructDef();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se eh token autual eh 'Identifier'
-            if(atual2[0].contains("Identificador_")) {
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
 
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh ';'
-                if(atual3[1].trim().equals(";")) {
+            // Verifica se o token atual eh primeiro de <StructDef>    
+            } else if(atual[1].trim().equals("struct")) {
 
-                    this.idTokenAtual++;
+                this.procedureStructDef();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se eh token autual eh 'Identifier'
+                    if(atual2[0].contains("Identificador_")) {
+
+                        this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh ';'
+                            if(atual3[1].trim().equals(";")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                            }  
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                              
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
-                }                
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -437,40 +585,58 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureVarDef() {
        
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'var'
-        if(atual[1].trim().equals("var")) {
-        
-            this.idTokenAtual++;            
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            // Verifica se o token atual eh '{'
-            if(atual2[1].trim().equals("{")) {
-        
-                this.idTokenAtual++;
-                this.procedureDeclarationList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se o token atual eh '}'
-                if(atual3[1].trim().equals("}")) {
-        
-                    this.idTokenAtual++;
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'var'
+            if(atual[1].trim().equals("var")) {
+
+                this.idTokenAtual++;      
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual eh '{'
+                    if(atual2[1].trim().equals("{")) {
+
+                        this.idTokenAtual++;
+                        this.procedureDeclarationList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                            // Verifica se o token atual eh '}'
+                            if(atual3[1].trim().equals("}")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'var' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'var' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -478,40 +644,58 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureConstDef() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'const'
-        if(atual[1].trim().equals("const")) {
-        
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh '{'
-            if(atual2[1].trim().equals("{")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'const'
+            if(atual[1].trim().equals("const")) {
 
                 this.idTokenAtual++;
-                this.procedureDeclarationList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh '}'
-                if(atual3[1].trim().equals("}")) {
+                if(this.idTokenAtual < this.tokens.getSize()) {
 
-                    this.idTokenAtual++;
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh '{'
+                    if(atual2[1].trim().equals("{")) {
+
+                        this.idTokenAtual++;
+                        this.procedureDeclarationList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh '}'
+                            if(atual3[1].trim().equals("}")) {
+
+                                this.idTokenAtual++;
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'const' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'const' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -519,29 +703,41 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStructDef() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh 'struct'
-        if(atual[1].trim().equals("struct")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh 'struct'
+            if(atual[1].trim().equals("struct")) {
 
-            this.idTokenAtual++;            
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh 'Identifier'
-            if(atual2[0].contains("Identificador_")) {
+                this.idTokenAtual++;    
+                if(this.idTokenAtual < this.tokens.getSize()) {
 
-                this.idTokenAtual++;
-                this.procedureStructDeflf();
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh 'Identifier'
+                    if(atual2[0].contains("Identificador_")) {
+
+                        this.idTokenAtual++;
+                        this.procedureStructDeflf();
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'struct' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
-
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'struct' não encontrada na linha "+linha.trim()+".\n";
-        }
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -549,67 +745,98 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStructDeflf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh '{'
-        if(atual[1].trim().equals("{")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureDeclarationList();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh '}'
-            if(atual2[1].trim().equals("}")) {
-                
-                this.idTokenAtual++;
-            } else {
-                
-                // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-            }        
-        // Verifica se o token atual eh 'extends'    
-        } else if(atual[1].trim().equals("extends")) {
-            
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-            // Verifica se o token atual eh '}'
-            if(atual2[1].trim().equals("}")) {
-                
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                // Verifica se o token atual eh '{'
-                if(atual3[0].contains("Identificador_")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh '{'
+            if(atual[1].trim().equals("{")) {
 
-                    this.idTokenAtual++;
-                    this.procedureDeclarationList();
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                this.idTokenAtual++;
+                this.procedureDeclarationList();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                     // Verifica se o token atual eh '}'
-                    if(atual4[1].trim().equals("}")) {
+                    if(atual2[1].trim().equals("}")) {
 
                         this.idTokenAtual++;
                     } else {
 
                         // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
+                        String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
                 }
+
+            // Verifica se o token atual eh 'extends'    
+            } else if(atual[1].trim().equals("extends")) {
+
+                this.idTokenAtual++;
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                    // Verifica se o token atual eh '}'
+                    if(atual2[1].trim().equals("}")) {
+
+                        this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                            // Verifica se o token atual eh '{'
+                            if(atual3[0].contains("Identificador_")) {
+
+                                this.idTokenAtual++;
+                                this.procedureDeclarationList();
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+                                    // Verifica se o token atual eh '}'
+                                    if(atual4[1].trim().equals("}")) {
+
+                                        this.idTokenAtual++;
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -626,16 +853,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureParameterList1() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 4) { 
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh ','
+            if(atual[0].contains("Delimitador") && atual.length == 4) { 
 
-            this.idTokenAtual++;
-            this.procedureDeclaration();
-            this.procedureParameterList1();
-        }
-        
-        // Vazio
+                this.idTokenAtual++;
+                this.procedureDeclaration();
+                this.procedureParameterList1();
+            }
+
+            // Vazio            
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        } 
     }
     
     /**
@@ -661,17 +894,23 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureDeclarationList1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh primeiro de <Declaration>
-        if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") || 
-                atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
-                atual[0].contains("Identificador_")) {
-        
-            this.procedureDeclaration();
-            this.procedureDeclarationList1();
-        }
-        
-        // Vazio
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh primeiro de <Declaration>
+            if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") || 
+                    atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
+                    atual[0].contains("Identificador_")) {
+
+                this.procedureDeclaration();
+                this.procedureDeclarationList1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -682,17 +921,23 @@ public class ControllerAnalisadorSintatico {
         this.procedureType();
         this.procedureInitDeclaratorList();
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh ';'
-        if(atual[1].trim().equals(";")) {
-            
-            this.idTokenAtual++;          
+        if(this.idTokenAtual < this.tokens.getSize()) {
+                        
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh ';'
+            if(atual[1].trim().equals(";")) {
+
+                this.idTokenAtual++;          
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }          
     }
     
     /**
@@ -709,16 +954,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureInitDeclaratorList1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 4) { 
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh ','
+            if(atual[0].contains("Delimitador") && atual.length == 4) { 
 
-            this.idTokenAtual++;
-            this.procedureInitDeclarator();
-            this.procedureInitDeclaratorList1();
-        }
-        
-        // Vazio
+                this.idTokenAtual++;
+                this.procedureInitDeclarator();
+                this.procedureInitDeclaratorList1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -735,15 +986,21 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureInitDeclaratorlf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '='
-        if(atual[1].trim().equals("=")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;    
-            this.procedureInitializer();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '='
+            if(atual[1].trim().equals("=")) {
+
+                this.idTokenAtual++;    
+                this.procedureInitializer();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -751,28 +1008,34 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureInitializer() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh primeiro de <AssignExpr> 
-        if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
-                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--")) {
-        
-            this.procedureAssignExpr();
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-        // Verifica se o token atual eh '{'
-        } else if(atual[1].trim().equals("{")) {
-            
-            this.idTokenAtual++;
-            this.procedureInitializerList();
-            this.procedureInitializerlf();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh primeiro de <AssignExpr> 
+            if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+                    atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
+                    atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
+                    atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                    atual[1].trim().equals("--")) {
+
+                this.procedureAssignExpr();
+
+            // Verifica se o token atual eh '{'
+            } else if(atual[1].trim().equals("{")) {
+
+                this.idTokenAtual++;
+                this.procedureInitializerList();
+                this.procedureInitializerlf();
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
-        
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
-        }
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -780,33 +1043,45 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureInitializerlf() {
 
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '}'
-        if(atual[1].trim().equals("}")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;   
-            
-        // Verifica se o token atual eh ','         
-        } else if(atual[0].contains("Delimitador") && atual.length == 4) {
-
-            this.idTokenAtual++; 
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
             // Verifica se o token atual eh '}'
-            if(atual2[1].trim().equals("}")) {
+            if(atual[1].trim().equals("}")) {
 
-                this.idTokenAtual++;    
+                this.idTokenAtual++;   
+
+            // Verifica se o token atual eh ','         
+            } else if(atual[0].contains("Delimitador") && atual.length == 4) {
+
+                this.idTokenAtual++; 
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual eh '}'
+                    if(atual2[1].trim().equals("}")) {
+
+                        this.idTokenAtual++;    
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
+                String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -823,16 +1098,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureInitializerList1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 4) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh ','
+            if(atual[0].contains("Delimitador") && atual.length == 4) {
 
-            this.idTokenAtual++;
-            this.procedureInitializer();
-            this.procedureInitializerList1();
-        }
-        
-        // Vazio
+                this.idTokenAtual++;
+                this.procedureInitializer();
+                this.procedureInitializerList1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -840,18 +1121,24 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureDeclarator() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '}'
-        if(atual[0].contains("Indetificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureDeclarator1();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '}'
+            if(atual[0].contains("Indetificador_")) {
+
+                this.idTokenAtual++;
+                this.procedureDeclarator1();
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     } 
     
     /**
@@ -859,15 +1146,21 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureDeclarator1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '['
-        if(atual[1].trim().equals("[")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureDeclarator1lf();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '['
+            if(atual[1].trim().equals("[")) {
+
+                this.idTokenAtual++;
+                this.procedureDeclarator1lf();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -875,39 +1168,51 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureDeclarator1lf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh primeiro de <CondExpr>
-        if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
-                atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
-                atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
-                atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[0].contains("Identificador_")) {
-        
-                this.procedureCondExpr();
-                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                // Verifica se o token atual eh ']'
-                if(atual2[1].trim().equals("]")) {
-
-                    this.idTokenAtual++;
-                    this.procedureDeclarator1();
-                } else {
-
-                    // Erro
-                    String linha = atual2[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
-                }
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-        // Verifica se o token atual eh ']'
-        } else if(atual[1].trim().equals("]")) {
-            
-            this.idTokenAtual++;
-            this.procedureDeclarator1();            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh primeiro de <CondExpr>
+            if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                    atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
+                    atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
+                    atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
+                    atual[0].contains("Identificador_")) {
+
+                    this.procedureCondExpr();
+                    if(this.idTokenAtual < this.tokens.getSize()) {
+
+                        String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                        // Verifica se o token atual eh ']'
+                        if(atual2[1].trim().equals("]")) {
+
+                            this.idTokenAtual++;
+                            this.procedureDeclarator1();
+                        } else {
+
+                            // Erro
+                            String linha = atual2[2].replaceAll(">", " ");
+                            this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+                        }
+                    } else {
+
+                        this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    }                
+
+            // Verifica se o token atual eh ']'
+            } else if(atual[1].trim().equals("]")) {
+
+                this.idTokenAtual++;
+                this.procedureDeclarator1();            
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -915,51 +1220,57 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh primeiro de <IterationStmt>
-        if(atual[1].trim().equals("while")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureIterationStmt();
-            
-        // Verifica se o token atual eh primeiro de <ExprStmt>    
-        } else if(atual[1].trim().equals("false") || atual[1].trim().equals(";") ||
-                atual[1].trim().equals("true") || atual[1].trim().equals("(") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--") || atual[0].contains("Numero") ||
-                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
-            
-            this.procedureExprStmt();
-            
-        // Verifica se o token atual eh primeiro de <CompoundStmt>      
-        } else if(atual[1].trim().equals("{")) {
-            
-            this.procedureCompoundStmt();
-            
-        // Verifica se o token atual eh primeiro de <PrintStmt>      
-        } else if(atual[1].trim().equals("print")) {
-            
-            this.procedurePrintStmt();
-            
-        // Verifica se o token atual eh primeiro de <ScanStmt>      
-        } else if(atual[1].trim().equals("scan")) {
-            
-            this.procedureScanStmt();
-            
-        // Verifica se o token atual eh primeiro de <IfStmt>      
-        } else if(atual[1].trim().equals("if")) {
-            
-            this.procedureIfStmt();
-            
-        // Verifica se o token atual eh primeiro de <ReturnStmt>      
-        } else if(atual[1].trim().equals("return")) {
-            
-            this.procedureReturnStmt();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh primeiro de <IterationStmt>
+            if(atual[1].trim().equals("while")) {
+
+                this.procedureIterationStmt();
+
+            // Verifica se o token atual eh primeiro de <ExprStmt>    
+            } else if(atual[1].trim().equals("false") || atual[1].trim().equals(";") ||
+                    atual[1].trim().equals("true") || atual[1].trim().equals("(") ||
+                    atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                    atual[1].trim().equals("--") || atual[0].contains("Numero") ||
+                    atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+
+                this.procedureExprStmt();
+
+            // Verifica se o token atual eh primeiro de <CompoundStmt>      
+            } else if(atual[1].trim().equals("{")) {
+
+                this.procedureCompoundStmt();
+
+            // Verifica se o token atual eh primeiro de <PrintStmt>      
+            } else if(atual[1].trim().equals("print")) {
+
+                this.procedurePrintStmt();
+
+            // Verifica se o token atual eh primeiro de <ScanStmt>      
+            } else if(atual[1].trim().equals("scan")) {
+
+                this.procedureScanStmt();
+
+            // Verifica se o token atual eh primeiro de <IfStmt>      
+            } else if(atual[1].trim().equals("if")) {
+
+                this.procedureIfStmt();
+
+            // Verifica se o token atual eh primeiro de <ReturnStmt>      
+            } else if(atual[1].trim().equals("return")) {
+
+                this.procedureReturnStmt();
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -967,30 +1278,36 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStmtOrDeclarationList() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh primeiro de <Stmt>
-        if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
-                || atual[1].trim().equals("return") || atual[1].trim().equals("print")
-                || atual[1].trim().equals("!") || atual[1].trim().equals("++")
-                || atual[1].trim().equals("--") || atual[0].contains("Numero")
-                || atual[1].trim().equals("if") || atual[1].trim().equals("while")
-                || atual[1].trim().equals(";") || atual[1].trim().equals("{")
-                || atual[1].trim().equals("scan") || atual[1].trim().equals("true")
-                || atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureStmt();
-            this.procedureStmtOrDeclarationList1();
-        
-        // Verifica se o token atual eh primeiro de <VarDef>
-        } else if(atual[1].trim().equals("var")) {
-            
-            this.procedureVarDef(); 
-            this.procedureStmtOrDeclarationList1(); 
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh primeiro de <Stmt>
+            if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
+                    || atual[1].trim().equals("return") || atual[1].trim().equals("print")
+                    || atual[1].trim().equals("!") || atual[1].trim().equals("++")
+                    || atual[1].trim().equals("--") || atual[0].contains("Numero")
+                    || atual[1].trim().equals("if") || atual[1].trim().equals("while")
+                    || atual[1].trim().equals(";") || atual[1].trim().equals("{")
+                    || atual[1].trim().equals("scan") || atual[1].trim().equals("true")
+                    || atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+
+                this.procedureStmt();
+                this.procedureStmtOrDeclarationList1();
+
+            // Verifica se o token atual eh primeiro de <VarDef>
+            } else if(atual[1].trim().equals("var")) {
+
+                this.procedureVarDef(); 
+                this.procedureStmtOrDeclarationList1(); 
+            } else {
+
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Declaração esperada não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     } 
     
     /**
@@ -998,28 +1315,34 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStmtOrDeclarationList1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh primeiro de <Stmt>
-        if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
-                || atual[1].trim().equals("return") || atual[1].trim().equals("print")
-                || atual[1].trim().equals("!") || atual[1].trim().equals("++")
-                || atual[1].trim().equals("--") || atual[0].contains("Numero")
-                || atual[1].trim().equals("if") || atual[1].trim().equals("while")
-                || atual[1].trim().equals(";") || atual[1].trim().equals("{")
-                || atual[1].trim().equals("scan") || atual[1].trim().equals("true")
-                || atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureStmt();
-            this.procedureStmtOrDeclarationList1();
-        
-        // Verifica se o token atual eh primeiro de <VarDef>
-        } else if(atual[1].trim().equals("var")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
+            // Verifica se o token atual eh primeiro de <Stmt>
+            if(atual[1].trim().equals("false") || atual[1].trim().equals("(")
+                    || atual[1].trim().equals("return") || atual[1].trim().equals("print")
+                    || atual[1].trim().equals("!") || atual[1].trim().equals("++")
+                    || atual[1].trim().equals("--") || atual[0].contains("Numero")
+                    || atual[1].trim().equals("if") || atual[1].trim().equals("while")
+                    || atual[1].trim().equals(";") || atual[1].trim().equals("{")
+                    || atual[1].trim().equals("scan") || atual[1].trim().equals("true")
+                    || atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+
+                this.procedureStmt();
+                this.procedureStmtOrDeclarationList1();
+
+            // Verifica se o token atual eh primeiro de <VarDef>
+            } else if(atual[1].trim().equals("var")) {
+
+                this.procedureVarDef(); 
+                this.procedureStmtOrDeclarationList1(); 
+            } 
+
+            // Vazio
+        } else {
             
-            this.procedureVarDef(); 
-            this.procedureStmtOrDeclarationList1(); 
-        } 
-        
-        // Vazio    
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }            
     }
     
     /**
@@ -1027,62 +1350,92 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureStartDef() {
             
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'start'
-        if(atual[1].trim().equals("start")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;            
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh '('
-            if(atual2[1].trim().equals("(")) {
-                
-                this.idTokenAtual++;
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                // Verifica se o token atual eh ')'
-                if(atual3[1].trim().equals(")")) {                    
-                    
-                    this.idTokenAtual++;
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
-                    // Verifica se o token atual eh '{'
-                    if(atual4[1].trim().equals("{")) {
-                     
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'start'
+            if(atual[1].trim().equals("start")) {
+
+                this.idTokenAtual++;           
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh '('
+                    if(atual2[1].trim().equals("(")) {
+
                         this.idTokenAtual++;
-                        this.procedureStmtOrDeclarationList();                        
-                        String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
-                        // Verifica se o token atual eh '}'
-                        if(atual5[1].trim().equals("}")) {
-                            
-                            this.idTokenAtual++;
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                            // Verifica se o token atual eh ')'
+                            if(atual3[1].trim().equals(")")) {                    
+
+                                this.idTokenAtual++;
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
+                                    // Verifica se o token atual eh '{'
+                                    if(atual4[1].trim().equals("{")) {
+
+                                        this.idTokenAtual++;
+                                        this.procedureStmtOrDeclarationList();  
+                                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                            String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
+                                            // Verifica se o token atual eh '}'
+                                            if(atual5[1].trim().equals("}")) {
+
+                                                this.idTokenAtual++;
+                                            } else {
+
+                                                // Erro                            
+                                                String linha = atual5[2].replaceAll(">", " ");
+                                                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                                            }
+                                        } else {
+
+                                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                        }                        
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";                    
+                            }
                         } else {
-                            
-                            // Erro                            
-                            String linha = atual5[2].replaceAll(">", " ");
-                            this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-                        }
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
                     } else {
-                        
-                        // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+
+                        // Erro  
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
-                    
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";                    
-                }
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
-                // Erro  
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'Start' esperada na linha "+linha.trim()+".\n";
             }
         } else {
-         
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'Start' esperada na linha "+linha.trim()+".\n";
-        }        
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }                
     }
     
     /**
@@ -1090,51 +1443,75 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedurePrintStmt() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'print'
-        if(atual[1].trim().equals("print")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh '('
-            if(atual2[1].trim().equals("(")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'print'
+            if(atual[1].trim().equals("print")) {
 
                 this.idTokenAtual++;
-                this.procedureArgumentList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                // Verifica se o token atual eh ')'
-                if(atual3[1].trim().equals(")")) {
-                    
-                    this.idTokenAtual++;
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                    // Verifica se o token atual eh ';'
-                    if(atual4[1].trim().equals(";")) {
-                        
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh '('
+                    if(atual2[1].trim().equals("(")) {
+
                         this.idTokenAtual++;
+                        this.procedureArgumentList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                            // Verifica se o token atual eh ')'
+                            if(atual3[1].trim().equals(")")) {
+
+                                this.idTokenAtual++;
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                                    // Verifica se o token atual eh ';'
+                                    if(atual4[1].trim().equals(";")) {
+
+                                        this.idTokenAtual++;
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
                     } else {
 
                         // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'print' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'print' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     } 
     
     /**
@@ -1142,51 +1519,75 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureScanStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'scan'
-        if(atual[1].trim().equals("scan")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh '('
-            if(atual2[1].trim().equals("(")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'scan'
+            if(atual[1].trim().equals("scan")) {
 
                 this.idTokenAtual++;
-                this.procedureArgumentList();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                // Verifica se o token atual eh ')'
-                if(atual3[1].trim().equals(")")) {
-                    
-                    this.idTokenAtual++;
-                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                    // Verifica se o token atual eh ';'
-                    if(atual4[1].trim().equals(";")) {
-                        
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh '('
+                    if(atual2[1].trim().equals("(")) {
+
                         this.idTokenAtual++;
+                        this.procedureArgumentList();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                            // Verifica se o token atual eh ')'
+                            if(atual3[1].trim().equals(")")) {
+
+                                this.idTokenAtual++;
+                                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                                    String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                                    // Verifica se o token atual eh ';'
+                                    if(atual4[1].trim().equals(";")) {
+
+                                        this.idTokenAtual++;
+                                    } else {
+
+                                        // Erro
+                                        String linha = atual4[2].replaceAll(">", " ");
+                                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                    }
+                                } else {
+
+                                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                                }                    
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
                     } else {
 
                         // Erro
-                        String linha = atual4[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
                     }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'scan' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'scan' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1194,41 +1595,59 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureIterationStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'while'
-        if(atual[1].trim().equals("while")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh '('
-            if(atual2[1].trim().equals("(")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'while'
+            if(atual[1].trim().equals("while")) {
 
                 this.idTokenAtual++;
-                this.procedureExpr();
-                String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-                // Verifica se o token atual eh ')'
-                if(atual3[1].trim().equals(")")) {
-                    
-                    this.idTokenAtual++;
-                    this.procedureStmt();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh '('
+                    if(atual2[1].trim().equals("(")) {
+
+                        this.idTokenAtual++;
+                        this.procedureExpr();
+                        if(this.idTokenAtual < this.tokens.getSize()) {
+
+                            String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                            // Verifica se o token atual eh ')'
+                            if(atual3[1].trim().equals(")")) {
+
+                                this.idTokenAtual++;
+                                this.procedureStmt();
+                            } else {
+
+                                // Erro
+                                String linha = atual3[2].replaceAll(">", " ");
+                                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                            }
+                        } else {
+
+                            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                        }                
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                    }
                 } else {
 
-                    // Erro
-                    String linha = atual3[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                }
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador '(' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'while' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'while' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1236,31 +1655,43 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureIfStmt() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'while'
-        if(atual[1].trim().equals("if")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureExpr();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh 'then'
-            if(atual2[1].trim().equals("then")) {
-                
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'while'
+            if(atual[1].trim().equals("if")) {
+
                 this.idTokenAtual++;
-                this.procedureStmt();
-                this.procedureIfStmtlf();
+                this.procedureExpr();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh 'then'
+                    if(atual2[1].trim().equals("then")) {
+
+                        this.idTokenAtual++;
+                        this.procedureStmt();
+                        this.procedureIfStmtlf();
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Palavra Reservada 'then' não encontrada na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Palavra Reservada 'then' não encontrada na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'if' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'if' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }    
     
     /**
@@ -1268,15 +1699,21 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureIfStmtlf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'else'
-        if(atual[1].trim().equals("else")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureStmt();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'else'
+            if(atual[1].trim().equals("else")) {
+
+                this.idTokenAtual++;
+                this.procedureStmt();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1284,29 +1721,41 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureReturnStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh 'return'
-        if(atual[1].trim().equals("return")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureExpr();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-            // Verifica se o token atual eh ';'
-            if(atual2[1].trim().equals(";")) {
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh 'return'
+            if(atual[1].trim().equals("return")) {
 
                 this.idTokenAtual++;
+                this.procedureExpr();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh ';'
+                    if(atual2[1].trim().equals(";")) {
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+                    
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Palavra Reservada 'return' não encontrada na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Palavra Reservada 'return' não encontrada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1314,18 +1763,23 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureCompoundStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh '{'
-        if(atual[1].trim().equals("{")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureCompoundStmtlf();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '{'
+            if(atual[1].trim().equals("{")) {
+
+                this.idTokenAtual++;
+                this.procedureCompoundStmtlf();
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
-            
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
-        }        
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }                
     } 
     
     /**
@@ -1333,41 +1787,53 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureCompoundStmtlf() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh '}'
-        if(atual[1].trim().equals("}")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh primeiro de <StmtOrDeclarationList>  
-        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("(") ||
-                atual[1].trim().equals("return") || atual[1].trim().equals("print") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--") || atual[1].trim().equals("var") ||
-                atual[1].trim().equals("if") || atual[1].trim().equals("while") ||
-                atual[1].trim().equals(";") || atual[1].trim().equals("{") || 
-                atual[1].trim().equals("scan") || atual[1].trim().equals("true") ||
-                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
-                   
-                this.procedureStmtOrDeclarationList();
-                    
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
             // Verifica se o token atual eh '}'
-            if(atual2[1].trim().equals("}")) {
+            if(atual[1].trim().equals("}")) {
 
                 this.idTokenAtual++;
+
+            // Verifica se o token atual eh primeiro de <StmtOrDeclarationList>  
+            } else if(atual[1].trim().equals("false") || atual[1].trim().equals("(") ||
+                    atual[1].trim().equals("return") || atual[1].trim().equals("print") ||
+                    atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                    atual[1].trim().equals("--") || atual[1].trim().equals("var") ||
+                    atual[1].trim().equals("if") || atual[1].trim().equals("while") ||
+                    atual[1].trim().equals(";") || atual[1].trim().equals("{") || 
+                    atual[1].trim().equals("scan") || atual[1].trim().equals("true") ||
+                    atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+
+                this.procedureStmtOrDeclarationList();
+
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh '}'
+                    if(atual2[1].trim().equals("}")) {
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
+                String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }       
     }
     
     /**
@@ -1375,37 +1841,49 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureExprStmt() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh ';'
-        if(atual[1].trim().equals(";")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh primeiro de <Expr>    
-        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
-                atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
-                atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
-                atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[0].contains("Identificador_")) {
-                    
-            this.procedureExpr();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
             // Verifica se o token atual eh ';'
-            if(atual2[1].trim().equals(";")) {
+            if(atual[1].trim().equals(";")) {
 
                 this.idTokenAtual++;
+
+            // Verifica se o token atual eh primeiro de <Expr>    
+            } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                    atual[1].trim().equals("(") || atual[1].trim().equals("!") ||
+                    atual[1].trim().equals("++") || atual[1].trim().equals("--") ||
+                    atual[0].contains("Numero") || atual[0].contains("Cadeia_de_Caracteres") ||
+                    atual[0].contains("Identificador_")) {
+
+                this.procedureExpr();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+                    // Verifica se o token atual eh ';'
+                    if(atual2[1].trim().equals(";")) {
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }            
             } else {
 
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
+                String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
             }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1422,16 +1900,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 4) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh ','
+            if(atual[0].contains("Delimitador") && atual.length == 4) {
 
-            this.idTokenAtual++;
-            this.procedureAssignExpr();
-            this.procedureExpr1();
+                this.idTokenAtual++;
+                this.procedureAssignExpr();
+                this.procedureExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         }
-        
-        // Vazio
     }
     
     /**
@@ -1448,16 +1932,21 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureAssignExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh '='
-        if(atual[1].trim().equals("=")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureCondExpr();
-            this.procedureAssignExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '='
+            if(atual[1].trim().equals("=")) {
+
+                this.idTokenAtual++;
+                this.procedureCondExpr();
+                this.procedureAssignExpr1();
+            }
+
+            // Vazio
+        } else {
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        } 
     }
     
     /**
@@ -1482,16 +1971,21 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureLogicalOrExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh '||'
-        if(atual[1].trim().equals("||")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureLogicalAndExpr();
-            this.procedureLogicalOrExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '||'
+            if(atual[1].trim().equals("||")) {
+
+                this.idTokenAtual++;
+                this.procedureLogicalAndExpr();
+                this.procedureLogicalOrExpr1();
+            }
+
+            // Vazio
+        } else {
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1508,16 +2002,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureLogicalAndExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh '&&'
-        if(atual[1].trim().equals("&&")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureEqualExpr();
-            this.procedureLogicalAndExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh '&&'
+            if(atual[1].trim().equals("&&")) {
+
+                this.idTokenAtual++;
+                this.procedureEqualExpr();
+                this.procedureLogicalAndExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1534,16 +2034,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureEqualExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh primeiro de <EqualOp>
-        if(atual[1].trim().equals("!=") || atual[1].trim().equals("==")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureEqualOp();
-            this.procedureRelationalExpr();
-            this.procedureEqualExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh primeiro de <EqualOp>
+            if(atual[1].trim().equals("!=") || atual[1].trim().equals("==")) {
+
+                this.procedureEqualOp();
+                this.procedureRelationalExpr();
+                this.procedureEqualExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1560,17 +2066,23 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureRelationalExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh primeiro de <RelationalOp>
-        if(atual[1].trim().equals("<") || atual[1].trim().equals("<=") ||
-                atual[1].trim().equals(">") || atual[1].trim().equals(">=")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureRelationalOp();
-            this.procedureAdditiveExpr();
-            this.procedureRelationalExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh primeiro de <RelationalOp>
+            if(atual[1].trim().equals("<") || atual[1].trim().equals("<=") ||
+                    atual[1].trim().equals(">") || atual[1].trim().equals(">=")) {
+
+                this.procedureRelationalOp();
+                this.procedureAdditiveExpr();
+                this.procedureRelationalExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1587,16 +2099,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureAdditiveExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh primeiro de <AdditiveOp>
-        if(atual[1].trim().equals("-") || atual[1].trim().equals("+")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureAdditiveOp();
-            this.procedureMultExpr();
-            this.procedureAdditiveExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh primeiro de <AdditiveOp>
+            if(atual[1].trim().equals("-") || atual[1].trim().equals("+")) {
+
+                this.procedureAdditiveOp();
+                this.procedureMultExpr();
+                this.procedureAdditiveExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1613,16 +2131,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureMultExpr1() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh primeiro de <MultOp>
-        if(atual[1].trim().equals("*") || atual[1].trim().equals("/")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureMultOp();
-            this.procedureUnaryExpr();
-            this.procedureMultExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh primeiro de <MultOp>
+            if(atual[1].trim().equals("*") || atual[1].trim().equals("/")) {
+
+                this.procedureMultOp();
+                this.procedureUnaryExpr();
+                this.procedureMultExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1630,20 +2154,26 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureUnaryExpr() {
     
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
-        // Verifica se o token atual eh primeiro de <UnaryOp>
-        if(atual[1].trim().equals("!") || atual[1].trim().equals("++") || atual[1].trim().equals("--")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedureUnaryOp();
-            this.procedureUnaryExpr();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
+            // Verifica se o token atual eh primeiro de <UnaryOp>
+            if(atual[1].trim().equals("!") || atual[1].trim().equals("++") || atual[1].trim().equals("--")) {
+
+                this.procedureUnaryOp();
+                this.procedureUnaryExpr();
+
+            // Verifica se o token atual eh primeiro de <PostfixExpr>    
+            } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
+                    atual[1].trim().equals("(") || atual[0].contains("Numero") ||
+                    atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
+
+                this.procedurePostfixExpr();
+            }
+        } else {
             
-        // Verifica se o token atual eh primeiro de <PostfixExpr>    
-        } else if(atual[1].trim().equals("false") || atual[1].trim().equals("true") ||
-                atual[1].trim().equals("(") || atual[0].contains("Numero") ||
-                atual[0].contains("Cadeia_de_Caracteres") || atual[0].contains("Identificador_")) {
-                        
-            this.procedurePostfixExpr();
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }   
     
     /**
@@ -1660,17 +2190,23 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedurePostfixExpr1() {
                 
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        //verifica se está no primeiro de <PostfixOp>
-        if(atual[1].trim().equals("[") || atual[1].trim().equals("(") ||
-           atual[1].trim().equals("++" )|| atual[1].trim().equals("--") ||
-           atual[1].trim().equals(".")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.procedurePostfixOp();
-            this.procedurePostfixExpr1();
-        }
-        
-        // Vazio
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            //verifica se está no primeiro de <PostfixOp>
+            if(atual[1].trim().equals("[") || atual[1].trim().equals("(") ||
+               atual[1].trim().equals("++" )|| atual[1].trim().equals("--") ||
+               atual[1].trim().equals(".")){
+
+                this.procedurePostfixOp();
+                this.procedurePostfixExpr1();
+            }
+
+            // Vazio
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1678,54 +2214,66 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedurePrimaryExpr() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh 'Identifier'
-        if(atual[0].contains("Identificador_")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh 'Number'    
-        } else if(atual[0].contains("Numero")) {
-            
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh 'Literal'    
-        } else if(atual[0].contains("Cadeia_de_Caracteres")) {
-            
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh 'true'    
-        } else if(atual[1].trim().equals("true")) {
-            
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh 'false'    
-        } else if(atual[1].trim().equals("false")) {
-            
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh '('    
-        } else if(atual[1].trim().equals("(")) {
-            
-            this.idTokenAtual++;
-            this.procedureExpr();
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            // Verifica se o token atual eh ')'
-            if(atual2[1].trim().equals(")")) {
-                
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh 'Identifier'
+            if(atual[0].contains("Identificador_")){
+
                 this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'Number'    
+            } else if(atual[0].contains("Numero")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'Literal'    
+            } else if(atual[0].contains("Cadeia_de_Caracteres")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'true'    
+            } else if(atual[1].trim().equals("true")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'false'    
+            } else if(atual[1].trim().equals("false")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '('    
+            } else if(atual[1].trim().equals("(")) {
+
+                this.idTokenAtual++;
+                this.procedureExpr();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual eh ')'
+                    if(atual2[1].trim().equals(")")) {
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                    }  
+                } else {
+
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }                      
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-            }            
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Expressão mal formada na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Expressão mal formada na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1733,22 +2281,28 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureEqualOp() {
             
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '=='
-        if(atual[1].trim().equals("==")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual é '!='    
-        } else if(atual[1].trim().equals("!=")){
-            
-            this.idTokenAtual++;
-        } else{
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '=='
+            if(atual[1].trim().equals("==")){
 
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ('==' ou '!=') não encontrado na linha "+linha.trim()+".\n";
-        }
+                this.idTokenAtual++;
+
+            // Verifica se o token atual é '!='    
+            } else if(atual[1].trim().equals("!=")){
+
+                this.idTokenAtual++;
+            } else{
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ('==' ou '!=') não encontrado na linha "+linha.trim()+".\n";
+            }
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1756,32 +2310,38 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureRelationalOp() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '<'
-        if(atual[1].trim().equals("<")){
-        
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh '>'    
-        } else if(atual[1].trim().equals(">")){
-        
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh '<='    
-        } else if(atual[1].trim().equals("<=")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh '>='    
-        } else if(atual[1].trim().equals(">=")){
-            
-            this.idTokenAtual++;
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '<'
+            if(atual[1].trim().equals("<")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '>'    
+            } else if(atual[1].trim().equals(">")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '<='    
+            } else if(atual[1].trim().equals("<=")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '>='    
+            } else if(atual[1].trim().equals(">=")){
+
+                this.idTokenAtual++;
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ('<', '>', '<=', '>=' ou '>') não encontrado na linha "+linha.trim()+".\n";
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ('<', '>', '<=', '>=' ou '>') não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }      
     
     /**
@@ -1789,22 +2349,29 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureAdditiveOp() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '+'
-        if(atual[1].trim().equals("+")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh '-'    
-        } else if(atual[1].trim().equals("-")){
-            
-            this.idTokenAtual++;            
-        } else{
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '+'
+            if(atual[1].trim().equals("+")){
 
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ('+' ou '-') não encontrado na linha "+linha.trim()+".\n";
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '-'    
+            } else if(atual[1].trim().equals("-")){
+
+                this.idTokenAtual++;            
+            } else{
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ('+' ou '-') não encontrado na linha "+linha.trim()+".\n";
+            }
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         }
+        
     }   
     
     /**
@@ -1812,49 +2379,61 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureMultOp() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '*'
-        if(atual[1].trim().equals("*")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh '/'
-        } else if(atual[1].trim().equals("/")){
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '*'
+            if(atual[1].trim().equals("*")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '/'
+            } else if(atual[1].trim().equals("/")){
+
+                this.idTokenAtual++;        
+            } else{
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ('*' ou '/') não encontrado na linha "+linha.trim()+".\n";
+            }
+        } else {
             
-            this.idTokenAtual++;        
-        } else{
-            
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ('*' ou '/') não encontrado na linha "+linha.trim()+".\n";
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }        
     /**
      * <UnaryOp> ::= '++' | '--' | '!'
      */
     private void procedureUnaryOp() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh '++'
-        if(atual[1].trim().equals("++")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh '--'    
-        } else if(atual[1].trim().equals("--")){
-            
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh '!'    
-        } else if(atual[1].trim().equals("!")){
-            
-            this.idTokenAtual++;
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh '++'
+            if(atual[1].trim().equals("++")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '--'    
+            } else if(atual[1].trim().equals("--")){
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh '!'    
+            } else if(atual[1].trim().equals("!")){
+
+                this.idTokenAtual++;
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ('++', '--' ou '!') não encontrado na linha "+linha.trim()+".\n";          
+            }
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ('++', '--' ou '!') não encontrado na linha "+linha.trim()+".\n";          
-        }
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
     /**
@@ -1862,61 +2441,77 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedurePostfixOp() {
                 
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual é '++'
-        if(atual[1].trim().equals("++")){
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual é '--'    
-        } else if(atual[1].trim().equals("--")){
-        
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual é '['    
-        } else if(atual[1].trim().equals("[")){
-            
-            this.idTokenAtual++;
-            this.procedureExpr();
-            // Verifica se o token atual é ']'
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            if(atual2[1].trim().equals("]")){
-                
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual é '++'
+            if(atual[1].trim().equals("++")){
+
                 this.idTokenAtual++;
-            } else {
-                
-                // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
-            }
-        
-        // Verifica se o token atual é '('      
-        } else if(atual[1].trim().equals("(")){
-            
-            this.idTokenAtual++;
-            this.procedurePostfixOplf();  
-            
-        // Verifica se o token atual é '.'      
-        } else if(atual[1].trim().equals(".")){
-            
-            this.idTokenAtual++;
-            // Verifica se o token atual é um 'Identifier'
-            String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            if(atual2[0].contains("Identificador_")){
-                
+
+            // Verifica se o token atual é '--'    
+            } else if(atual[1].trim().equals("--")){
+
                 this.idTokenAtual++;
+
+            // Verifica se o token atual é '['    
+            } else if(atual[1].trim().equals("[")){
+
+                this.idTokenAtual++;
+                this.procedureExpr();
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual é ']'
+                    if(atual2[1].trim().equals("]")){
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }
+
+            // Verifica se o token atual é '('      
+            } else if(atual[1].trim().equals("(")){
+
+                this.idTokenAtual++;
+                this.procedurePostfixOplf();  
+
+            // Verifica se o token atual é '.'      
+            } else if(atual[1].trim().equals(".")){
+
+                this.idTokenAtual++;
+                if(this.idTokenAtual < this.tokens.getSize()) {
+
+                    String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                    // Verifica se o token atual é um 'Identifier'
+                    if(atual2[0].contains("Identificador_")){
+
+                        this.idTokenAtual++;
+                    } else {
+
+                        // Erro
+                        String linha = atual2[2].replaceAll(">", " ");
+                        this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                    }
+                } else {
+                    this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                }
             } else {
-                
+
                 // Erro
-                String linha = atual2[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Operador ou Delimitador não encontrado na linha "+linha.trim()+".\n";           
             }
         } else {
-
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador ou Delimitador não encontrado na linha "+linha.trim()+".\n";           
-        }       
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }   
     } 
     
     /**
@@ -1924,37 +2519,49 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedurePostfixOplf() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual é ')'
-        if(atual[1].trim().equals(")")){
-           
-            this.idTokenAtual++; 
-        
-        // Verifica se o token atual eh primeiro de <ArgumentList>
-        } else if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
-                atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
-                atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
-                atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
-                atual[1].trim().equals("--")) {
-                
-                this.procedureArgumentList();
-                // Verifica se o token atual eh ')'
-                String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-                if(atual2[1].trim().equals(")")){
-                    
-                    this.idTokenAtual++;
-                } else{
-                
-                    // Erro
-                    String linha = atual2[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                }        
+        if(this.idTokenAtual < this.tokens.getSize()) {
+            
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual é ')'
+            if(atual[1].trim().equals(")")){
+
+                this.idTokenAtual++; 
+
+            // Verifica se o token atual eh primeiro de <ArgumentList>
+            } else if(atual[0].contains("Numero") || atual[1].trim().equals("false") ||
+                    atual[1].trim().equals("true") || atual[0].contains("Cadeia_de_Caracteres") ||
+                    atual[1].trim().equals("(") || atual[0].contains("Identificador_") ||
+                    atual[1].trim().equals("!") || atual[1].trim().equals("++") ||
+                    atual[1].trim().equals("--")) {
+
+                    this.procedureArgumentList();
+                    if(this.idTokenAtual < this.tokens.getSize()) {
+
+                        String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+                        // Verifica se o token atual eh ')'
+                        if(atual2[1].trim().equals(")")){
+
+                            this.idTokenAtual++;
+                        } else{
+
+                            // Erro
+                            String linha = atual2[2].replaceAll(">", " ");
+                            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                        } 
+                    } else {
+                        
+                        this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+                    }    
+            } else {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+            } 
         } else {
             
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-        }      
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }  
     }
     
     /**
@@ -1971,16 +2578,22 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureArgumentList1() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 4) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
-            this.procedureAssignExpr();
-            this.procedureArgumentList1();
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh ','
+            if(atual[0].contains("Delimitador") && atual.length == 4) {
+
+                this.idTokenAtual++;
+                this.procedureAssignExpr();
+                this.procedureArgumentList1();
+            }
+
+            // Vazio            
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         }
-        
-        // Vazio
     }
     
     /**
@@ -1988,37 +2601,43 @@ public class ControllerAnalisadorSintatico {
      */
     private void procedureType() {
         
-        String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-        // Verifica se o token atual eh 'int'
-        if(atual[1].trim().equals("int")) {
+        if(this.idTokenAtual < this.tokens.getSize()) {
             
-            this.idTokenAtual++;
+            String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            // Verifica se o token atual eh 'int'
+            if(atual[1].trim().equals("int")) {
 
-        // Verifica se o token atual eh 'string'    
-        } else if(atual[1].trim().equals("string")) {
-            
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh 'float'        
-        } else if(atual[1].trim().equals("float")) {
-        
-            this.idTokenAtual++;
-        
-        // Verifica se o token atual eh 'bool'   
-        } else if(atual[1].trim().equals("bool")) {
-            
-            this.idTokenAtual++;
-            
-        // Verifica se o token atual eh 'Identifier'       
-        } else if(atual[0].contains("Identificador_")) {
-            
-            this.idTokenAtual++;            
-        } else  {
+                this.idTokenAtual++;
 
-            // Erro
-            String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
-        }
+            // Verifica se o token atual eh 'string'    
+            } else if(atual[1].trim().equals("string")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'float'        
+            } else if(atual[1].trim().equals("float")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'bool'   
+            } else if(atual[1].trim().equals("bool")) {
+
+                this.idTokenAtual++;
+
+            // Verifica se o token atual eh 'Identifier'       
+            } else if(atual[0].contains("Identificador_")) {
+
+                this.idTokenAtual++;            
+            } else  {
+
+                // Erro
+                String linha = atual[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
+            }
+        } else {
+            
+            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+        }        
     }
     
 }
