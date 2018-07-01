@@ -2503,13 +2503,15 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Operador ('*' ou '/') não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("Numero, false, true, Cadeia_de_Caracteres, (, Identificador_, !, ++, --");
                 
             }
         } else {
             
             this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
         }        
-    }        
+    }   
+    
     /**
      * <UnaryOp> ::= '++' | '--' | '!'
      */
@@ -2536,7 +2538,8 @@ public class ControllerAnalisadorSintatico {
 
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Operador ('++', '--' ou '!') não encontrado na linha "+linha.trim()+".\n";          
+                this.errosSintaticos += "Erro - Operador ('++', '--' ou '!') não encontrado na linha "+linha.trim()+".\n"; 
+                this.modalidadeDesespero2("-, +, then, *, ), <=, ||, ==, &&, >, =, ], }, <, !=, >=, ;, /");
             }
         } else {
             
@@ -2579,6 +2582,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -, +, then, ), ||, &&, >, ], <, [, >=, .");
                     }
                 } else {
                     this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
@@ -2606,6 +2610,7 @@ public class ControllerAnalisadorSintatico {
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
                         this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".\n";
+                        this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -, +, then, ), ||, &&, >, ], <, [, >=, .");
                     }
                 } else {
                     this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
@@ -2614,7 +2619,8 @@ public class ControllerAnalisadorSintatico {
 
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Operador ou Delimitador não encontrado na linha "+linha.trim()+".\n";           
+                this.errosSintaticos += "Erro - Operador ou Delimitador não encontrado na linha "+linha.trim()+".\n";  
+                this.modalidadeDesespero2("*, (, <=, ++, --, ==, =, }, !=, ;, /, -, +, then, ), ||, &&, >, ], <, [, >=, .");
             }
         } else {
             
@@ -2655,6 +2661,7 @@ public class ControllerAnalisadorSintatico {
                             // Erro
                             String linha = atual2[2].replaceAll(">", " ");
                             this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                            this.modalidadeDesespero2("-, +, then, *, ), (, <=, ||, ++, --, ==, &&, >, =, ], }, <, !=, [, >=, ;, /, .");
                         } 
                     } else {
                         
@@ -2665,6 +2672,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero2("-, +, then, *, ), (, <=, ||, ++, --, ==, &&, >, =, ], }, <, !=, [, >=, ;, /, .");
             } 
         } else {
             
@@ -2741,6 +2749,7 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
+                this.modalidadeDesespero("Identificador_");
             }
         } else {
             
