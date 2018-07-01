@@ -1,6 +1,6 @@
 function int getSomar() {
 
-    int { 
+    var { 
     
         int x;
         int y;
