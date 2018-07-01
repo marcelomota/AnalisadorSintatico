@@ -1125,7 +1125,7 @@ public class ControllerAnalisadorSintatico {
             
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
             // Verifica se o token atual eh '}'
-            if(atual[0].contains("Indetificador_")) {
+            if(atual[0].contains("Identificador_")) {
 
                 this.idTokenAtual++;
                 this.procedureDeclarator1();
