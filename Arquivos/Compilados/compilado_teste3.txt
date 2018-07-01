@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro 69 - Delimitador ';' não encontrado na linha 14.

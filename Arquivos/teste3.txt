@@ -3,11 +3,13 @@ function int getSomar() {
     var { 
     
         int x, y, soma;
+
+    
     }
+    
+    scan(x, y);
 
-    scan(x,y);
-
-    soma = somar(x, y);
+    soma = somar(x, y)
 
     print(soma);
 }

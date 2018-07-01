@@ -531,8 +531,7 @@ public class ControllerAnalisadorSintatico {
                             } else {
 
                                 // Erro
-                                String linha = atual3[2].replaceAll(">", " ");
-                                this.errosSintaticos += "Erro 20 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                this.errosSintaticos += "Erro 20 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                                 this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                             }
                         } else {
@@ -572,8 +571,7 @@ public class ControllerAnalisadorSintatico {
                             } else {
 
                                 // Erro
-                                String linha = atual3[2].replaceAll(">", " ");
-                                this.errosSintaticos += "Erro 22 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                this.errosSintaticos += "Erro 22 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                                 this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
                             }  
                         } else {
@@ -969,8 +967,7 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 // Erro
-                String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 37 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 37 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                 this.modalidadeDesespero("}, bool, float, int, string, Identificador_");
             }
         } else {
@@ -1135,7 +1132,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitializerList1> ::= ',' <Initializer> <InitializerList1> | 'vazio'
+     * <InitializerList1> ::= ',' <Initializer> <InitializerList1> | 
      */
     private void procedureInitializerList1() {
     
@@ -1164,21 +1161,20 @@ public class ControllerAnalisadorSintatico {
         if(this.idTokenAtual < this.tokens.getSize()) {
             
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
-            // Verifica se o token atual eh '}'
+            // Verifica se o token atual eh 'Identifier'
             if(atual[0].contains("Identificador_")) {
 
                 this.idTokenAtual++;
                 this.procedureDeclarator1();
             } else {
 
-                // Erro
-                String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 41 - Identificador não encontrado na linha "+linha.trim()+".\n";
+                // Erro    
+                this.errosSintaticos += "Erro 41 - Identificador não encontrado na linha "+this.getLinhaErro(this.idTokenAtual-1)+".\n";
                 this.modalidadeDesespero2("=, ;, ), (");
             }
         } else {
             
-            this.errosSintaticos += "Erro - Limite da lista de tokens.\n";
+            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureDeclarator()");
         }        
     } 
     
@@ -1525,7 +1521,7 @@ public class ControllerAnalisadorSintatico {
 
                                         // Erro
                                         String linha = atual4[2].replaceAll(">", " ");
-                                        this.errosSintaticos += "Erro 51 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                        this.errosSintaticos += "Erro 51 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                                         this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                                     }
@@ -1608,8 +1604,7 @@ public class ControllerAnalisadorSintatico {
                                     } else {
 
                                         // Erro
-                                        String linha = atual4[2].replaceAll(">", " ");
-                                        this.errosSintaticos += "Erro 55 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                                        this.errosSintaticos += "Erro 55 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                                         this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                                     }
@@ -1813,8 +1808,7 @@ public class ControllerAnalisadorSintatico {
                     } else {
 
                         // Erro
-                        String linha = atual2[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro 64 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        this.errosSintaticos += "Erro 64 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                         this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificacor_");
                     }
@@ -1952,8 +1946,7 @@ public class ControllerAnalisadorSintatico {
                     } else {
 
                         // Erro
-                        String linha = atual2[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro 69 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                        this.errosSintaticos += "Erro 69 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                         this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                     }
@@ -1964,8 +1957,7 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 // Erro
-                String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 70 - Delimitador ';' não encontrado na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 70 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(idTokenAtual-1)+".\n";
                 this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
@@ -2256,7 +2248,7 @@ public class ControllerAnalisadorSintatico {
                 
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 71 - Expressão mal formada na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 71 - Token esperado não encontrado na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero2("-, +, then, *, ), <=, ||, ==, &&, >, =, ], }, <, !=, >=, ;, /");
             }
         } else {
@@ -2807,6 +2799,20 @@ public class ControllerAnalisadorSintatico {
                 }                
             }
         } while(trava);        
+    }
+    
+    private int getLinhaErro(int index) {
+                
+        String[] atual = this.tokens.getUnicToken(index).split(",");
+        if(atual.length == 4) {
+            
+            String linha = atual[3].replaceAll(">", " ");
+            return Integer.parseInt(linha.trim());
+        } else {
+            
+            String linha = atual[2].replaceAll(">", " ");
+            return Integer.parseInt(linha.trim());
+        }        
     }
     
 }
