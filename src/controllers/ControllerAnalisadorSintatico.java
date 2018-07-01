@@ -797,7 +797,12 @@ public class ControllerAnalisadorSintatico {
             if(atual2[1].trim().equals("}")) {
 
                 this.idTokenAtual++;    
-            } 
+            } else {
+                
+                // Erro
+                String linha = atual2[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Delimitador '}' não encontrado na linha "+linha.trim()+".";
+            }
         } else {
             
             // Erro
@@ -825,6 +830,8 @@ public class ControllerAnalisadorSintatico {
         if(atual[0].contains("Delimitador") && atual.length == 3) {
 //************************************************************************************** VERIFICAR **************************
             this.idTokenAtual++;
+            this.procedureInitializer();
+            this.procedureInitializerList1();
         }
         
         // Vazio
@@ -1481,6 +1488,7 @@ public class ControllerAnalisadorSintatico {
         // Verifica se o token atual eh '||'
         if(atual[1].trim().equals("||")) {
             
+            this.idTokenAtual++;
             this.procedureLogicalAndExpr();
             this.procedureLogicalOrExpr1();
         }
@@ -1506,6 +1514,7 @@ public class ControllerAnalisadorSintatico {
         // Verifica se o token atual eh '&&'
         if(atual[1].trim().equals("&&")) {
             
+            this.idTokenAtual++;
             this.procedureEqualExpr();
             this.procedureLogicalAndExpr1();
         }
@@ -1712,7 +1721,6 @@ public class ControllerAnalisadorSintatico {
                 // Erro
                 String linha = atual2[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
-
             }            
         } else {
             
@@ -1741,8 +1749,7 @@ public class ControllerAnalisadorSintatico {
 
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador de Igualdade não encontrado na linha "+linha.trim()+".";
-
+            this.errosSintaticos += "Erro - Operador ('==' ou '!=') não encontrado na linha "+linha.trim()+".";
         }
     }
     
@@ -1775,8 +1782,7 @@ public class ControllerAnalisadorSintatico {
             
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador Relacional não encontrado na linha "+linha.trim()+".";
-
+            this.errosSintaticos += "Erro - Operador ('<', '>', '<=', '>=' ou '>') não encontrado na linha "+linha.trim()+".";
         }
     }      
     
@@ -1794,14 +1800,12 @@ public class ControllerAnalisadorSintatico {
         // Verifica se o token atual eh '-'    
         } else if(atual[1].trim().equals("-")){
             
-            this.idTokenAtual++;
-            
+            this.idTokenAtual++;            
         } else{
 
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro - Operador Aritmético não encontrado na linha "+linha.trim()+".";
-
+            this.errosSintaticos += "Erro - Operador ('+' ou '-') não encontrado na linha "+linha.trim()+".";
         }
     }   
     
@@ -1819,14 +1823,12 @@ public class ControllerAnalisadorSintatico {
         // Verifica se o token atual eh '/'
         } else if(atual[1].trim().equals("/")){
             
-            this.idTokenAtual++;
-        
+            this.idTokenAtual++;        
         } else{
             
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador Aritmético não encontrado na linha "+linha.trim()+".";
-
+            this.errosSintaticos += "Erro - Operador ('*' ou '/') não encontrado na linha "+linha.trim()+".";
         }
     }        
     /**
@@ -1853,9 +1855,7 @@ public class ControllerAnalisadorSintatico {
             
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Operador não encontrado na linha "+linha.trim()+".";
-
-            
+            this.errosSintaticos += "Erro - Operador ('++', '--' ou '!') não encontrado na linha "+linha.trim()+".";          
         }
     }
     
@@ -1891,11 +1891,14 @@ public class ControllerAnalisadorSintatico {
                 String linha = atual2[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro - Delimitador ']' não encontrado na linha "+linha.trim()+".";
             }
+        
+        // Verifica se o token atual é '('      
         } else if(atual[1].trim().equals("(")){
             
             this.idTokenAtual++;
-            this.procedurePostfixOplf();
+            this.procedurePostfixOplf();  
             
+        // Verifica se o token atual é '.'      
         } else if(atual[1].trim().equals(".")){
             
             this.idTokenAtual++;
@@ -1904,16 +1907,18 @@ public class ControllerAnalisadorSintatico {
             if(atual2[0].contains("Identificador_")){
                 
                 this.idTokenAtual++;
+            } else {
+                
+                // Erro
+                String linha = atual2[2].replaceAll(">", " ");
+                this.errosSintaticos += "Erro - Identificador não encontrado na linha "+linha.trim()+".";
             }
         } else {
 
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-            this.errosSintaticos += "Erro - Sintaxe mal formulada na linha "+linha.trim()+".";
-
-            
-        }
-         
+            this.errosSintaticos += "Erro - Operador ou Delimitador não encontrado na linha "+linha.trim()+".";           
+        }       
     } 
     
     /**
@@ -1950,7 +1955,7 @@ public class ControllerAnalisadorSintatico {
             
             // Erro
             String linha = atual[2].replaceAll(">", " ");
-                    this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
+            this.errosSintaticos += "Erro - Delimitador ')' não encontrado na linha "+linha.trim()+".";
         }      
     }
     
@@ -1972,7 +1977,8 @@ public class ControllerAnalisadorSintatico {
         // Verifica se o token atual eh ','
         if(atual[0].contains("Delimitador") && atual.length == 3) {
 // ************************************************************************************** VERIFICAR **************************
-        
+            
+            this.idTokenAtual++;
             this.procedureAssignExpr();
             this.procedureArgumentList1();
         }
