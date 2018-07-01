@@ -1,0 +1,6 @@
+function int somar(int x, int y) {
+
+    int soma = 8;
+
+    return x;
+}

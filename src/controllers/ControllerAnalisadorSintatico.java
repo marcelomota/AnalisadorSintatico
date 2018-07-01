@@ -9,8 +9,7 @@ public class ControllerAnalisadorSintatico {
     private int idTokenAtual;
     
     public ControllerAnalisadorSintatico() {
-   
-        this.errosSintaticos = "";
+        
     }
     
     /**
@@ -22,6 +21,7 @@ public class ControllerAnalisadorSintatico {
         
         this.tokens = tokens;        
         this.idTokenAtual = 0;
+        this.errosSintaticos = "";
         if(this.idTokenAtual < this.tokens.getSize()) {
             
             this.procedureS();

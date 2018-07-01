@@ -1,124 +1,101 @@
 const {
 
-	int fator = 40;
+    int fator = 40;
 }
-
 
 struct pessoas {
 
+    string nome;
 
-     string nome;
+    int idade;
 
-     int idade;
-
-     double peso;
-
-
+    double peso;
 }
 
 start() {
 
+    var { int valor; }
 
-	int valor;
+    valor = 10;
 
-	valor = 10;
+    valor = (fator*valor*soma(valor, 4))/40;
 
-	valor = (fator*valor*soma(valor, 4))/40;
+    var { pessoa pessoas[10]; }
 
-    	pessoa pessoas[10];
-     
-	string nome;
-    
-	int i = 0, x=0;
-     
-	double peso = 0;
-     
-	string texto= "Digite";
-    
+    var { string nome; }
 
-	while(i<10) {
+    var { int i = 0, x=0; }
 
+    var { double peso = 0; }
 
-		printf(texto,texto);
+    var { string texto= "Digite"; }
 
-		scanf(nome);
-    
-		printf(texto);
-    
-		scanf(x);
-    
-		printf(texto,x);
-    
-		scanf(peso);
-    
-		pessoa[i].nome=nome;
-    
-		pessoa[i].idade=x;
-   
-		pessoa[i].peso=peso;
-   
-		x++;
-    
-		printf(pessoa[i].idade,pessoa[i].peso);
-    
-	}
+    while(i<10) {
 
-    
-	nome = "a";
+        printf(texto,texto);
 
-    	while(nome=="a") {
+        scanf(nome);
 
+        printf(texto);
 
-    		print(nome);
+        scanf(x);
 
-    		scan(nome);
-    
-		teste(nome);
-    
-	}
-    
+        printf(texto,x);
 
+        scanf(peso);
+
+        pessoa[i].nome=nome;
+
+        pessoa[i].idade=x;
+
+        pessoa[i].peso=peso;
+
+        x++;
+
+        printf(pessoa[i].idade,pessoa[i].peso);    
+    }
+
+    nome = "a";
+
+    while(nome=="a") {
+
+        print(nome);
+
+        scan(nome);
+
+        teste(nome);    
+    }
 }
 
 function int somar(int x, int y) {
 
-
 	int soma = 8;
 
 	return x;
-
 }
-
 
 procedure teste(string teste) {
 
+    string outro = teste+teste;
 
-	string outro = teste+teste;
+    if(teste==outro) then {
 
-	if(teste==outro) then {
+        print(teste);
+    } else {
 
-		print(teste);
-
-	} else {
-
-		print(teste, teste);
-
-   	}
-
+        print(teste, teste);
+    }
 }
-
 
 function int getSomar() {
 
+    int x;
 
-	int x;
-	
-int y;
-	
-scanf(x,y);
-	
-int soma = somar(x,y);
-	
-print(soma);
+    int y;
 
+    scanf(x,y);
+
+    int soma = somar(x,y);
+
+    print(soma);
 }
