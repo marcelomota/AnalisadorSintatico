@@ -628,10 +628,8 @@ public class ControllerAnalisadorSintatico {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
         // Verifica se o token atual eh ','
-        
-        this.verificaVirgula();
-        if(atual[0].contains("Delimitador") && atual.length == 3) { 
-//************************************************************************************** VERIFICAR **************************
+        if(atual[0].contains("Delimitador") && atual.length == 4) { 
+
             this.idTokenAtual++;
             this.procedureDeclaration();
             this.procedureParameterList1();
@@ -713,8 +711,8 @@ public class ControllerAnalisadorSintatico {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
         // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 3) { 
-//************************************************************************************** VERIFICAR **************************
+        if(atual[0].contains("Delimitador") && atual.length == 4) { 
+
             this.idTokenAtual++;
             this.procedureInitDeclarator();
             this.procedureInitDeclaratorList1();
@@ -781,16 +779,16 @@ public class ControllerAnalisadorSintatico {
      * <Initializerlf> ::= '}' | ',' '}'    
      */
     private void procedureInitializerlf() {
-    
+
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh '}'
         if(atual[1].trim().equals("}")) {
             
             this.idTokenAtual++;   
             
-        // Verifica se o token atual eh ','    
-        } else if(atual[0].contains("Delimitador") && atual.length == 3) {
-//************************************************************************************** VERIFICAR **************************
+        // Verifica se o token atual eh ','         
+        } else if(atual[0].contains("Delimitador") && atual.length == 4) {
+
             this.idTokenAtual++; 
             String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
             // Verifica se o token atual eh '}'
@@ -827,8 +825,8 @@ public class ControllerAnalisadorSintatico {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 3) {
-//************************************************************************************** VERIFICAR **************************
+        if(atual[0].contains("Delimitador") && atual.length == 4) {
+
             this.idTokenAtual++;
             this.procedureInitializer();
             this.procedureInitializerList1();
@@ -1426,8 +1424,8 @@ public class ControllerAnalisadorSintatico {
     
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
         // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 3) {
-//************************************************************************************** VERIFICAR **************************
+        if(atual[0].contains("Delimitador") && atual.length == 4) {
+
             this.idTokenAtual++;
             this.procedureAssignExpr();
             this.procedureExpr1();
@@ -1975,8 +1973,7 @@ public class ControllerAnalisadorSintatico {
         
         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
         // Verifica se o token atual eh ','
-        if(atual[0].contains("Delimitador") && atual.length == 3) {
-// ************************************************************************************** VERIFICAR **************************
+        if(atual[0].contains("Delimitador") && atual.length == 4) {
             
             this.idTokenAtual++;
             this.procedureAssignExpr();
@@ -2021,23 +2018,6 @@ public class ControllerAnalisadorSintatico {
             // Erro
             String linha = atual[2].replaceAll(">", " ");
             this.errosSintaticos += "Erro - Tipo não encontrado na linha "+linha.trim()+".\n";
-        }
-    }
-    
-    private void verificaVirgula() {
-        
-         String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-        // Verifica se o token atual eh ','
-        System.out.println("Teste do if da virgula");
-        System.out.println("Token: "+this.tokens.getUnicToken(this.idTokenAtual));
-        System.out.println("Atual[0]: "+atual[0]);
-        System.out.println("Atual.length: "+atual.length);
-        if(atual[0].contains("Delimitador") && atual.length == 3) { 
-            
-            System.out.println("Entrou no if da virgula");
-        } else {
-            
-            System.err.println("Não entrou no if");
         }
     }
     

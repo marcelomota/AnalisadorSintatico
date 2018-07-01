@@ -38,7 +38,7 @@ public class Main {
                 
                 // Percorre os caracteres do texto e retorna os erros encontrados.
                 String errosLexicos = lexico.analisar(texto, tokens, simbolos); 
-                
+                //tokens.printTokens();
                 // Percorre os tokens e retorna os erros encontrados.
                 String errosSintaticos = sintatico.analisar(tokens);
 
