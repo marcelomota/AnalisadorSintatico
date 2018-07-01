@@ -1,0 +1,15 @@
+function int getSomar() {
+
+    var { 
+    
+        int x;
+        int y;
+        int soma;
+    }
+
+    scanf(x, y);
+
+    soma = somar(x, y);
+    
+    return soma;
+}
