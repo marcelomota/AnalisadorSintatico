@@ -1,0 +1,7 @@
+** ARQUIVO COMPILADO COM SUCESSO! **
+
+--- ERROS LÉXICOS ---
+Não foram encontrados erros Léxicos!
+
+--- ERROS SINTÁTICOS ---
+Erro - Limite da lista de tokens.

@@ -2770,19 +2770,26 @@ public class ControllerAnalisadorSintatico {
             String[] seguintes = follow.split(",");
             for (String seguinte : seguintes) {
                 
-                if (this.tokens.getUnicToken(this.idTokenAtual).contains(seguinte.trim())) {
+                if(this.idTokenAtual > this.tokens.getSize()) {
+                    
+                    if (this.tokens.getUnicToken(this.idTokenAtual).contains(seguinte.trim())) {
+
+                        trava = false;
+                        break;
+                    } else {
+
+                        this.idTokenAtual++;
+                        if(this.idTokenAtual > this.tokens.getSize()) {
+
+                            trava = false;
+                            break;
+                        }
+                    }
+                } else {
                     
                     trava = false;
                     break;
-                } else {
-                    
-                    this.idTokenAtual++;
-                    if(this.idTokenAtual > this.tokens.getSize()) {
-                        
-                        trava = false;
-                        break;
-                    }
-                }
+                }                
             }
         } while(trava || this.idTokenAtual < this.tokens.getSize());        
     }

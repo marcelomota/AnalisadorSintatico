@@ -7,9 +7,4 @@ function int getSomar() {
         int soma;
     }
 
-    scanf(x, y);
-
-    soma = somar(x, y);
-    
-    return soma;
 }
