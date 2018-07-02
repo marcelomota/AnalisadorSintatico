@@ -28,11 +28,11 @@ start() {
 
     var { double peso = 0; }
 
-    var { string texto= "Digite"; }
+    var { string texto = "Digite"; }
 
-    while(i<10) {
+    while(i < 10) {
 
-        printf(texto,texto);
+        printf(texto, texto);
 
         scanf(nome);
 
@@ -52,7 +52,7 @@ start() {
 
         x++;
 
-        printf(pessoa[i].idade,pessoa[i].peso);    
+        printf(pessoa[i].idade, pessoa[i].peso);    
     }
 
     nome = "a";

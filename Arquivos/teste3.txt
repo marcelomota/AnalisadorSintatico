@@ -1,5 +1,5 @@
-const {
 
+<<<<<<< HEAD
     int fator = 65;
 }
 
@@ -12,3 +12,9 @@ start(){
 while(x==3)
 
 if(y==13)
+=======
+struct pessoa {
+    
+    
+}
+>>>>>>> 3f5b8a254cc979941fad5c2175a3fc11e9a1fe3f

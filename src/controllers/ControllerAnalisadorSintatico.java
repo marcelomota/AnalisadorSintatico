@@ -1368,13 +1368,13 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 45* - Declaração esperada na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 45 - Declaração esperada na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero("}");
             }
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStmtOrDeclarationList()");
-            this.errosSintaticos += "Erro 45 - Declaração esperada na linha"+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro 45 - Declaração esperada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     } 
     
@@ -1720,7 +1720,7 @@ public class ControllerAnalisadorSintatico {
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
                                 this.errosSintaticos += "Erro 59 - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
-                                this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if,"
+                                this.modalidadeDesespero("}, false, (, return, print, else, !, ++, --, Numero, if,"
                                         + " while, ;, {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
                             }
                         } else {
@@ -1948,14 +1948,14 @@ public class ControllerAnalisadorSintatico {
             } else {
                 
                 // Erro
-                this.errosSintaticos += "Erro 68 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.idTokenAtual-1)+".\n";
+                this.errosSintaticos += "Erro 68 - Declaração inválida na linha "+this.getLinhaErro(this.idTokenAtual-1)+".\n";
                 this.modalidadeDesespero("false, (, return, print, else, !, ++, --, Numero, }, if, while, ;,"
                                 + " {, scan, true, Cadeia_de_Caracteres, var, Identificador_");
             }
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureCompoundStmtlf()");
-            this.errosSintaticos += "Erro 68 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro 68 - Declaração inválida na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }       
     }
     
@@ -2813,11 +2813,11 @@ public class ControllerAnalisadorSintatico {
                         return;
                     }             
                 }   
+                this.idTokenAtual++;
             } else {
 
                 break;
-            }   
-            this.idTokenAtual++;
+            } 
         } while(true);        
     }
     
@@ -2841,11 +2841,11 @@ public class ControllerAnalisadorSintatico {
                         return;
                     }               
                 }
+                this.idTokenAtual++;
             } else {
 
                break; 
             }
-            this.idTokenAtual++;
         } while(true);        
     }
     

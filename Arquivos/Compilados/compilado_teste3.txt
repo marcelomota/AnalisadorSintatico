@@ -4,4 +4,7 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro 84 - Tipo não encontrado na linha 5.
+Erro 41 - Identificador não encontrado na linha 5.
+Erro 37 - Delimitador ';' não encontrado na linha 5.
+Erro 32 - Delimitador '}' não encontrado na linha 5.
