@@ -1,4 +1,4 @@
 const {
 
-    int fator = ;
+    int fator = 65;
 }

@@ -110,7 +110,7 @@ public class ControllerAnalisadorSintatico {
 
                 String linha = atual[2].replaceAll(">", " ");
                 this.errosSintaticos += "Erro 1 - Palavra Reservada não encontrada na linha "+linha.trim()+".\n";                
-                this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
+                this.modalidadeDesespero("start, struct, procedure, typedef, const, function, var");
             }
         } else {
             
@@ -2801,29 +2801,24 @@ public class ControllerAnalisadorSintatico {
      */
     private void modalidadeDesespero(String follow) {
         
-        boolean trava = true;
         do {
             
-            String[] seguintes = follow.split(",");
-            for (String seguinte : seguintes) {
-                
-                if(this.idTokenAtual < this.tokens.getSize()) {
-                    
-                    if (this.tokens.getUnicToken(this.idTokenAtual).contains(seguinte.trim())) {
+            if(this.idTokenAtual < this.tokens.getSize()) {
+                 
+                String[] seguintes = follow.split(",");
+                for (String seguinte : seguintes) {
 
-                        trava = false;
-                        break;
-                    } else {
+                    if (this.tokens.getUnicToken(idTokenAtual).contains(seguinte.trim())) {
 
-                        this.idTokenAtual++;                        
-                    }
-                } else {
-                    
-                    trava = false;
-                    break;
-                }                
-            }
-        } while(trava);        
+                        return;
+                    }             
+                }   
+            } else {
+
+                break;
+            }   
+            this.idTokenAtual++;
+        } while(true);        
     }
     
     /**
@@ -2832,31 +2827,26 @@ public class ControllerAnalisadorSintatico {
      */
     private void modalidadeDesespero2(String follow) {
         
-        boolean trava = true;
         do {
             
-            String[] seguintes = follow.split(",");
-            for (String seguinte : seguintes) {
-                
-                if(this.idTokenAtual < this.tokens.getSize()) {
-                    
+            if(this.idTokenAtual < this.tokens.getSize()) {
+            
+                String[] seguintes = follow.split(",");
+                for (String seguinte : seguintes) {
+
                     String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                     if (atual[1].trim().equals(seguinte.trim()) || atual[0].contains(seguinte.trim()) ||
                             (atual[0].contains("Delimitador") && atual.length == 4)) {
 
-                        trava = false;
-                        break;
-                    } else {
+                        return;
+                    }               
+                }
+            } else {
 
-                        this.idTokenAtual++;
-                    }
-                } else {
-                   
-                   trava = false;
-                   break; 
-                }                
+               break; 
             }
-        } while(trava);        
+            this.idTokenAtual++;
+        } while(true);        
     }
     
     private int getLinhaErro(int index) {

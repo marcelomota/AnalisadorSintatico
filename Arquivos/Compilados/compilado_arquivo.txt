@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro 37 - Delimitador ';' não encontrado na linha 12.
+Não foram encontrados erros Sintáticos!
