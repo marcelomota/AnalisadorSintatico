@@ -37,7 +37,7 @@ public class Token {
     public String getUnicToken(int index) {
         return this.listTokens.get(index);
     }
-    
+       
     public int getSize() {
         return this.listTokens.size();
     }
