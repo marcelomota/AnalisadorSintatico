@@ -2,3 +2,13 @@ const {
 
     int fator = 65;
 }
+
+start(){
+ if(x==k)then{
+
+}
+}
+
+while(x==3)
+
+if(y==13)
