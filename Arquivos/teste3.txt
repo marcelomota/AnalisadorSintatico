@@ -1,4 +1,5 @@
-const {
 
-    int fator = 65;
+struct pessoa {
+    
+    
 }
