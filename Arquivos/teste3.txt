@@ -1,5 +1,5 @@
 
-struct pessoa {
+struct pessoa extends gr1 extends gr2 {
     
-    
+    int a;
 }
