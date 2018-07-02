@@ -831,15 +831,15 @@ public class ControllerAnalisadorSintatico {
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
-                    // Verifica se o token atual eh '}'
-                    if(atual2[1].trim().equals("}")) {
+                    // Verifica se o token atual eh 'Identifier'
+                    if(atual2[0].contains("Identificador_")) {
 
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                             // Verifica se o token atual eh '{'
-                            if(atual3[0].contains("Identificador_")) {
+                            if(atual3[1].trim().equals("{")) {
 
                                 this.idTokenAtual++;
                                 this.procedureDeclarationList();
@@ -866,25 +866,25 @@ public class ControllerAnalisadorSintatico {
 
                                 // Erro
                                 String linha = atual3[2].replaceAll(">", " ");
-                                this.errosSintaticos += "Erro 34 - Identificador não encontrado na linha "+linha.trim()+".\n";
+                                this.errosSintaticos += "Erro 34 - Delimitador '{' não encontrado na linha "+linha.trim()+".\n";
                                 this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                             }
                         } else {
                             
-                            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
-                            this.errosSintaticos += "Erro 34 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
+                            this.errosSintaticos += "Erro 34 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
-                        this.errosSintaticos += "Erro 35 - Delimitador '}' não encontrado na linha "+linha.trim()+".\n";
+                        this.errosSintaticos += "Erro 35 - Identificador não encontrado na linha "+linha.trim()+".\n";
                         this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
                     }
                 } else {
                     
                     System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDeflf()");
-                    this.errosSintaticos += "Erro 35 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro 35 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -1368,13 +1368,13 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 45* - Declaração não encontrada na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 45* - Declaração esperada na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero("}");
             }
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStmtOrDeclarationList()");
-            this.errosSintaticos += "Erro 45 - Palavra reservada 'var' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro 45 - Declaração esperada na linha"+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     } 
     
@@ -2294,13 +2294,13 @@ public class ControllerAnalisadorSintatico {
                 
                 // Erro
                 String linha = atual[2].replaceAll(">", " ");
-                this.errosSintaticos += "Erro 71 - Token esperado não encontrado na linha "+linha.trim()+".\n";
+                this.errosSintaticos += "Erro 71 - Expressão inválida na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero2("-, +, then, *, ), <=, ||, ==, &&, >, =, ], }, <, !=, >=, ;, /");
             }
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureUnaryExpr()");
-            this.errosSintaticos += "Erro 71 - Token esperado não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro 71 - Expressão inválida na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }   
     
@@ -2802,7 +2802,6 @@ public class ControllerAnalisadorSintatico {
     private void modalidadeDesespero(String follow) {
         
         boolean trava = true;
-        this.idTokenAtual++;
         do {
             
             String[] seguintes = follow.split(",");
@@ -2834,7 +2833,6 @@ public class ControllerAnalisadorSintatico {
     private void modalidadeDesespero2(String follow) {
         
         boolean trava = true;
-        this.idTokenAtual++;
         do {
             
             String[] seguintes = follow.split(",");

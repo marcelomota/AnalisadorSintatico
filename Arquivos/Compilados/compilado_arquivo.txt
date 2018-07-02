@@ -4,5 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro 7 - Delimitador '}' não encontrado na linha 100.
-Erro - Limite da lista de tokens.
+Não foram encontrados erros Sintáticos!

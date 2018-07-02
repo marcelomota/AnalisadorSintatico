@@ -4,5 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro 45 - Palavra reservada 'var' não encontrada na linha 22.
-Erro 35 - Delimitador '}' não encontrado na linha 136.
+Não foram encontrados erros Sintáticos!

@@ -4,7 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro 71 - Expressão mal formada na linha 75.
-Erro 72 - Delimitador ')' não encontrado na linha 82.
-Erro 62 - Palavra Reservada 'then' não encontrada na linha 93.
-Erro - Limite da lista de tokens.
+Não foram encontrados erros Sintáticos!

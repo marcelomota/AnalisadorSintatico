@@ -72,7 +72,7 @@ start () {
 
 
 
-    if (f >= -10 && f == true) then {
+    if (f == true) then {
 
         
 	print ("hello");

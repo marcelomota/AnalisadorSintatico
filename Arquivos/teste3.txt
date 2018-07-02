@@ -1,15 +1,18 @@
-function int getSomar() {
 
-    var {
-    
-        int x, y, soma;
-        float a, b, c;
-        }
-    
-    
-    scan(x, y);
+struct aluno extends pessoa {
 
-    soma = somar(x, y);
 
-    print(soma);
+    string curso;
+
+    int matricula;
+
+    float bolsa;
+ 
+    int valores[];
+
+    float taxas[][];
+
+    pessoa eu_mesmo;
+
 }
+

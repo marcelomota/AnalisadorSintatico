@@ -689,6 +689,6 @@ public class ControllerAnalisadorLexico {
      * @return 
      */
     public boolean verificaAnterior(String anterior) {
-        return anterior.matches("[!|=|<|>|\\+|\\-|\\*|/|\\(|,]");
+        return anterior.matches("[!|\\=|\\<|\\>|\\+|\\-|\\*|/|\\(|,]*");
     }
 }

@@ -92,12 +92,12 @@ function int getSomar() {
     var { 
     
         int x;
-        int y;
+        int y, soma;
     }
 
-    scanf(x,y);
+    scan(x,y);
 
-    int soma = somar(x,y);
+    soma = somar(x,y);
 
     print(soma);
 }
