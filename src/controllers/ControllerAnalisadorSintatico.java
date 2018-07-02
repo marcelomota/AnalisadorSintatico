@@ -115,7 +115,8 @@ public class ControllerAnalisadorSintatico {
             }
         } else {
             
-            System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureGlobalDeclaration()");
+            //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureGlobalDeclaration()");
+            this.errosSintaticos += "Erro @1 - Palavra Reservada não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";  
         }        
     }
     
@@ -152,7 +153,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
 
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDef()");
-                    this.errosSintaticos += "Erro 2 - Delimitador '(' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @2 - Delimitador '(' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }                        
             } else {
 
@@ -165,7 +166,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDef()");
-            this.errosSintaticos += "Erro 3 - Palavra Reservada 'function' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @3 - Palavra Reservada 'function' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }               
     }
     
@@ -216,7 +217,7 @@ public class ControllerAnalisadorSintatico {
                                 } else {
 
                                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-                                    this.errosSintaticos += "Erro 4 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";                                    
+                                    this.errosSintaticos += "Erro @4 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";                                    
                                 }                    
                             } else {
 
@@ -229,7 +230,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
 
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-                            this.errosSintaticos += "Erro 5 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @5 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -242,7 +243,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-                    this.errosSintaticos += "Erro 6 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @6 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
 
             // Verifica se o token atual eh ')'
@@ -275,7 +276,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-                            this.errosSintaticos += "Erro 7 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @7 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -288,7 +289,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                         
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-                    this.errosSintaticos += "Erro 8 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @8 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -301,7 +302,7 @@ public class ControllerAnalisadorSintatico {
         } else {
                 
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
-            this.errosSintaticos += "Erro 9* - Declaração inválida na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @9 - Declaração inválida na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }
     
@@ -343,7 +344,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                                 
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
-                            this.errosSintaticos += "Erro 10 - Delimitador '(' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @10 - Delimitador '(' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                               
                     } else {
 
@@ -356,7 +357,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                         
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
-                    this.errosSintaticos += "Erro 11 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @11 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -369,7 +370,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDef()");
-            this.errosSintaticos += "Erro 12 - Palavra Reservada 'procedure' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @12 - Palavra Reservada 'procedure' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }              
     }
     
@@ -420,7 +421,7 @@ public class ControllerAnalisadorSintatico {
                                 } else {
                                         
                                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-                                    this.errosSintaticos += "Erro 13 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                                    this.errosSintaticos += "Erro @13 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                                 }                    
                             } else {
 
@@ -433,7 +434,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-                            this.errosSintaticos += "Erro 14 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @14 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -446,7 +447,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-                    this.errosSintaticos += "Erro 15 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @15 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
 
             // Verifica se o token atual eh ')'    
@@ -479,7 +480,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-                            this.errosSintaticos += "Erro 16 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @16 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -492,7 +493,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-                    this.errosSintaticos += "Erro 17 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @17 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -505,7 +506,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
-            this.errosSintaticos += "Erro 18 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";    
+            this.errosSintaticos += "Erro @18 - Delimitador ')' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";    
         }        
     }
     
@@ -533,7 +534,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDef()");
-            this.errosSintaticos += "Erro 19 - Palavra Reservada 'typedef' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @19 - Palavra Reservada 'typedef' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }               
     }
     
@@ -576,7 +577,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
-                            this.errosSintaticos += "Erro 20 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @20 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -589,7 +590,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
-                    this.errosSintaticos += "Erro 21 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @21 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
 
             // Verifica se o token atual eh primeiro de <StructDef>    
@@ -621,7 +622,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
-                            this.errosSintaticos += "Erro 22 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @22 - Delimitador ';' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                              
                     } else {
 
@@ -634,7 +635,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
-                    this.errosSintaticos += "Erro 23 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @23 - Identificador não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -647,7 +648,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureTypedefDeflf()");
-            this.errosSintaticos += "Erro 24 - Tipo não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @24 - Tipo não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }
     
@@ -690,7 +691,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
-                            this.errosSintaticos += "Erro 25 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @25 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -704,7 +705,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
-                    this.errosSintaticos += "Erro 26 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @26 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -718,7 +719,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureVarDef()");
-            this.errosSintaticos += "Erro 27 - Palavra Reservada 'var' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @27 - Palavra Reservada 'var' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }
     
@@ -760,7 +761,7 @@ public class ControllerAnalisadorSintatico {
                         } else {
                             
                             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
-                            this.errosSintaticos += "Erro 28 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                            this.errosSintaticos += "Erro @28 - Delimitador '}' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                         }                
                     } else {
 
@@ -773,7 +774,7 @@ public class ControllerAnalisadorSintatico {
                 } else {
                     
                     //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
-                    this.errosSintaticos += "Erro 29 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+                    this.errosSintaticos += "Erro @29 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
                 }            
             } else {
 
@@ -786,7 +787,7 @@ public class ControllerAnalisadorSintatico {
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureConstDef()");
-            this.errosSintaticos += "Erro 30 - Palavra Reservada 'const' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro @30 - Palavra Reservada 'const' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }
     
