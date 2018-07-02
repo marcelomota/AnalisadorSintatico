@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro 38 - Erro de inicialização na linha 3.

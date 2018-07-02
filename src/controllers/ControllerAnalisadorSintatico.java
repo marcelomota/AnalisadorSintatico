@@ -1086,13 +1086,13 @@ public class ControllerAnalisadorSintatico {
             } else {
 
                 // Erro
-                this.errosSintaticos += "Erro 38 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.idTokenAtual-1)+".\n";
-                this.modalidadeDesespero2("}, ;");
+                this.errosSintaticos += "Erro 38 - Erro de inicialização na linha "+this.getLinhaErro(this.idTokenAtual-1)+".\n";
+                this.modalidadeDesespero2(";, }");
             }
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureInitializer()");
-            this.errosSintaticos += "Erro 38 - Delimitador '{' não encontrado na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
+            this.errosSintaticos += "Erro 38 - Erro de inicialização na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
         }        
     }
     
