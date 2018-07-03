@@ -4,4 +4,4 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Erro 34 - Delimitador '{' não encontrado na linha 2.
+Não foram encontrados erros Sintáticos!
