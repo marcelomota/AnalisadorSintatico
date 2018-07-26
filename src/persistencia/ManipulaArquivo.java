@@ -66,10 +66,11 @@ public class ManipulaArquivo {
      * Adiciona um conteudo a um arquivo.
      * @param errosLexicos String
      * @param errosSintaticos String
+     * @param errosSemanticos String
      * @param nomeArquivo String
      * @return 
      */
-    public boolean salvaArquivo(String errosLexicos, String errosSintaticos, String nomeArquivo) {
+    public boolean salvaArquivo(String errosLexicos, String errosSintaticos, String errosSemanticos, String nomeArquivo) {
         
         try{
             File file = new File(nomeArquivo);       
@@ -120,6 +121,25 @@ public class ManipulaArquivo {
                 bw.newLine ();
             }
                         
+            if(!errosSemanticos.isEmpty()) {
+                bw.newLine ();
+                bw.write("--- ERROS SEMÂNTICOS ---");
+                bw.newLine ();
+                for(int i=0; i<errosSemanticos.length(); i++){
+                    if(errosSemanticos.charAt(i) == '\n'){
+                        bw.newLine ();
+                    } else {
+                        bw.write(errosSemanticos.charAt(i));
+                    }                
+                }
+            } else {
+                bw.newLine ();
+                bw.write("--- ERROS SEMÂNTICOS ---");
+                bw.newLine ();
+                bw.write("Não foram encontrados erros Semânticos!");
+                bw.newLine ();
+            }
+                        
             bw.close();
             return true;
         } catch(IOException e) {
@@ -128,24 +148,4 @@ public class ManipulaArquivo {
         }
     }
     
-    public String carregarGramatica() {
-        
-        try {                  
-            
-            FileReader fileReader = new FileReader("gramatica.txt");
-            BufferedReader br = new BufferedReader(fileReader);      
-                        
-            String gramatica = ""; 
-            String linha = br.readLine();           
-            while(linha != null){                
-                gramatica += linha+"\n"; 
-                linha = br.readLine();
-            }   
-            
-            br.close();            
-            return gramatica;
-        } catch(IOException e) {
-            return e.getMessage();
-        }  
-    }
 }

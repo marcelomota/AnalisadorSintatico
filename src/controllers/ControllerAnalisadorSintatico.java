@@ -1,5 +1,8 @@
 package controllers;
 
+import models.ErrosSemanticos;
+import models.TabelaFuncao;
+import models.TabelaVarConst;
 import models.Token;
 
 public class ControllerAnalisadorSintatico {
@@ -8,19 +11,30 @@ public class ControllerAnalisadorSintatico {
     private Token tokens;
     private int idTokenAtual;
     
+    /* Atributos para a analise Semantica */
+    private boolean existeStart; 
+    private TabelaFuncao tabelaFuncao;
+    private TabelaVarConst tabelaVarConst;
+    private ErrosSemanticos errosSemanticos;
+    private String armazenaDeclaracao;
+    
     public ControllerAnalisadorSintatico() {
         
     }
     
     /**
-     * Analisa sintaticamente a sequencia de tokens de forma preditiva e recursiva.
+     * Analisa sintaticamente e semanticamente a sequencia de tokens de forma preditiva e recursiva.
      * @param tokens
+     * @param errosSemanticos
      * @return 
      */
-    public String analisar(Token tokens) {
+    public String analisar(Token tokens, ErrosSemanticos errosSemanticos) {
         
         this.tokens = tokens; 
-        //this.tokens.addToken("Final", "$", 0);
+        this.existeStart = false;
+        this.tabelaFuncao = new TabelaFuncao();
+        this.tabelaVarConst = new TabelaVarConst();   
+        this.errosSemanticos = errosSemanticos;
         this.idTokenAtual = 0;
         this.errosSintaticos = "";
         if(this.idTokenAtual < this.tokens.getSize()) {
@@ -663,6 +677,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'var'
             if(atual[1].trim().equals("var")) {
 
+                String linhaS = atual[2].replaceAll(">", " ");
                 this.idTokenAtual++;      
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -1493,6 +1508,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'start'
             if(atual[1].trim().equals("start")) {
 
+                String linhaS = atual[2].replaceAll(">", " ");
                 this.idTokenAtual++;           
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -1521,8 +1537,13 @@ public class ControllerAnalisadorSintatico {
                                             String[] atual5 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
                                             // Verifica se o token atual eh '}'
                                             if(atual5[1].trim().equals("}")) {
-
+                                                
                                                 this.idTokenAtual++;
+                                                if(this.existeStart) {
+                                                    this.errosSemanticos.addErroSemantico("Erro#01 - Erro na linha "+linhaS.trim()+", só é permitido um metodo principal 'Start'.\n");
+                                                } else {
+                                                    this.existeStart = true;
+                                                }
                                             } else {
 
                                                 // Erro                  

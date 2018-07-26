@@ -4,4 +4,7 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro 4 - Delimitador '}' não encontrado na linha 74.
+
+--- ERROS SEMÂNTICOS ---
+Não foram encontrados erros Semânticos!

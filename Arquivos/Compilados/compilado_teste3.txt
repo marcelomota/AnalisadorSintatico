@@ -5,3 +5,6 @@ Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
 Não foram encontrados erros Sintáticos!
+
+--- ERROS SEMÂNTICOS ---
+Não foram encontrados erros Semânticos!

@@ -2,6 +2,7 @@ package view;
 
 import controllers.ControllerAnalisadorLexico;
 import controllers.ControllerAnalisadorSintatico;
+import models.ErrosSemanticos;
 import models.TabelaSimbolo;
 import models.Token;
 import persistencia.ManipulaArquivo;
@@ -38,12 +39,15 @@ public class Main {
                 
                 // Percorre os caracteres do texto e retorna os erros encontrados.
                 String errosLexicos = lexico.analisar(texto, tokens, simbolos);
-                //tokens.printTokens();
+                
+                // Armazena os Erros Semanticos.
+                ErrosSemanticos errosSemanticos = new ErrosSemanticos();
+                
                 // Percorre os tokens e retorna os erros encontrados.
-                String errosSintaticos = sintatico.analisar(tokens);
+                String errosSintaticos = sintatico.analisar(tokens, errosSemanticos);
 
                 // Salva o resultado da compilacao em um Arquivo de mesmo nome e prefixo compilado_ na pasta Arquivos/Compilados.
-                ma.salvaArquivo(errosLexicos, errosSintaticos, "Arquivos/Compilados/compilado_"+arrayS[1]);
+                ma.salvaArquivo(errosLexicos, errosSintaticos, errosSemanticos.getErrosSemanticos(), "Arquivos/Compilados/compilado_"+arrayS[1]);
                 //System.out.println("Arquivo compilado com sucesso!\n");
             }            
         }     

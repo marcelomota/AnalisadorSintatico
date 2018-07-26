@@ -72,7 +72,7 @@ function int somar(int x, int y) {
 	var { int soma = 8; }
 
 	return x;
-}
+
 
 procedure teste(string teste) {
 

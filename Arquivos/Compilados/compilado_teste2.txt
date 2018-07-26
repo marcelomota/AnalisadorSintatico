@@ -5,3 +5,11 @@ Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
 Não foram encontrados erros Sintáticos!
+
+--- ERROS SEMÂNTICOS ---
+Erro#01 - Erro na linha 232, só é permitido um metodo principal 'Start'.
+Erro#01 - Erro na linha 244, só é permitido um metodo principal 'Start'.
+Erro#01 - Erro na linha 256, só é permitido um metodo principal 'Start'.
+Erro#01 - Erro na linha 268, só é permitido um metodo principal 'Start'.
+Erro#01 - Erro na linha 301, só é permitido um metodo principal 'Start'.
+Erro#01 - Erro na linha 314, só é permitido um metodo principal 'Start'.
