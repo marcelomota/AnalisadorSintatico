@@ -1,1 +1,6 @@
+start() {
+    
+    var { meuTipo id1; }
 
+
+}

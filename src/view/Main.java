@@ -2,7 +2,7 @@ package view;
 
 import controllers.ControllerAnalisadorLexico;
 import controllers.ControllerAnalisadorSintatico;
-import models.ErrosSemanticos;
+import models.AnalisadorSemantico;
 import models.TabelaSimbolo;
 import models.Token;
 import persistencia.ManipulaArquivo;
@@ -34,20 +34,21 @@ public class Main {
             // Se texto for diferente de vazio, inicia a compilacao do arquivo.
             if(!texto.isEmpty()) {
                 
+                // Analisador Semantico
+                AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico();
+                
                 Token tokens = new Token();
                 TabelaSimbolo simbolos = new TabelaSimbolo();
                 
                 // Percorre os caracteres do texto e retorna os erros encontrados.
-                String errosLexicos = lexico.analisar(texto, tokens, simbolos);
+                String errosLexicos = lexico.analisar(texto, tokens, simbolos);                               
                 
-                // Armazena os Erros Semanticos.
-                ErrosSemanticos errosSemanticos = new ErrosSemanticos();
-                
-                // Percorre os tokens e retorna os erros encontrados.
-                String errosSintaticos = sintatico.analisar(tokens, errosSemanticos);
-
+                // Percorre os tokens e retorna os erros sintaticos encontrados.
+                String errosSintaticos = sintatico.analisar(tokens, analisadorSemantico);
+                analisadorSemantico.printSemanticTable();
+                System.out.println("***** ERROS *****\n"+analisadorSemantico.getErros());
                 // Salva o resultado da compilacao em um Arquivo de mesmo nome e prefixo compilado_ na pasta Arquivos/Compilados.
-                ma.salvaArquivo(errosLexicos, errosSintaticos, errosSemanticos.getErrosSemanticos(), "Arquivos/Compilados/compilado_"+arrayS[1]);
+                ma.salvaArquivo(errosLexicos, errosSintaticos, analisadorSemantico.getErros(), "Arquivos/Compilados/compilado_"+arrayS[1]);
                 //System.out.println("Arquivo compilado com sucesso!\n");
             }            
         }     
