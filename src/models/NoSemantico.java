@@ -5,14 +5,17 @@ public class NoSemantico {
     private String declaracao;         
     private String tipo;
     private String nome;      
-    private String escopo;
+    private String nomeEscopo;
+    private String valorEscopo;
     private String valor; 
+    protected boolean chave;
 
     public NoSemantico() {
-        this.nome = null;
-        this.valor = null;    
-        this.tipo = null;
-        this.escopo = null;
+        this.nome = "";
+        this.valor = "";    
+        this.tipo = "";
+        this.nomeEscopo = "";
+        this.valorEscopo = "";
     }
 
      public String getDeclaracao() {
@@ -38,13 +41,21 @@ public class NoSemantico {
     public void setNome(String nome) {
         this.nome = nome;
     }
-   
-    public String getEscopo() {
-        return this.escopo;
+       
+    public String getNomeEscopo() {
+        return this.nomeEscopo;
     }
 
-    public void setEscopo(String escopo) {
-        this.escopo = escopo;
+    public void setNomeEscopo(String nomeEscopo) {
+        this.nomeEscopo = nomeEscopo;
+    }
+    
+    public String getValorEscopo() {
+        return this.valorEscopo;
+    }
+
+    public void setValorEscopo(String valorEscopo) {
+        this.valorEscopo = valorEscopo;
     }
 
     public String getValor() {
@@ -53,6 +64,18 @@ public class NoSemantico {
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+    
+    public void setValor2(String valor) {
+        
+        if(this.chave) {
+            this.valor += ", "+valor;
+            this.chave = false;
+        } else {
+            this.valor += " "+valor;
+            this.chave = true;
+        }
+        
     }
 
 }

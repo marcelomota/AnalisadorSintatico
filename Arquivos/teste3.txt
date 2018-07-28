@@ -1,6 +1,29 @@
-start() {
-    
-    var { meuTipo id1; }
+struct nova {
 
+   int k = 0;
 
 }
+
+const { int j; }
+    
+function int somar(int a, int b, int c) {
+
+    var {int a, b, c;}
+
+    a = 1;
+    b = 2;
+
+    a = b + a;
+
+    return a;
+}
+
+
+start() {  
+
+    somar();
+
+}
+
+
+

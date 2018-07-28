@@ -263,6 +263,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh '{'
                     if(atual2[1].trim().equals("{")) {
 
+                        this.analisadorSemantico.atualizarEscopo(true);
                         this.idTokenAtual++;
                         this.procedureStmtOrDeclarationList();
                         if(this.idTokenAtual < this.tokens.getSize()) {
@@ -271,6 +272,7 @@ public class ControllerAnalisadorSintatico {
                             // Verifica se o token atual eh '}'
                             if(atual3[1].trim().equals("}")) {
 
+                                this.analisadorSemantico.atualizarEscopo(false);
                                 this.idTokenAtual++;
                             } else {
 
@@ -867,6 +869,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '{'
             if(atual[1].trim().equals("{")) {
 
+                this.analisadorSemantico.atualizarEscopo(true);
                 this.idTokenAtual++;
                 this.procedureDeclarationList();
                 if(this.idTokenAtual < this.tokens.getSize()) {
@@ -875,6 +878,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh '}'
                     if(atual2[1].trim().equals("}")) {
 
+                        this.analisadorSemantico.atualizarEscopo(false);
                         this.idTokenAtual++;
                     } else {
 
@@ -907,6 +911,7 @@ public class ControllerAnalisadorSintatico {
                             // Verifica se o token atual eh '{'
                             if(atual3[1].trim().equals("{")) {
 
+                                this.analisadorSemantico.atualizarEscopo(true);
                                 this.idTokenAtual++;
                                 this.procedureDeclarationList();
                                 if(this.idTokenAtual < this.tokens.getSize()) {
@@ -915,6 +920,7 @@ public class ControllerAnalisadorSintatico {
                                     // Verifica se o token atual eh '}'
                                     if(atual4[1].trim().equals("}")) {
 
+                                        this.analisadorSemantico.atualizarEscopo(true);
                                         this.idTokenAtual++;
                                     } else {
 
@@ -1532,6 +1538,7 @@ public class ControllerAnalisadorSintatico {
                                     // Verifica se o token atual eh '{'
                                     if(atual4[1].trim().equals("{")) {
 
+                                        this.analisadorSemantico.atualizarEscopo(true);
                                         this.idTokenAtual++;
                                         this.procedureStmtOrDeclarationList();  
                                         if(this.idTokenAtual < this.tokens.getSize()) {
@@ -1540,6 +1547,7 @@ public class ControllerAnalisadorSintatico {
                                             // Verifica se o token atual eh '}'
                                             if(atual5[1].trim().equals("}")) {
                                                 
+                                                this.analisadorSemantico.atualizarEscopo(false);
                                                 this.idTokenAtual++;                                                                                                
                                             } else {
 
