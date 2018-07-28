@@ -135,7 +135,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'function'
             if(atual[1].trim().equals("function")) {
 
-                this.analisadorSemantico.declararFuncao();
+                this.analisadorSemantico.declararFuncao(atual[2].replaceAll(">", " "));
                 this.idTokenAtual++;
                 this.procedureType();
                 this.procedureDeclarator();
@@ -324,7 +324,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'procedure'
             if(atual[1].trim().equals("procedure")) {
 
-                this.analisadorSemantico.declararProcedure();                
+                this.analisadorSemantico.declararProcedure(atual[2].replaceAll(">", " ").trim());                
                 this.idTokenAtual++;
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -534,7 +534,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'typedef'
             if(atual[1].trim().equals("typedef")) {
 
-                this.analisadorSemantico.declararTypedef();
+                this.analisadorSemantico.declararTypedef(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;
                 this.procedureTypedefDeflf();
             } else {
@@ -677,7 +677,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'var'
             if(atual[1].trim().equals("var")) {
 
-                this.analisadorSemantico.declararVar();
+                this.analisadorSemantico.declararVar(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;      
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -751,7 +751,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'const'
             if(atual[1].trim().equals("const")) {
 
-                this.analisadorSemantico.declararConst();
+                this.analisadorSemantico.declararConst(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -823,7 +823,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'struct'
             if(atual[1].trim().equals("struct")) {
 
-                this.analisadorSemantico.declararStruct();
+                this.analisadorSemantico.declararStruct(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;    
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -2940,39 +2940,39 @@ public class ControllerAnalisadorSintatico {
         if(this.idTokenAtual < this.tokens.getSize()) {
             
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
+            String linha = atual[2].replaceAll(">", " ").trim();
             // Verifica se o token atual eh 'int'
             if(atual[1].trim().equals("int")) {
 
-                this.analisadorSemantico.addTipo("int");
+                this.analisadorSemantico.addTipo("int", linha);
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'string'    
             } else if(atual[1].trim().equals("string")) {
 
-                this.analisadorSemantico.addTipo("string");  
+                this.analisadorSemantico.addTipo("string", linha);  
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'float'        
             } else if(atual[1].trim().equals("float")) {
 
-                this.analisadorSemantico.addTipo("float");
+                this.analisadorSemantico.addTipo("float", linha);
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'bool'   
             } else if(atual[1].trim().equals("bool")) {
 
-                this.analisadorSemantico.addTipo("bool");
+                this.analisadorSemantico.addTipo("bool", linha);
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'Identifier'       
             } else if(atual[0].contains("Identificador_")) {
 
-                this.analisadorSemantico.addTipo(atual[1].trim());
+                this.analisadorSemantico.addTipo(atual[1].trim(), linha);
                 this.idTokenAtual++;            
             } else  {
 
                 // Erro
-                String linha = atual[2].replaceAll(">", " ");
                 //this.errosSintaticos += "Erro #85 - '"+atual[1].trim()+"' inesperado na linha " +linha.trim()+".\n";
                 this.errosSintaticos += "Erro 85 - Tipo não encontrado na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero("Identificador_");

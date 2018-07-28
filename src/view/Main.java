@@ -46,7 +46,8 @@ public class Main {
                 // Percorre os tokens e retorna os erros sintaticos encontrados.
                 String errosSintaticos = sintatico.analisar(tokens, analisadorSemantico);
                 analisadorSemantico.printSemanticTable();
-                System.out.println("***** ERROS *****\n"+analisadorSemantico.getErros());
+                analisadorSemantico.printFunctionTable();
+                System.out.println("\n***** ERROS *****\n"+analisadorSemantico.getErros());
                 // Salva o resultado da compilacao em um Arquivo de mesmo nome e prefixo compilado_ na pasta Arquivos/Compilados.
                 ma.salvaArquivo(errosLexicos, errosSintaticos, analisadorSemantico.getErros(), "Arquivos/Compilados/compilado_"+arrayS[1]);
                 //System.out.println("Arquivo compilado com sucesso!\n");

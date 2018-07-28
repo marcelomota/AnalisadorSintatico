@@ -6,6 +6,7 @@ public class AnalisadorSemantico {
     
     private ArrayList<NoSemantico> tabelaSemantica;
     private ArrayList<String> funcoesPendentes;
+    private ArrayList<String> proceduresPendentes;
     private String erros; // 8
     private Escopo escopo;   
     private boolean temStart;
@@ -16,6 +17,7 @@ public class AnalisadorSemantico {
         
         this.tabelaSemantica = new ArrayList();
         this.funcoesPendentes = new ArrayList();
+        this.proceduresPendentes = new ArrayList();
         this.erros = "";
         this.escopo = new Escopo();
         this.escopo.addEscopo("global", "global");
@@ -52,99 +54,107 @@ public class AnalisadorSemantico {
         }
     }
     
-    public void declararVar() {
+    public void declararVar(String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("var");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararVar(String tipo) {
+    public void declararVar(String tipo, String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("var");
+        no.setLinhaDeclaracao(linha);
         no.setTipo(tipo);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararConst() {
+    public void declararConst(String linha) {
         
 //        if(this.escopo.getLastNomeEscopo().equals("")) {
 //            
 //        }
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("const");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararConst(String tipo) {
+    public void declararConst(String tipo, String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("const");
+        no.setLinhaDeclaracao(linha);
         no.setTipo(tipo);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararStruct() {
+    public void declararStruct(String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("struct");
-        no.setTipo("struct");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararFuncao() {
+    public void declararFuncao(String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("function");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararProcedure() {
+    public void declararProcedure(String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("procedure");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararTypedef() {
+    public void declararTypedef(String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("typedef");
+        no.setLinhaDeclaracao(linha);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
     
-    public void declararVarStruct(String tipo) {
+    public void declararVarStruct(String tipo, String linha) {
         
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("varStruct");
+        no.setLinhaDeclaracao(linha);
         no.setTipo(tipo);
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
         
-    public void addTipo(String tipo) {
+    public void addTipo(String tipo, String linha) {
         
         if(this.escopo.getLastNomeEscopo().equals("struct")) {
             
-            this.declararVarStruct(tipo);
+            this.declararVarStruct(tipo, linha);
         } else if(this.tabelaSemantica.get(this.getLastIndex()).getDeclaracao().equals("function")) {
             
             if(this.tabelaSemantica.get(this.getLastIndex()).getTipo().isEmpty()) {
@@ -199,7 +209,7 @@ public class AnalisadorSemantico {
                 this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             } else {
                  
-                this.declararVarStruct(this.tabelaSemantica.get(this.getLastIndex()).getTipo());
+                this.declararVarStruct(this.tabelaSemantica.get(this.getLastIndex()).getTipo(), linha);
                 this.verificarNome(no, nome, linha);
                 this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             }  
@@ -357,7 +367,7 @@ public class AnalisadorSemantico {
             
             if(no.getDeclaracao().equals("procedure") && no.getNome().equals(nome)) {
                 
-                this.funcoesPendentes.add(nome);
+                this.proceduresPendentes.add(nome);
                 return false;
             }
         }
@@ -408,12 +418,30 @@ public class AnalisadorSemantico {
         this.tabelaSemantica.forEach(
             (no) -> {
                 System.out.println("Declaração: "+no.getDeclaracao());
+                System.out.println("Linha da Declaração: "+no.getLinhaDeclaracao());
                 System.out.println("Tipo: "+no.getTipo());
                 System.out.println("Nome: "+no.getNome());
                 System.out.println("Valor: "+no.getValor());
                 System.out.println("Nome Escopo: "+no.getNomeEscopo());
                 System.out.println("Valor Escopo: "+no.getValorEscopo());                
                 System.out.println();
+            }
+        );
+    }
+    
+     public void printFunctionTable() {
+        
+         System.out.println("***** Funções Pendentes *****\n"); 
+        this.funcoesPendentes.forEach(
+            (f) -> {
+                System.out.println("Função: "+f);  
+            }
+        );        
+        
+        System.out.println("\n***** Procedures Pendentes *****\n"); 
+        this.proceduresPendentes.forEach(
+            (p) -> {
+                System.out.println("Procedure: "+p); 
             }
         );
     }

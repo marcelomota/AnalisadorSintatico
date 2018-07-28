@@ -2,7 +2,8 @@ package models;
 
 public class NoSemantico {
 
-    private String declaracao;         
+    private String declaracao;  
+    private String linhaDeclaracao;
     private String tipo;
     private String nome;      
     private String nomeEscopo;
@@ -25,6 +26,14 @@ public class NoSemantico {
     public void setDeclaracao(String declaracao) {
         this.declaracao = declaracao;
     }      
+
+    public String getLinhaDeclaracao() {
+        return linhaDeclaracao;
+    }
+
+    public void setLinhaDeclaracao(String linhaDeclaracao) {
+        this.linhaDeclaracao = linhaDeclaracao;
+    }
         
     public String getTipo() {
         return tipo;
@@ -81,6 +90,6 @@ public class NoSemantico {
     public void setValor3(String valor) {
         
         this.valor += " "+valor;
-    }
+    }    
 
 }
