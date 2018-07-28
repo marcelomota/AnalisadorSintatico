@@ -6,16 +6,40 @@ public class AnalisadorSemantico {
     
     private ArrayList<NoSemantico> tabelaSemantica;
     private ArrayList<String> funcoesPendentes;
+    private String erros; // 8
     private Escopo escopo;   
-    private boolean temStart; 
-    private String erros;
+    private boolean temStart;
+    private boolean ativarAtribuicao;
+    
      
     public AnalisadorSemantico() {
         
         this.tabelaSemantica = new ArrayList();
         this.erros = "";
         this.escopo = new Escopo();
-        this.escopo.addEscopo("Global", "Global");
+        this.escopo.addEscopo("global", "global");
+    }
+    
+    public void ativarAtribuicao(boolean ativar) {
+        this.ativarAtribuicao = ativar;
+    }
+    
+    public void addEscopo(String nome, String valor) {
+                      
+        this.escopo.addEscopo(nome, valor);
+    }
+    
+     public void addEscopo() {
+                      
+        NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+        if(no.getDeclaracao().equals("function")) {
+            this.escopo.addEscopo("function", no.getNome());
+        }        
+    }
+    
+    public void removerEscopo() {
+
+        this.escopo.removeLast();
     }
         
     public void declararStart(String linha) {
@@ -111,15 +135,7 @@ public class AnalisadorSemantico {
         no.setValorEscopo(this.escopo.getLastValorEscopo());
         this.tabelaSemantica.add(no);
     }
-    
-    public void atualizarEscopo(boolean ativar) {
         
-        if(ativar)               
-            this.escopo.addEscopo(this.tabelaSemantica.get(this.getLastIndex()).getDeclaracao(), this.tabelaSemantica.get(this.getLastIndex()).getNome());
-        else
-            this.escopo.removeLast();
-    }
-      
     public void addTipo(String tipo) {
         
         if(this.escopo.getLastNomeEscopo().equals("struct")) {
@@ -209,6 +225,30 @@ public class AnalisadorSemantico {
                 this.erros += "ERRO AO ATUALIZAR NOME - Linha "+linha+"\n";
             }
         }        
+    }
+    
+    public void addValor(String valor) {
+        
+        if(this.ativarAtribuicao) {
+        
+            NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+            if(no.getValor().isEmpty()) {
+
+                no.setValor(valor);
+            } else {
+
+                no.setValor3(valor);
+            }
+        }        
+    }
+    
+    public void verificarConst(String linha) {
+        
+        NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+        if(no.getValor().isEmpty()) {
+            
+            this.erros += "Erro 09 - Constante "+no.getNome()+" não inicializada na linha "+linha+"\n";
+        }
     }
     
     public void verificarNome(NoSemantico no, String nome, String linha) {

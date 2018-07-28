@@ -1,7 +1,0 @@
-** ARQUIVO COMPILADO COM SUCESSO! **
-
---- ERROS LÉXICOS ---
-Não foram encontrados erros Léxicos!
-
---- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!

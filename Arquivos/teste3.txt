@@ -1,29 +1,25 @@
-struct nova {
+const { float pi = 3.14; }
 
-   int k = 0;
-
-}
-
-const { int j; }
+struct pessoa {
     
-function int somar(int a, int b, int c) {
-
-    var {int a, b, c;}
-
-    a = 1;
-    b = 2;
-
-    a = b + a;
-
-    return a;
+    string nome;
+    float peso;
+    int idade;
 }
 
+function int somar(int a, int b) {
 
-start() {  
-
-    somar();
-
+    return a + b;
 }
 
+start() {
 
+    pessoa.nome = "Fulano";
+    pessoa.peso = 80.7;
+    pessoa.idade = 26;
+
+    var { int x = 2, y = 3;}
+
+
+}
 

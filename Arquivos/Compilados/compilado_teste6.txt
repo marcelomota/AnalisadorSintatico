@@ -1,7 +1,0 @@
-** ARQUIVO COMPILADO COM SUCESSO! **
-
---- ERROS LÉXICOS ---
-Não foram encontrados erros Léxicos!
-
---- ERROS SINTÁTICOS ---
-Erro 46 - Declaração inválida na linha 3.

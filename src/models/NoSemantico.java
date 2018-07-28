@@ -77,5 +77,10 @@ public class NoSemantico {
         }
         
     }
+    
+    public void setValor3(String valor) {
+        
+        this.valor += " "+valor;
+    }
 
 }
