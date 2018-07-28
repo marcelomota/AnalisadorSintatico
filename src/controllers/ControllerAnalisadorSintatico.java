@@ -125,7 +125,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <FunctionDef> ::= 'function' <Type> <Declarator> '(' <FunctionDeflf>
+     * FunctionDef ::= 'function' Type Declarator '(' FunctionDeflf
      */
     private void procedureFunctionDef() {
     
@@ -176,7 +176,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <FunctionDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' | ')' '{' <StmtOrDeclarationList> '}' 
+     * FunctionDeflf ::= ParameterList ')' '{' StmtOrDeclarationList '}' | ')' '{' StmtOrDeclarationList '}' 
      */
     private void procedureFunctionDeflf() {
         
@@ -316,7 +316,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ProcedureDef> ::= 'procedure' 'Identifier' '(' <ProcedureDefdlf>
+     * ProcedureDef ::= 'procedure' 'Identifier' '(' ProcedureDefdlf
      */
     private void procedureProcedureDef() {
     
@@ -385,7 +385,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ProcedureDeflf> ::= <ParameterList> ')' '{' <StmtOrDeclarationList> '}' |  ')' '{' <StmtOrDeclarationList> '}' 
+     * ProcedureDeflf ::= ParameterList ')' '{' StmtOrDeclarationList '}' |  ')' '{' StmtOrDeclarationList '}' 
      */
     private void procedureProcedureDeflf() {
         
@@ -523,7 +523,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <TypedefDef> ::= 'typedef' <TypedefDeflf> 
+     * TypedefDef ::= 'typedef' TypedefDeflf 
      */
     private void procedureTypedefDef() {
     
@@ -552,7 +552,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <TypedefDeflf> ::= <Type> 'Identifier' ';' | <StructDef> 'Identifier' ';'
+     * TypedefDeflf ::= Type 'Identifier' ';' | StructDef 'Identifier' ';'
      */
     private void procedureTypedefDeflf() {
     
@@ -666,7 +666,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <VarDef> ::= 'var' '{' <DeclarationList> '}'
+     * VarDef ::= 'var' '{' DeclarationList '}'
      */
     private void procedureVarDef() {
        
@@ -738,7 +738,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ConstDef> ::= 'const' '{' <DeclarationList> '}'
+     * ConstDef ::= 'const' '{' DeclarationList '}'
      */
     private void procedureConstDef() {
     
@@ -807,7 +807,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <StructDef> ::= 'struct' 'Identifier' <StructDeflf> 
+     * StructDef ::= 'struct' 'Identifier' StructDeflf 
      */
     private void procedureStructDef() {
         
@@ -859,7 +859,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <StructDeflf> ::= '{' <DeclarationList> '}' | 'extends' 'Identifier' '{' <DeclarationList> '}'
+     * StructDeflf ::= '{' DeclarationList '}' | 'extends' 'Identifier' '{' DeclarationList '}'
      */
     private void procedureStructDeflf() {
     
@@ -977,7 +977,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ParameterList> ::= <ParameterDeclaration> <ParameterList1>   
+     * ParameterList ::= ParameterDeclaration ParameterList1   
      */
     private void procedureParameterList() {
     
@@ -986,7 +986,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ParameterList1> ::= ',' <ParameterDeclaration> <ParameterList1> | 
+     * ParameterList1 ::= ',' ParameterDeclaration ParameterList1 | 
      */
     private void procedureParameterList1() {
         
@@ -1008,7 +1008,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ParameterDeclaration> ::= <Type> <Declarator>
+     * ParameterDeclaration ::= Type Declarator
      */
     private void procedureParameterDeclaration() {
     
@@ -1017,7 +1017,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <DeclarationList> ::= <Declaration> <DeclarationList1>  
+     * DeclarationList ::= Declaration DeclarationList1  
      */
     private void procedureDeclarationList() {
     
@@ -1026,7 +1026,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <DeclarationList1> ::= <Declaration> <DeclarationList1> | 
+     * DeclarationList1 ::= Declaration DeclarationList1 | 
      */
     private void procedureDeclarationList1() {
     
@@ -1049,7 +1049,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Declaration> ::= <Type> <InitDeclaratorList> ';'
+     * Declaration ::= Type InitDeclaratorList ';'
      */
     private void procedureDeclaration() {
     
@@ -1079,7 +1079,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitDeclaratorList> ::= <InitDeclarator> <InitDeclaratorList1>
+     * InitDeclaratorList ::= InitDeclarator InitDeclaratorList1
      */
     private void procedureInitDeclaratorList() {
             
@@ -1088,7 +1088,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <InitDeclaratorList1> ::= ',' <InitDeclarator> <InitDeclaratorList1> | 
+     * InitDeclaratorList1 ::= ',' InitDeclarator InitDeclaratorList1 | 
      */
     private void procedureInitDeclaratorList1() {
     
@@ -1110,7 +1110,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitDeclarator> ::= <Declarator> <InitDeclaratorlf>
+     * InitDeclarator ::= Declarator InitDeclaratorlf
      */
     private void procedureInitDeclarator() {
     
@@ -1119,7 +1119,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitDeclaratorlf> ::= '=' <Initializer> | 
+     * InitDeclaratorlf ::= '=' Initializer | 
      */
     private void procedureInitDeclaratorlf() {
     
@@ -1140,7 +1140,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Initializer> ::= <AssignExpr> | '{' <InitializerList> <Initializerlf>
+     * Initializer ::= AssignExpr | '{' InitializerList Initializerlf
      */
     private void procedureInitializer() {
     
@@ -1178,7 +1178,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Initializerlf> ::= '}' | ',' '}'    
+     * Initializerlf ::= '}' | ',' '}'    
      */
     private void procedureInitializerlf() {
 
@@ -1230,7 +1230,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitializerList> ::= <Initializer> <InitializerList1>    
+     * InitializerList ::= Initializer InitializerList1    
      */
     private void procedureInitializerList() {
     
@@ -1239,7 +1239,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <InitializerList1> ::= ',' <Initializer> <InitializerList1> | 
+     * InitializerList1 ::= ',' Initializer InitializerList1 | 
      */
     private void procedureInitializerList1() {
     
@@ -1261,7 +1261,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Declarator> ::= 'Identifier' <Declarator1> 
+     * Declarator ::= 'Identifier' Declarator1 
      */
     private void procedureDeclarator() {
     
@@ -1290,7 +1290,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <Declarator1> ::= '[' <Declarator1lf> | 'vazio'
+     * Declarator1 ::= '[' Declarator1lf | 'vazio'
      */
     private void procedureDeclarator1() {
     
@@ -1311,7 +1311,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Declarator1lf> ::= <CondExpr> ']' <Declarator1> | ']' <Declarator1>
+     * Declarator1lf ::= CondExpr ']' Declarator1 | ']' Declarator1
      */
     private void procedureDeclarator1lf() {
     
@@ -1369,7 +1369,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Stmt> ::= <IterationStmt> | <ExprStmt> | <CompoundStmt>  | <PrintStmt> | <ScanStmt> | <IfStmt> | <ReturnStmt>
+     * Stmt ::= IterationStmt | ExprStmt | CompoundStmt  | PrintStmt | ScanStmt | IfStmt | ReturnStmt
      */
     private void procedureStmt() {
     
@@ -1431,7 +1431,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <StmtOrDeclarationList> ::= <Stmt> <StmtOrDeclarationList1> | <VarDef> <StmtOrDeclarationList1>   
+     * StmtOrDeclarationList ::= Stmt StmtOrDeclarationList1 | VarDef StmtOrDeclarationList1   
      */
     private void procedureStmtOrDeclarationList() {
     
@@ -1471,7 +1471,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <StmtOrDeclarationList1> ::= <Stmt> <StmtOrDeclarationList1> | <VarDef> <StmtOrDeclarationList1> |
+     * StmtOrDeclarationList1 ::= Stmt StmtOrDeclarationList1 | VarDef StmtOrDeclarationList1 |
      */
     private void procedureStmtOrDeclarationList1() {
     
@@ -1505,7 +1505,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <StartDef> ::= 'start' '(' ')' '{' <StmtOrDeclarationList> '}'
+     * StartDef ::= 'start' '(' ')' '{' StmtOrDeclarationList '}'
      */
     private void procedureStartDef() {
             
@@ -1617,7 +1617,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <PrintStmt> ::= 'print' '(' <ArgumentList> ')' ';'    
+     * PrintStmt ::= 'print' '(' ArgumentList ')' ';'    
      */
     private void procedurePrintStmt() {
         
@@ -1709,7 +1709,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <ScanStmt> ::= 'scan' '(' <ArgumentList> ')' ';'
+     * ScanStmt ::= 'scan' '(' ArgumentList ')' ';'
      */
     private void procedureScanStmt() {
     
@@ -1801,7 +1801,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <IterationStmt> ::= 'while' '(' <Expr> ')' <Stmt>
+     * IterationStmt ::= 'while' '(' Expr ')' Stmt
      */
     private void procedureIterationStmt() {
     
@@ -1873,7 +1873,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <IfStmt> ::= 'if' <Expr> 'then' <Stmt> <IfStmtlf>  
+     * IfStmt ::= 'if' Expr 'then' Stmt IfStmtlf  
      */
     private void procedureIfStmt() {
         
@@ -1925,7 +1925,7 @@ public class ControllerAnalisadorSintatico {
     }    
     
     /**
-     * <IfStmtlf> ::= 'else' <Stmt> |
+     * IfStmtlf ::= 'else' Stmt |
      */
     private void procedureIfStmtlf() {
     
@@ -1946,7 +1946,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ReturnStmt> ::= 'return' <Expr> ';'
+     * ReturnStmt ::= 'return' Expr ';'
      */
     private void procedureReturnStmt() {
     
@@ -1996,7 +1996,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <CompoundStmt> ::= '{' <CompoundStmtlf> 
+     * CompoundStmt ::= '{' CompoundStmtlf 
      */
     private void procedureCompoundStmt() {
     
@@ -2025,7 +2025,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <CompoundStmtlf> ::= '}' | <StmtOrDeclarationList> '}'
+     * CompoundStmtlf ::= '}' | StmtOrDeclarationList '}'
      */
     private void procedureCompoundStmtlf() {
     
@@ -2087,7 +2087,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ExprStmt> ::= ';' | <Expr> ';'
+     * ExprStmt ::= ';' | Expr ';'
      */
     private void procedureExprStmt() {
     
@@ -2145,7 +2145,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Expr> ::= <AssignExpr> <Expr1>     
+     * Expr ::= AssignExpr Expr1     
      */
     private void procedureExpr() {
     
@@ -2154,7 +2154,7 @@ public class ControllerAnalisadorSintatico {
     }   
     
     /**
-     * <Expr1> ::= ',' <AssignExpr> <Expr1> | 
+     * Expr1 ::= ',' AssignExpr Expr1 | 
      */
     private void procedureExpr1() {
     
@@ -2176,7 +2176,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <AssignExpr> ::= <CondExpr> <AssignExpr1>  
+     * AssignExpr ::= CondExpr AssignExpr1  
      */
     private void procedureAssignExpr() {
     
@@ -2185,7 +2185,7 @@ public class ControllerAnalisadorSintatico {
     }    
     
     /**
-     * <AssignExpr1> ::= '=' <CondExpr> <AssignExpr1> | 
+     * AssignExpr1 ::= '=' CondExpr AssignExpr1 | 
      */
     private void procedureAssignExpr1() {
     
@@ -2207,7 +2207,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <CondExpr> ::= <LogicalOrExpr>   
+     * CondExpr ::= LogicalOrExpr   
      */
     private void procedureCondExpr() {
     
@@ -2215,7 +2215,7 @@ public class ControllerAnalisadorSintatico {
     }    
     
     /**
-     * <LogicalOrExpr> ::= <LogicalAndExpr> <LogicalOrExpr1>  
+     * LogicalOrExpr ::= LogicalAndExpr LogicalOrExpr1  
      */
     private void procedureLogicalOrExpr() {
     
@@ -2224,7 +2224,7 @@ public class ControllerAnalisadorSintatico {
     }   
     
     /**
-     * <LogicalOrExpr1> ::= '||' <LogicalAndExpr> <LogicalOrExpr1> |
+     * LogicalOrExpr1 ::= '||' LogicalAndExpr LogicalOrExpr1 |
      */
     private void procedureLogicalOrExpr1() {
     
@@ -2246,7 +2246,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <LogicalAndExpr> ::= <EqualExpr> <LogicalAndExpr1>
+     * LogicalAndExpr ::= EqualExpr LogicalAndExpr1
      */
     private void procedureLogicalAndExpr() {
     
@@ -2255,7 +2255,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <LogicalAndExpr1> ::= '&&' <EqualExpr> <LogicalAndExpr1> | 
+     * LogicalAndExpr1 ::= '&&' EqualExpr LogicalAndExpr1 | 
      */
     private void procedureLogicalAndExpr1() {
     
@@ -2277,7 +2277,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <EqualExpr> ::= <RelationalExpr> <EqualExpr1>
+     * EqualExpr ::= RelationalExpr EqualExpr1
      */
     private void procedureEqualExpr() {
     
@@ -2286,7 +2286,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <EqualExpr1> ::= <EqualOp> <RelationalExpr> <EqualExpr1> | 
+     * EqualExpr1 ::= EqualOp RelationalExpr EqualExpr1 | 
      */
     private void procedureEqualExpr1() {
     
@@ -2308,7 +2308,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <RelationalExpr> ::= <AdditiveExpr> <RelationalExpr1>  
+     * RelationalExpr ::= AdditiveExpr RelationalExpr1  
      */
     private void procedureRelationalExpr() {
     
@@ -2317,7 +2317,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <RelationalExpr1> ::= <RelationalOp> <AdditiveExpr> <RelationalExpr1> | 
+     * RelationalExpr1 ::= RelationalOp AdditiveExpr RelationalExpr1 | 
      */
     private void procedureRelationalExpr1() {
     
@@ -2340,7 +2340,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <AdditiveExpr> ::= <MultExpr> <AdditiveExpr1>    
+     * AdditiveExpr ::= MultExpr AdditiveExpr1    
      */
     private void procedureAdditiveExpr() {
     
@@ -2349,7 +2349,7 @@ public class ControllerAnalisadorSintatico {
     }  
     
     /**
-     * <AdditiveExpr1> ::= <AdditiveOp> <MultExpr> <AdditiveExpr1> | 
+     * AdditiveExpr1 ::= AdditiveOp MultExpr AdditiveExpr1 | 
      */
     private void procedureAdditiveExpr1() {
     
@@ -2371,7 +2371,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <MultExpr> ::= <UnaryExpr> <MultExpr1>  
+     * MultExpr ::= UnaryExpr MultExpr1  
      */
     private void procedureMultExpr() {
         
@@ -2380,7 +2380,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <MultExpr1> ::= <MultOp> <UnaryExpr> <MultExpr1> | 
+     * MultExpr1 ::= MultOp UnaryExpr MultExpr1 | 
      */
     private void procedureMultExpr1() {
     
@@ -2402,7 +2402,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <UnaryExpr> ::= <UnaryOp> <UnaryExpr> | <PostfixExpr> 
+     * UnaryExpr ::= UnaryOp UnaryExpr | PostfixExpr 
      */
     private void procedureUnaryExpr() {
     
@@ -2437,7 +2437,7 @@ public class ControllerAnalisadorSintatico {
     }   
     
     /**
-     * <PostfixExpr> ::= <PrimaryExpr> <PostfixExpr1>
+     * PostfixExpr ::= PrimaryExpr PostfixExpr1
      */
     private void procedurePostfixExpr() {
         
@@ -2446,7 +2446,7 @@ public class ControllerAnalisadorSintatico {
     }           
     
     /**
-     * <PostfixExpr1> ::= <PostfixOp> <PostfixExpr1> |
+     * PostfixExpr1 ::= PostfixOp PostfixExpr1 |
      */
     private void procedurePostfixExpr1() {
                 
@@ -2469,7 +2469,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <PrimaryExpr> ::= 'Identifier' | 'Number' | 'Literal' | 'true' | 'false' | '(' <Expr> ')' 
+     * PrimaryExpr ::= 'Identifier' | 'Number' | 'Literal' | 'true' | 'false' | '(' Expr ')' 
      */
     private void procedurePrimaryExpr() {
         
@@ -2542,7 +2542,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <EqualOp> ::= '==' | '!='
+     * EqualOp ::= '==' | '!='
      */
     private void procedureEqualOp() {
             
@@ -2574,7 +2574,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <RelationalOp> ::= '<' | '>' | '<=' | '>='       
+     * RelationalOp ::= '<' | '>' | '<=' | '>='       
      */
     private void procedureRelationalOp() {
         
@@ -2616,7 +2616,7 @@ public class ControllerAnalisadorSintatico {
     }      
     
     /**
-     * <AdditiveOp> ::= '+' | '-'
+     * AdditiveOp ::= '+' | '-'
      */
     private void procedureAdditiveOp() {
         
@@ -2648,7 +2648,7 @@ public class ControllerAnalisadorSintatico {
     }   
     
     /**
-     * <MultOp> ::= '*' | '/'
+     * MultOp ::= '*' | '/'
      */
     private void procedureMultOp() {
         
@@ -2681,7 +2681,7 @@ public class ControllerAnalisadorSintatico {
     }   
     
     /**
-     * <UnaryOp> ::= '++' | '--' | '!'
+     * UnaryOp ::= '++' | '--' | '!'
      */
     private void procedureUnaryOp() {
         
@@ -2718,7 +2718,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <PostfixOp> ::= '++' | '--' | '[' <Expr> ']' | '(' <PostfixOplf> | '.' 'Identifier'              
+     * PostfixOp ::= '++' | '--' | '[' Expr ']' | '(' PostfixOplf | '.' 'Identifier'              
      */
     private void procedurePostfixOp() {
                 
@@ -2807,7 +2807,7 @@ public class ControllerAnalisadorSintatico {
     } 
     
     /**
-     * <PostfixOplf> ::= ')' | <ArgumentList> ')'
+     * PostfixOplf ::= ')' | ArgumentList ')'
      */
     private void procedurePostfixOplf() {
         
@@ -2863,7 +2863,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ArgumentList> ::= <AssignExpr> <ArgumentList1>            
+     * ArgumentList ::= AssignExpr ArgumentList1            
      */
     private void procedureArgumentList() {
         
@@ -2872,7 +2872,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <ArgumentList1> ::= ',' <AssignExpr> <ArgumentList1> |
+     * ArgumentList1 ::= ',' AssignExpr ArgumentList1 |
      */
     private void procedureArgumentList1() {
         
@@ -2894,7 +2894,7 @@ public class ControllerAnalisadorSintatico {
     }
     
     /**
-     * <Type> ::= 'int' | 'string' | 'float' | 'bool'  | 'Identifier'
+     * Type ::= 'int' | 'string' | 'float' | 'bool'  | 'Identifier'
      */
     private void procedureType() {
         
