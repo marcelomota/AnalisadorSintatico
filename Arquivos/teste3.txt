@@ -1,17 +1,3 @@
-const { float pi = 3.14; }
-
-struct pessoa {
-    
-    string nome;
-    float peso;
-    int idade;
-}
-
-function int somar(int a, int b) {
-
-    return a + b;
-}
-
 start() {
 
     pessoa.nome = "Fulano";
@@ -20,6 +6,31 @@ start() {
 
     var { int x = 2, y = 3;}
 
-
 }
+
+const { float pi = 3.14; }
+
+struct pessoa {
+    
+    string nome = "Sicrano";
+    float peso = 101.30;
+    int idade = 30;
+}
+
+procedure caca (){
+
+    var { int dum = 3; }
+}
+
+procedure caca (){
+
+    var { int duasm = 3; }
+}
+
+function int somar(int a, int b) {
+   
+    return a + b;
+}
+
+
 

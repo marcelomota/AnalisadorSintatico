@@ -332,6 +332,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh 'Identifier'
                     if(atual2[0].contains("Identificador_")) {
 
+                        this.analisadorSemantico.addNome(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -835,7 +836,9 @@ public class ControllerAnalisadorSintatico {
                         this.idTokenAtual++;
                         
                         this.analisadorSemantico.addEscopo("struct", atual2[1].trim());
+                        this.analisadorSemantico.ativarAtribuicao(true);
                         this.procedureStructDeflf();
+                        this.analisadorSemantico.ativarAtribuicao(false);
                         this.analisadorSemantico.removerEscopo();
                         
                     } else {

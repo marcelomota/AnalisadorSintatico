@@ -15,6 +15,7 @@ public class AnalisadorSemantico {
     public AnalisadorSemantico() {
         
         this.tabelaSemantica = new ArrayList();
+        this.funcoesPendentes = new ArrayList();
         this.erros = "";
         this.escopo = new Escopo();
         this.escopo.addEscopo("global", "global");
@@ -72,6 +73,9 @@ public class AnalisadorSemantico {
     
     public void declararConst() {
         
+//        if(this.escopo.getLastNomeEscopo().equals("")) {
+//            
+//        }
         NoSemantico no = new NoSemantico();
         no.setDeclaracao("const");
         no.setNomeEscopo(this.escopo.getLastNomeEscopo());
