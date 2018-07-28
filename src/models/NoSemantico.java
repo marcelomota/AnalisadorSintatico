@@ -9,6 +9,7 @@ public class NoSemantico {
     private String nomeEscopo;
     private String valorEscopo;
     private String valor; 
+    private boolean verificarSobre_carga_escrita;
     protected boolean chave;
 
     public NoSemantico() {
@@ -91,5 +92,13 @@ public class NoSemantico {
         
         this.valor += " "+valor;
     }    
+
+    public boolean verificarSobre_carga_escrita() {
+        return verificarSobre_carga_escrita;
+    }
+
+    public void setVerificarSobre_carga_escrita(boolean verificarSobre_carga_escrita) {
+        this.verificarSobre_carga_escrita = verificarSobre_carga_escrita;
+    }
 
 }

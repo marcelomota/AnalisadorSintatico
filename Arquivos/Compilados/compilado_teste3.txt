@@ -7,4 +7,4 @@ Não foram encontrados erros Léxicos!
 Não foram encontrados erros Sintáticos!
 
 --- ERROS SEMÂNTICOS ---
-Erro 10 - Valor da constante 'pi' não pode ser alterado na linha 5.
+Erro 10 - Valor da constante 'pi' não pode ser alterado na linha 27.

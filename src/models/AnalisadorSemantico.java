@@ -182,44 +182,44 @@ public class AnalisadorSemantico {
             
             if(no.getNome().isEmpty()) {
                 
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha)) 
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);                                                   
             } else {
                  
                 this.declararVar(this.tabelaSemantica.get(this.getLastIndex()).getTipo());
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             }            
         } else if(no.getDeclaracao().equals("const")) {
             
             if(no.getNome().isEmpty()) {
                 
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             } else {
                  
                 this.declararConst(this.tabelaSemantica.get(this.getLastIndex()).getTipo());
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             }  
         } else if(no.getDeclaracao().equals("varStruct")) {
             
             if(no.getNome().isEmpty()) {
                 
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             } else {
                  
                 this.declararVarStruct(this.tabelaSemantica.get(this.getLastIndex()).getTipo(), linha);
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             }  
         } else if(no.getDeclaracao().equals("function")) {
             
             if(no.getNome().isEmpty()) {
                 
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);                
             } else {
                 
                 if(this.tabelaSemantica.get(this.getLastIndex()).getValor().isEmpty()) {
@@ -233,9 +233,9 @@ public class AnalisadorSemantico {
         } else {
             
             if(no.getNome().isEmpty()) {
-                // Acao pos verificacao ?
-                this.verificarNome(no, nome, linha);
-                this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
+                
+                if(this.verificarNome(no, nome, linha))                
+                    this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             } else {
                 this.erros += "ERRO AO ATUALIZAR NOME - Linha "+linha+"\n";
             }
@@ -246,7 +246,7 @@ public class AnalisadorSemantico {
         
         if(this.ativarAtribuicao) {
         
-            NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+            NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());            
             if(no.getValor().isEmpty()) {
 
                 no.setValor(valor);
@@ -274,47 +274,56 @@ public class AnalisadorSemantico {
         }
     }
     
-    public void verificarNome(NoSemantico no, String nome, String linha) {
+    public boolean verificarNome(NoSemantico no, String nome, String linha) {
         
         if(no.getDeclaracao().equals("var")) {
             
             if(this.verificarNomeVar(nome, no.getNomeEscopo(), no.getValorEscopo())) {
                 this.erros += "Erro 02 - Erro na linha "+linha+", já existe uma variável declarada como '"+nome+"'.\n";
+                return false;
             }            
         } else if(no.getDeclaracao().equals("const")){
             
             if(this.verificarNomeConst(nome)) {
                 this.erros += "Erro 03 - Erro na linha "+linha+", já existe uma constante declarada como '"+nome+"'.\n";
+                return false;
             } 
         } else if(no.getDeclaracao().equals("struct")){
             
             if(this.verificarNomeStruct(nome)) {
                 this.erros += "Erro 04 - Erro na linha "+linha+", já existe uma struct declarada como '"+nome+"'.\n";
+                return false;
             } 
         } else if(no.getDeclaracao().equals("function")){
             
             if(this.verificarNomeFuncao(nome)) {
                 this.erros += "Erro 05 - Erro na linha "+linha+", já existe uma funcao declarada como '"+nome+"'.\n";
+                return false;
             } 
         } else if(no.getDeclaracao().equals("procedure")){
             
             if(this.verificarNomeProcedure(nome)) {
                 this.erros += "Erro 06 - Erro na linha "+linha+", já existe uma procedure declarada como '"+nome+"'.\n";
+                return false;
             } 
         } else if(no.getDeclaracao().equals("typedef")){
             
             if(this.verificarNomeTypedef(nome)) {
                 this.erros += "Erro 07 - Erro na linha "+linha+", já existe um tipo declarado como '"+nome+"'.\n";
+                return false;
             } 
         } else if(no.getDeclaracao().equals("varStruct")){
             
             if(this.verificarNomeVarStruct(nome, no.getNomeEscopo(), no.getValorEscopo())) {
                 this.erros += "Erro 08 - Erro na linha "+linha+", já existe uma variável declarada como '"+nome+"'.\n";
+                return false;
             } 
         } else {
             this.erros += "ERRO AO VERIFICAR NOME\n";
+            return false;
         }
-                
+        
+        return true;
     }
     
     public boolean verificarNomeVar(String nome, String nomeEscopo, String valorEscopo) {

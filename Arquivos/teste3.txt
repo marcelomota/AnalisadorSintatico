@@ -1,15 +1,5 @@
 const { float pi = 3.14; }
 
-start() {
-
-    pi = 15.4;
-
-    pessoa.nome = "Fulano";
-    pessoa.peso = 80.7;
-    pessoa.idade = 26;
-
-}
-
 struct pessoa {
     
     string nome = "Sicrano";
@@ -30,6 +20,16 @@ procedure caca (){
 function int somar(int a, int b) {
    
     return a + b;
+}
+
+start() {
+
+    pi = 15.4;
+
+    pessoa.nome = "Fulano";
+    pessoa.peso = 80.7;
+    pessoa.idade = 26;
+
 }
 
 
