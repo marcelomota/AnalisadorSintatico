@@ -135,7 +135,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'function'
             if(atual[1].trim().equals("function")) {
 
-                this.analisadorSemantico.declararFuncao(atual[2].replaceAll(">", " "));
+                this.analisadorSemantico.declararFuncao(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;
                 this.procedureType();
                 this.procedureDeclarator();
@@ -189,8 +189,10 @@ public class ControllerAnalisadorSintatico {
             if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
                     atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                     atual[0].contains("Identificador_")) {
-
+                
+                this.analisadorSemantico.ativarAtribuicao(true);
                 this.procedureParameterList();
+                this.analisadorSemantico.ativarAtribuicao(false);
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
@@ -398,8 +400,10 @@ public class ControllerAnalisadorSintatico {
             if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
                     atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                     atual[0].contains("Identificador_")) {
-
+                                
+                this.analisadorSemantico.ativarAtribuicao(true);
                 this.procedureParameterList();
+                this.analisadorSemantico.ativarAtribuicao(false);
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
@@ -535,8 +539,10 @@ public class ControllerAnalisadorSintatico {
             if(atual[1].trim().equals("typedef")) {
 
                 this.analisadorSemantico.declararTypedef(atual[2].replaceAll(">", " ").trim());
-                this.idTokenAtual++;
-                this.procedureTypedefDeflf();
+                this.idTokenAtual++;                
+                this.analisadorSemantico.ativarAtribuicao(true);
+                this.procedureTypedefDeflf();                
+                  this.analisadorSemantico.ativarAtribuicao(false);
             } else {
 
                 // Erro

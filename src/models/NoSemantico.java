@@ -2,6 +2,7 @@ package models;
 
 public class NoSemantico {
 
+    private int id;
     private String declaracao;  
     private String linhaDeclaracao;
     private String tipo;
@@ -9,18 +10,25 @@ public class NoSemantico {
     private String nomeEscopo;
     private String valorEscopo;
     private String valor; 
-    private boolean verificarSobre_carga_escrita;
+    private int idSobrecarga;
+    private boolean sobrescrita;
     protected boolean chave;
 
     public NoSemantico() {
+        this.id = AnalisadorSemantico.getId();
         this.nome = "";
         this.valor = "";    
         this.tipo = "";
         this.nomeEscopo = "";
         this.valorEscopo = "";
+        this.idSobrecarga = 0;
     }
 
-     public String getDeclaracao() {
+    public int getId() {
+        return id;
+    }
+    
+    public String getDeclaracao() {
         return declaracao;
     }
 
@@ -93,12 +101,20 @@ public class NoSemantico {
         this.valor += " "+valor;
     }    
 
-    public boolean verificarSobre_carga_escrita() {
-        return verificarSobre_carga_escrita;
+    public int getIdSobrecarga() {
+        return idSobrecarga;
     }
 
-    public void setVerificarSobre_carga_escrita(boolean verificarSobre_carga_escrita) {
-        this.verificarSobre_carga_escrita = verificarSobre_carga_escrita;
+    public void setIdSobrecarga(int idSobrecarga) {
+        this.idSobrecarga = idSobrecarga;
+    }
+
+    public boolean isSobrescrita() {
+        return sobrescrita;
+    }
+
+    public void setSobrescrita(boolean sobrescrita) {
+        this.sobrescrita = sobrescrita;
     }
 
 }
