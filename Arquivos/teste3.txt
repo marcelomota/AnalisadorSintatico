@@ -1,14 +1,14 @@
+const { float pi = 3.14; }
+
 start() {
+
+    pi = 15.4;
 
     pessoa.nome = "Fulano";
     pessoa.peso = 80.7;
     pessoa.idade = 26;
 
-    var { int x = 2, y = 3;}
-
 }
-
-const { float pi = 3.14; }
 
 struct pessoa {
     

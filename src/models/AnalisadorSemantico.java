@@ -5,12 +5,13 @@ import java.util.ArrayList;
 public class AnalisadorSemantico {
     
     private ArrayList<NoSemantico> tabelaSemantica;
-    private ArrayList<String> funcoesPendentes;
-    private ArrayList<String> proceduresPendentes;
-    private String erros; // 8
+    private ArrayList<NoSemantico> funcoesPendentes;
+    private ArrayList<NoSemantico> proceduresPendentes;
+    private String erros; // 10
     private Escopo escopo;   
     private boolean temStart;
     private boolean ativarAtribuicao;
+    private boolean ativarAtribuicao2;
     
      
     public AnalisadorSemantico() {
@@ -241,7 +242,7 @@ public class AnalisadorSemantico {
         }        
     }
     
-    public void addValor(String valor) {
+    public void addValor(String valor, String linha) {
         
         if(this.ativarAtribuicao) {
         
@@ -253,6 +254,14 @@ public class AnalisadorSemantico {
 
                 no.setValor3(valor);
             }
+        } else if(this.ativarAtribuicao2) {
+            
+            this.tabelaSemantica.get(this.getLastIndex()).setValor(valor);
+            
+            this.ativarAtribuicao2 = false;
+        } else {
+            
+            this.reEmpilhaNo(valor, linha);             
         }        
     }
     
@@ -353,7 +362,7 @@ public class AnalisadorSemantico {
             
             if(no.getDeclaracao().equals("function") && no.getNome().equals(nome)) {
                 
-                this.funcoesPendentes.add(nome);
+                this.funcoesPendentes.add(no);
                 return false;
             }
         }
@@ -367,7 +376,7 @@ public class AnalisadorSemantico {
             
             if(no.getDeclaracao().equals("procedure") && no.getNome().equals(nome)) {
                 
-                this.proceduresPendentes.add(nome);
+                this.proceduresPendentes.add(no);
                 return false;
             }
         }
@@ -400,6 +409,25 @@ public class AnalisadorSemantico {
         
         return false;
     }
+    
+    public void reEmpilhaNo(String nome, String linha) {
+        
+        for(int i=0; i<this.tabelaSemantica.size(); i++) {
+            
+            NoSemantico no = this.tabelaSemantica.get(i);
+            if(no.getNome().equals(nome)) {
+                if(no.getDeclaracao().equals("const")) {
+                    
+                    this.erros += "Erro 10 - Valor da constante '"+nome+"' não pode ser alterado na linha "+linha+".\n";
+                } else {
+                    
+                    this.tabelaSemantica.add(this.tabelaSemantica.remove(i));
+                    this.ativarAtribuicao2 = true;
+                }                
+                return;
+            }
+        }
+    }
             
     public String getErros() {
         return this.erros;
@@ -429,19 +457,19 @@ public class AnalisadorSemantico {
         );
     }
     
-     public void printFunctionTable() {
+    public void printFunctionTable() {
         
-         System.out.println("***** Funções Pendentes *****\n"); 
+        System.out.println("***** Funções Pendentes *****\n"); 
         this.funcoesPendentes.forEach(
-            (f) -> {
-                System.out.println("Função: "+f);  
+            (no) -> {
+                System.out.println("Função: "+no.getNome());  
             }
         );        
         
         System.out.println("\n***** Procedures Pendentes *****\n"); 
         this.proceduresPendentes.forEach(
-            (p) -> {
-                System.out.println("Procedure: "+p); 
+            (no) -> {
+                System.out.println("Procedure: "+no.getNome()); 
             }
         );
     }
