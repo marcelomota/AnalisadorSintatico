@@ -30,6 +30,7 @@ public class ControllerAnalisadorSintatico {
         if(this.idTokenAtual < this.tokens.getSize()) {
             
             this.procedureS();
+            this.analisadorSemantico.verificarSobre_carga_scrita();
         }        
         
         return this.errosSintaticos;
@@ -190,9 +191,7 @@ public class ControllerAnalisadorSintatico {
                     atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                     atual[0].contains("Identificador_")) {
                 
-                this.analisadorSemantico.ativarAtribuicao(true);
                 this.procedureParameterList();
-                this.analisadorSemantico.ativarAtribuicao(false);
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
@@ -847,6 +846,7 @@ public class ControllerAnalisadorSintatico {
                         this.analisadorSemantico.ativarAtribuicao(false);
                         this.analisadorSemantico.removerEscopo();
                         
+                        
                     } else {
 
                         // Erro
@@ -1143,9 +1143,11 @@ public class ControllerAnalisadorSintatico {
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
             // Verifica se o token atual eh '='
             if(atual[1].trim().equals("=")) {
-
+                
                 this.idTokenAtual++;    
+                this.analisadorSemantico.ativarAtribuicao(true);
                 this.procedureInitializer();
+                this.analisadorSemantico.ativarAtribuicao(false);
             }
 
             // Vazio
@@ -2833,6 +2835,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual é um 'Identifier'
                     if(atual2[0].contains("Identificador_")){
 
+                        this.analisadorSemantico.atribuicao3(atual2[1].trim());
                         this.idTokenAtual++;
                     } else {
 

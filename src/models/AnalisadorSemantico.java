@@ -7,7 +7,7 @@ public class AnalisadorSemantico {
     private ArrayList<NoSemantico> tabelaSemantica;
     private ArrayList<NoSemantico> funcoesPendentes;
     private ArrayList<NoSemantico> proceduresPendentes;
-    private String erros; // 11
+    private String erros; // 12
     private Escopo escopo;      
     private boolean temStart;
     private boolean ativarAtribuicao;
@@ -17,7 +17,7 @@ public class AnalisadorSemantico {
     
     public AnalisadorSemantico() {
         
-        AnalisadorSemantico.count = 1;
+        AnalisadorSemantico.count = 0;
         this.tabelaSemantica = new ArrayList();
         this.funcoesPendentes = new ArrayList();
         this.proceduresPendentes = new ArrayList();
@@ -28,6 +28,23 @@ public class AnalisadorSemantico {
     
     public void ativarAtribuicao(boolean ativar) {
         this.ativarAtribuicao = ativar;
+    }
+    
+    public void atribuicao3(String nome) {
+        
+        NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+        if(no.getDeclaracao().equals("struct")) {
+            
+            for(NoSemantico s : this.tabelaSemantica) {
+                if(s.getNomeEscopo().equals(no.getDeclaracao()) && s.getValorEscopo().equals(no.getNome())) {
+
+                    if(s.getDeclaracao().equals("varStruct") && s.getNome().equals(nome)) {
+                        this.reEmpilhaNo(s.getId());
+                        return;
+                    }
+                }  
+            }
+        }
     }
     
     public void addEscopo(String nome, String valor) {
@@ -45,15 +62,7 @@ public class AnalisadorSemantico {
     }
     
     public void removerEscopo() {
-        
-        if(this.escopo.getLastNomeEscopo().equals("function")) {
-            
-            NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
-            if(no.getIdSobrecarga() != 0){
-                
-                this.verificarSobrecarga(no);
-            }
-        }
+     
         this.escopo.removeLast();
     }
         
@@ -161,16 +170,25 @@ public class AnalisadorSemantico {
         
     public void addTipo(String tipo, String linha) {
         
-        if(this.tabelaSemantica.get(this.getLastIndex()).getDeclaracao().equals("function")) {
+        NoSemantico no = this.tabelaSemantica.get(this.getLastIndex());
+        String escopoAtual = this.escopo.getLastNomeEscopo();
+        if(no.getDeclaracao().equals("function")) {
             
-            if(this.tabelaSemantica.get(this.getLastIndex()).getTipo().isEmpty()) {
-                this.tabelaSemantica.get(this.getLastIndex()).setTipo(tipo);
-            } else if(this.tabelaSemantica.get(this.getLastIndex()).getValor().isEmpty()) {
-                this.tabelaSemantica.get(this.getLastIndex()).setValor(tipo);
+            if(no.getTipo().isEmpty()) {
+                no.setTipo(tipo);
+            } else if(no.getValor().isEmpty()) {
+                no.setValor(tipo);
             } else {
-                this.tabelaSemantica.get(this.getLastIndex()).setValor2(tipo);
+                no.setValor2(tipo);
             }
-        } else if(this.escopo.getLastNomeEscopo().equals("struct")) {
+        } else if(no.getDeclaracao().equals("procedure")) {
+            
+            if(no.getValor().isEmpty()) {
+                no.setValor(tipo);
+            } else {
+                no.setValor2(tipo);
+            }
+        } else if(escopoAtual.equals("struct")) {                      
             
             this.declararVarStruct(tipo, linha);
         } else {
@@ -220,7 +238,7 @@ public class AnalisadorSemantico {
                 this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
             } else {
                  
-                // Se a struct atual da tabela já tem um nome, adiciona uma nova.
+                // Se a variavel atual da struct já tem um nome, adiciona uma nova.                 
                 this.declararVarStruct(this.tabelaSemantica.get(this.getLastIndex()).getTipo(), linha);
                 this.verificarNome(no, nome, linha);               
                 this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);
@@ -238,29 +256,33 @@ public class AnalisadorSemantico {
             } else {
                 
                 // Se a funcao atual da tabela ja tem nome, adiciona os parametros.
-                if(this.tabelaSemantica.get(this.getLastIndex()).getValor().isEmpty()) {
+                if(no.getValor().isEmpty()) {
                     
-                    this.tabelaSemantica.get(this.getLastIndex()).setValor(nome);
+                    no.setValor(nome);
                 } else {
                     
-                    this.tabelaSemantica.get(this.getLastIndex()).setValor2(nome);
+                    no.setValor2(nome);
                 }                
             }
         } else if(no.getDeclaracao().equals("procedure")) {
             
-              if(no.getNome().isEmpty()) {
+            if(no.getNome().isEmpty()) {
                 
-                this.verificarNome(no, nome, linha);            
+                int id = this.verificarNomeProcedure(nome);
+                if(id != 0) {
+                    
+                    no.setIdSobrecarga(id);
+                }                
                 this.tabelaSemantica.get(this.getLastIndex()).setNome(nome);                
             } else {
                 
                 // Se a procedure atual da tabela ja tem nome, adiciona os parametros.
-                if(this.tabelaSemantica.get(this.getLastIndex()).getValor().isEmpty()) {
+                if(no.getValor().isEmpty()) {
                     
-                    this.tabelaSemantica.get(this.getLastIndex()).setValor(nome);
+                    no.setValor(nome);
                 } else {
                     
-                    this.tabelaSemantica.get(this.getLastIndex()).setValor2(nome);
+                    no.setValor2(nome);
                 }                
             }
         } else {
@@ -294,7 +316,7 @@ public class AnalisadorSemantico {
             this.ativarAtribuicao2 = false;
         } else {
             
-            this.reEmpilhaNo(valor, linha);             
+            this.verificarValor(valor, linha);             
         }        
     }
     
@@ -327,12 +349,6 @@ public class AnalisadorSemantico {
                 this.erros += "Erro 05 - Erro na linha "+linha+", já existe uma struct declarada como '"+nome+"'.\n";
                 return false;
             } 
-        } else if(no.getDeclaracao().equals("procedure")){
-            
-//            if(this.verificarNomeProcedure(nome)) {
-//                this.erros += "Erro 06 - Erro na linha "+linha+", já existe uma procedure declarada como '"+nome+"'.\n";
-//                return false;
-//            } 
         } else if(no.getDeclaracao().equals("typedef")){
             
             if(this.verificarNomeTypedef(nome)) {
@@ -357,9 +373,37 @@ public class AnalisadorSemantico {
         
         for (NoSemantico no : this.tabelaSemantica) {
             
-            if(no.getDeclaracao().equals("var") && no.getNomeEscopo().equals(nomeEscopo) && no.getValorEscopo().equals(valorEscopo) && no.getNome().contains(nome)) {
+            if(no.getDeclaracao().equals("var")) {
                 
-                return true;
+                if(no.getNomeEscopo().equals("Global") && no.getNome().equals(nome)) {
+                
+                    return true;
+                } else if(no.getNomeEscopo().equals(nomeEscopo) && no.getValorEscopo().equals(valorEscopo) && no.getNome().equals(nome)) {
+
+                    boolean trava = true;
+                    if(nomeEscopo.equals("function")) {
+                                                
+                        for (NoSemantico f : this.funcoesPendentes) {
+                            
+                            if(f.getNome().equals(valorEscopo) && f.getIdSobrecarga() == no.getId()) {
+                                   
+                                trava = false;
+                            }                             
+                        }
+                    } else if(nomeEscopo.equals("procedure")) {
+                        
+                        for (NoSemantico p : this.proceduresPendentes) {
+                            
+                            if(p.getNome().equals(valorEscopo)) {
+                                   
+                                trava = false;
+                            }                             
+                        }
+                    } 
+                    
+                    if(trava)
+                        return true;                    
+                }                
             }
         }
         
@@ -413,7 +457,7 @@ public class AnalisadorSemantico {
             if(no.getDeclaracao().equals("procedure") && no.getNome().equals(nome)) {
                 
                 this.proceduresPendentes.add(this.tabelaSemantica.get(this.getLastIndex()));
-                return no.getIdSobrecarga();
+                return no.getId();
             }
         }
         
@@ -446,27 +490,45 @@ public class AnalisadorSemantico {
         return false;
     }
     
-    public void verificarSobrecarga(NoSemantico noAtual) {
-        
-        NoSemantico no = this.tabelaSemantica.get(noAtual.getIdSobrecarga());
-        if(no.getValor().equals(noAtual.getValor())) {
-            System.out.println("V1: "+no.getValor()+" - V2: "+noAtual.getValor());
-            this.erros += "Erro 09 - Erro na linha "+noAtual.getLinhaDeclaracao()+", já existe uma funcao declarada como '"+noAtual.getNome()+"' e esta não é uma sobrecarga.\n";
-        } else if(!no.getTipo().equals(noAtual.getTipo())) {
+    /**
+     * Foi decidido que a sobrecarga so sera aceita mediante a mudanca dos parametros, 
+     * devendo manter o mesmo tipo de retorno e conteudo. 
+     */
+    public void verificarSobre_carga_scrita() {
             
-            this.erros += "Erro 10 - Erro na linha "+noAtual.getLinhaDeclaracao()+", os tipos das funções não correspondem para uma sobrecarga.\n";
-        }
+        this.funcoesPendentes.forEach(
+            (no) -> {
+                NoSemantico noAtual = this.getForID(no.getIdSobrecarga());
+                if(noAtual.getValor().equals(no.getValor())) {
+
+                    this.erros += "Erro 09 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma funcao declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
+                } else if(!noAtual.getTipo().equals(no.getTipo())) {
+
+                    this.erros += "Erro 10 - Erro na linha "+no.getLinhaDeclaracao()+", os tipos de retorno das funções não correspondem para uma sobrecarga.\n";
+                }
+            }
+        );
+
+        this.proceduresPendentes.forEach(
+            (no) -> {
+                NoSemantico noAtual = this.getForID(no.getIdSobrecarga());
+                 if(noAtual.getValor().equals(no.getValor())) {
+
+                    this.erros += "Erro 11 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma procedure declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
+                }
+            }
+        ); 
     }
-    
-    public void reEmpilhaNo(String nome, String linha) {
+         
+    public void verificarValor(String valor, String linha) {
         
-        for(int i=0; i<this.tabelaSemantica.size(); i++) {
+         for(int i=0; i<this.tabelaSemantica.size(); i++) {
             
             NoSemantico no = this.tabelaSemantica.get(i);
-            if(no.getNome().equals(nome)) {
+            if(no.getNome().equals(valor)) {
                 if(no.getDeclaracao().equals("const")) {
                     
-                    this.erros += "Erro 11 - Valor da constante '"+nome+"' não pode ser alterado na linha "+linha+".\n";
+                    this.erros += "Erro 12 - Valor da constante '"+valor+"' não pode ser alterado na linha "+linha+".\n";
                 } else {
                     
                     this.tabelaSemantica.add(this.tabelaSemantica.remove(i));
@@ -474,7 +536,35 @@ public class AnalisadorSemantico {
                 }                
                 return;
             }
+        }        
+    }
+    
+    public void reEmpilhaNo(int id) {
+        
+        for(int i=0; i<this.tabelaSemantica.size(); i++) {
+            
+            NoSemantico no = this.tabelaSemantica.get(i);
+            if(no.getId() == id) {
+                                  
+                this.tabelaSemantica.add(this.tabelaSemantica.remove(i));
+                this.ativarAtribuicao2 = true;
+                                
+                return;
+            }
         }
+    }
+    
+    public NoSemantico getForID(int id) {
+                    
+        for(NoSemantico no : this.tabelaSemantica) {
+            
+            if(no.getId() == id){
+                
+                return no;
+            }
+        }
+        
+        return null;
     }
             
     public String getErros() {
@@ -525,6 +615,6 @@ public class AnalisadorSemantico {
                 System.out.println("Procedure: "+no.getNome()); 
             }
         );
-    }
+    }   
     
 }

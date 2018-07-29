@@ -1,34 +1,13 @@
-function int somar(int a, int b) {
-   
-    return a + b;
-}
-
-function float somar(int a) {
-   
-    return a + b;
-}
-
-const { float pi = 3.14; }
-
 struct pessoa {
     
-    string nome = "Sicrano";
-    float peso = 101.30;
-    int idade = 30;
+    string nome;
+    int idade;
+    float pi = 3,14;
 }
 
-procedure caca (){
+procedure teste() {
 
-    var { int dum = 3; }
+    pessoa.pi = 0;
+    pessoa.nome = "Arnaldo";
+    pessoa.idade = 30;
 }
-
-start() {
-
-    pessoa.nome = "Fulano";
-    pessoa.peso = 80.7;
-    pessoa.idade = 26;
-
-}
-
-
-

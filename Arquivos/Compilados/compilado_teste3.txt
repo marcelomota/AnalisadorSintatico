@@ -4,7 +4,7 @@
 Não foram encontrados erros Léxicos!
 
 --- ERROS SINTÁTICOS ---
-Não foram encontrados erros Sintáticos!
+Erro 42 - Identificador não encontrado na linha 5.
 
 --- ERROS SEMÂNTICOS ---
-Erro 09 - Erro na linha 6, já existe uma funcao declarada como 'somar' e esta não é uma sobrecarga.
+Não foram encontrados erros Semânticos!
