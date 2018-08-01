@@ -2,32 +2,31 @@ package models;
 
 public class NoEscopo {
     
-    private String nome;
-    private String valor;
+    private String palavraReservada;
+    private String identificador;
 
-    public NoEscopo() {
-        
+    public NoEscopo() {        
     }
 
-    public NoEscopo(String nome, String valor) {
-        this.nome = nome;
-        this.valor = valor;
-    }
-    
-    public String getNome() {
-        return nome;
+    public NoEscopo(String palavraReservada, String identificador) {
+        this.palavraReservada = palavraReservada;
+        this.identificador = identificador;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getPalavraReservada() {
+        return palavraReservada;
     }
 
-    public String getValor() {
-        return valor;
+    public void setPalavraReservada(String palavraReservada) {
+        this.palavraReservada = palavraReservada;
     }
 
-    public void setValor(String valor) {
-        this.valor = valor;
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
     }
     
 }

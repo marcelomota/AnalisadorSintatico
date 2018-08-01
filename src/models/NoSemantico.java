@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public class NoSemantico {
 
     private int id;
@@ -7,20 +9,24 @@ public class NoSemantico {
     private String linhaDeclaracao;
     private String tipo;
     private String nome;      
-    private String nomeEscopo;
-    private String valorEscopo;
+    private String palavraReservadaEscopo;
+    private String identificadorEscopo;
     private String valor; 
+    private ArrayList<String> extensao;
+    private ArrayList<NoParametro> parametros; 
     private int idSobrecarga;
-    private boolean sobrescrita;
+    private boolean erro;
     protected boolean chave;
 
     public NoSemantico() {
-        this.id = AnalisadorSemantico.getId();
+        this.id = TabelaSemantica.getId();
         this.nome = "";
         this.valor = "";    
         this.tipo = "";
-        this.nomeEscopo = "";
-        this.valorEscopo = "";
+        this.extensao = new ArrayList();
+        this.parametros = new ArrayList();
+        this.palavraReservadaEscopo = "";
+        this.identificadorEscopo = "";
         this.idSobrecarga = 0;
     }
 
@@ -59,23 +65,23 @@ public class NoSemantico {
     public void setNome(String nome) {
         this.nome = nome;
     }
-       
-    public String getNomeEscopo() {
-        return this.nomeEscopo;
+
+    public String getPalavraReservadaEscopo() {
+        return palavraReservadaEscopo;
     }
 
-    public void setNomeEscopo(String nomeEscopo) {
-        this.nomeEscopo = nomeEscopo;
-    }
-    
-    public String getValorEscopo() {
-        return this.valorEscopo;
+    public void setPalavraReservadaEscopo(String palavraReservadaEscopo) {
+        this.palavraReservadaEscopo = palavraReservadaEscopo;
     }
 
-    public void setValorEscopo(String valorEscopo) {
-        this.valorEscopo = valorEscopo;
+    public String getIdentificadorEscopo() {
+        return identificadorEscopo;
     }
 
+    public void setIdentificadorEscopo(String identificadorEscopo) {
+        this.identificadorEscopo = identificadorEscopo;
+    }
+           
     public String getValor() {
         return valor;
     }
@@ -84,23 +90,20 @@ public class NoSemantico {
         this.valor = valor;
     }
     
-    public void setValor2(String valor) {
-        
+    public void setValor2(String valor) {        
+        this.valor += valor;
+    }  
+    
+    public void setValor3(String valor) {        
         if(this.chave) {
             this.valor += ", "+valor;
             this.chave = false;
         } else {
             this.valor += " "+valor;
             this.chave = true;
-        }
-        
+        }        
     }
     
-    public void setValor3(String valor) {
-        
-        this.valor += " "+valor;
-    }    
-
     public int getIdSobrecarga() {
         return idSobrecarga;
     }
@@ -109,12 +112,32 @@ public class NoSemantico {
         this.idSobrecarga = idSobrecarga;
     }
 
-    public boolean isSobrescrita() {
-        return sobrescrita;
+    public ArrayList<NoParametro> getParametros() {
+        return this.parametros;
     }
 
-    public void setSobrescrita(boolean sobrescrita) {
-        this.sobrescrita = sobrescrita;
+    public void addTipoParametro(String tipo) {
+        this.parametros.add(new NoParametro(tipo));
+    }
+    
+    public void addNomeParametro(String nome) {
+        this.parametros.get(this.parametros.size()-1).setNome(nome);
+    }
+
+    public boolean isErro() {
+        return erro;
+    }
+
+    public void setErro(boolean erro) {
+        this.erro = erro;
+    }
+
+    public ArrayList<String> getExtensoes() {
+        return extensao;
+    }
+
+    public void addExtensao(String extensao) {
+        this.extensao.add(extensao);
     }
 
 }

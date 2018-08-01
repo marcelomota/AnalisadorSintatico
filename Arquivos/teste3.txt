@@ -1,13 +1,20 @@
-struct pessoa {
-    
-    string nome;
-    int idade;
-    float pi = 3,14;
+const { int a; }
+
+procedure b () {
+
+    var { int x; }
+
 }
 
-procedure teste() {
+procedure a () {
 
-    pessoa.pi = 0;
-    pessoa.nome = "Arnaldo";
-    pessoa.idade = 30;
+    var { int x; }
+
+    return x;
+}
+
+function int a () {
+
+    var { int x; }
+
 }

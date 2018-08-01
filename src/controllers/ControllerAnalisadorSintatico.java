@@ -1,6 +1,5 @@
 package controllers;
 
-import models.AnalisadorSemantico;
 import models.Token;
 
 public class ControllerAnalisadorSintatico {
@@ -9,7 +8,7 @@ public class ControllerAnalisadorSintatico {
     private Token tokens;
     private int idTokenAtual;
      
-    private AnalisadorSemantico analisadorSemantico;
+    private ControllerAnalisadorSemantico analisadorSemantico;
     
     public ControllerAnalisadorSintatico() {
         
@@ -21,7 +20,7 @@ public class ControllerAnalisadorSintatico {
      * @param analisadorSemantico
      * @return 
      */
-    public String analisar(Token tokens, AnalisadorSemantico analisadorSemantico) {
+    public String analisar(Token tokens, ControllerAnalisadorSemantico analisadorSemantico) {
         
         this.tokens = tokens;        
         this.idTokenAtual = 0;
@@ -138,8 +137,9 @@ public class ControllerAnalisadorSintatico {
 
                 this.analisadorSemantico.declararFuncao(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;
-                this.procedureType();
-                this.procedureDeclarator();
+                this.analisadorSemantico.addContexto("function");
+                this.procedureType();                               
+                this.procedureDeclarator();                 
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
@@ -185,6 +185,9 @@ public class ControllerAnalisadorSintatico {
         
         if(this.idTokenAtual < this.tokens.getSize()) {
             
+            int idTokenInicio = 0;
+            int idTokenFim = 0;
+            
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
             // Verifica se o token atual eh o primeiro de <ParameterList>
             if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
@@ -192,27 +195,31 @@ public class ControllerAnalisadorSintatico {
                     atual[0].contains("Identificador_")) {
                 
                 this.procedureParameterList();
+                this.analisadorSemantico.removerContexto();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
                     // Verifica se o token atual eh ')'
                     if(atual2[1].trim().equals(")")) {
 
+                        this.analisadorSemantico.removerContexto();
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                             // Verifica se o token atual eh '{'
                             if(atual3[1].trim().equals("{")) {
-
-                                this.idTokenAtual++;
+                                
+                                this.idTokenAtual++;    
+                                idTokenInicio = this.idTokenAtual;
                                 this.procedureStmtOrDeclarationList();
                                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                                     String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                                     // Verifica se o token atual eh '}'
                                     if(atual4[1].trim().equals("}")) {
-
+                                        
+                                        idTokenFim = this.idTokenAtual;
                                         this.idTokenAtual++;
                                     } else {
 
@@ -263,8 +270,9 @@ public class ControllerAnalisadorSintatico {
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                     // Verifica se o token atual eh '{'
                     if(atual2[1].trim().equals("{")) {
-
-                        this.idTokenAtual++;
+                        
+                        this.idTokenAtual++;  
+                        idTokenInicio = this.idTokenAtual;
                         this.procedureStmtOrDeclarationList();
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -272,6 +280,7 @@ public class ControllerAnalisadorSintatico {
                             // Verifica se o token atual eh '}'
                             if(atual3[1].trim().equals("}")) {
 
+                                idTokenFim = this.idTokenAtual;
                                 this.idTokenAtual++;
                             } else {
 
@@ -307,6 +316,10 @@ public class ControllerAnalisadorSintatico {
                 this.errosSintaticos += "Erro 9* - Declaração inválida na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
             }
+            
+            if(idTokenInicio != 0 && idTokenFim != 0) {
+                this.getConteudoFuncao(idTokenInicio, idTokenFim);
+            }   
         } else {
                 
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureFunctionDeflf()");
@@ -333,7 +346,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh 'Identifier'
                     if(atual2[0].contains("Identificador_")) {
 
-                        this.analisadorSemantico.addNome(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
+                        this.analisadorSemantico.addNomeProcedure(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -343,7 +356,7 @@ public class ControllerAnalisadorSintatico {
 
                                 this.idTokenAtual++;
                                 
-                                this.analisadorSemantico.addEscopo("procedure", atual2[1].trim());
+                                this.analisadorSemantico.addEscopo();
                                 this.procedureProcedureDeflf();
                                 this.analisadorSemantico.removerEscopo();
                             } else {
@@ -394,15 +407,18 @@ public class ControllerAnalisadorSintatico {
         
         if(this.idTokenAtual < this.tokens.getSize()) {
             
+            int idTokenInicio = 0;
+            int idTokenFim = 0;
+            
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
             // Verifica se o token atual eh primeiro de <ParameterList>
             if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
                     atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                     atual[0].contains("Identificador_")) {
-                                
-                this.analisadorSemantico.ativarAtribuicao(true);
+                                                
+                this.analisadorSemantico.addContexto("procedure");
                 this.procedureParameterList();
-                this.analisadorSemantico.ativarAtribuicao(false);
+                this.analisadorSemantico.removerContexto();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
@@ -415,8 +431,9 @@ public class ControllerAnalisadorSintatico {
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                             // Verifica se o token atual eh '{'
                             if(atual3[1].trim().equals("{")) {
-                                
-                                this.idTokenAtual++;
+                                                                
+                                this.idTokenAtual++;   
+                                idTokenInicio = this.idTokenAtual;
                                 this.procedureStmtOrDeclarationList();
                                 
                                 if(this.idTokenAtual < this.tokens.getSize()) {
@@ -424,8 +441,9 @@ public class ControllerAnalisadorSintatico {
                                     String[] atual4 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                                     // Verifica se o token atual eh '}'
                                     if(atual4[1].trim().equals("}")) {
-                                        
-                                        this.idTokenAtual++;
+                                                 
+                                        idTokenFim = this.idTokenAtual;
+                                        this.idTokenAtual++; 
                                     } else {
 
                                         // Erro
@@ -475,16 +493,18 @@ public class ControllerAnalisadorSintatico {
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                     // Verifica se o token atual eh '{'
                     if(atual2[1].trim().equals("{")) {
-
-                        this.idTokenAtual++;
+                        
+                        this.idTokenAtual++;    
+                        idTokenInicio = this.idTokenAtual;
                         this.procedureStmtOrDeclarationList();
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                             // Verifica se o token atual eh '}'
                             if(atual3[1].trim().equals("}")) {
-
-                                this.idTokenAtual++;
+                                
+                                idTokenFim = this.idTokenAtual;
+                                this.idTokenAtual++;    
                             } else {
 
                                 // Erro
@@ -519,6 +539,10 @@ public class ControllerAnalisadorSintatico {
                 this.errosSintaticos += "Erro 18 - Delimitador ')' não encontrado na linha "+linha.trim()+".\n";
                 this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start");
             }
+            
+            if(idTokenInicio != 0 && idTokenFim != 0) {
+                this.getConteudoProcedure(idTokenInicio, idTokenFim);
+            } 
         } else {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureProcedureDeflf()");
@@ -539,9 +563,7 @@ public class ControllerAnalisadorSintatico {
 
                 this.analisadorSemantico.declararTypedef(atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;                
-                this.analisadorSemantico.ativarAtribuicao(true);
                 this.procedureTypedefDeflf();                
-                  this.analisadorSemantico.ativarAtribuicao(false);
             } else {
 
                 // Erro
@@ -569,14 +591,17 @@ public class ControllerAnalisadorSintatico {
             if(atual[1].trim().equals("bool") || atual[1].trim().equals("float") ||
                     atual[1].trim().equals("int") || atual[1].trim().equals("string") ||
                     atual[0].contains("Identificador_")) {
-
+                
+                this.analisadorSemantico.addContexto("typedef");
                 this.procedureType();
+                this.analisadorSemantico.removerContexto();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                     // Verifica se o token atual eh 'Identifier'
                     if(atual2[0].contains("Identificador_")) {
 
+                        this.analisadorSemantico.addNomeTypedef(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -690,16 +715,16 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh '{'
                     if(atual2[1].trim().equals("{")) {
 
-                        this.analisadorSemantico.ativarAtribuicao(true);
-                        this.idTokenAtual++;                        
+                        this.idTokenAtual++;     
+                        this.analisadorSemantico.addContexto("var");
                         this.procedureDeclarationList();
+                        this.analisadorSemantico.removerContexto();
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");
                             // Verifica se o token atual eh '}'
                             if(atual3[1].trim().equals("}")) {
 
-                                this.analisadorSemantico.ativarAtribuicao(false);
                                 this.idTokenAtual++;
                             } else {
 
@@ -764,17 +789,17 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh '{'
                     if(atual2[1].trim().equals("{")) {
 
-                        this.analisadorSemantico.ativarAtribuicao(true);
                         this.idTokenAtual++;
+                        this.analisadorSemantico.addContexto("const");
                         this.procedureDeclarationList();
+                        this.analisadorSemantico.removerContexto();
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
                             String[] atual3 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                             // Verifica se o token atual eh '}'
                             if(atual3[1].trim().equals("}")) {
 
-                                this.analisadorSemantico.verificarConst(atual[2].replaceAll(">", " ").trim());
-                                this.analisadorSemantico.ativarAtribuicao(false);
+                                this.analisadorSemantico.verificarInicializacaoConst(atual[2].replaceAll(">", " ").trim());
                                 this.idTokenAtual++;
                             } else {
 
@@ -836,22 +861,17 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh 'Identifier'
                     if(atual2[0].contains("Identificador_")) {
 
-                        this.analisadorSemantico.addNome(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
+                        this.analisadorSemantico.addNomeStruct(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
                         
                         this.idTokenAtual++;
                         
-                        this.analisadorSemantico.addEscopo("struct", atual2[1].trim());
-                        this.analisadorSemantico.ativarAtribuicao(true);
+                        this.analisadorSemantico.addEscopo();
                         this.procedureStructDeflf();
-                        this.analisadorSemantico.ativarAtribuicao(false);
                         this.analisadorSemantico.removerEscopo();
-                        
-                        
                     } else {
 
                         // Erro
                         String linha = atual2[2].replaceAll(">", " ");
-
                         //this.errosSintaticos += "Erro #31 - '"+atual2[1].trim()+"' inesperado na linha "+linha.trim()+".\n";
                         this.errosSintaticos += "Erro 31 - Identificador não encontrado na linha "+linha.trim()+".\n";
                         this.modalidadeDesespero("struct, procedure, typedef, const, function, var, start, Identificador_");
@@ -873,13 +893,12 @@ public class ControllerAnalisadorSintatico {
             
             //System.err.println("Erro - idTokenAtual > tokens.getSize() em procedureStructDef()");
             this.errosSintaticos += "Erro @32 - Palavra Reservada 'struct' não encontrada na linha "+this.getLinhaErro(this.tokens.getSize()-1)+".\n";
-
         }        
     }
     
     /**
      * StructDeflf ::= '{' DeclarationList '}' | 'extends' 'Identifier' '{' DeclarationList '}'
-     */
+    */
     private void procedureStructDeflf() {
     
         if(this.idTokenAtual < this.tokens.getSize()) {
@@ -921,6 +940,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh 'Identifier'
                     if(atual2[0].contains("Identificador_")) {
 
+                        this.analisadorSemantico.addExtensao(atual2[1].trim(), atual2[2].replaceAll(">", " ").trim());
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -1144,10 +1164,10 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '='
             if(atual[1].trim().equals("=")) {
                 
-                this.idTokenAtual++;    
-                this.analisadorSemantico.ativarAtribuicao(true);
+                this.idTokenAtual++;   
+                this.analisadorSemantico.setInitializer(true);
                 this.procedureInitializer();
-                this.analisadorSemantico.ativarAtribuicao(false);
+                this.analisadorSemantico.setInitializer(false);
             }
 
             // Vazio
@@ -1287,9 +1307,8 @@ public class ControllerAnalisadorSintatico {
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");
             // Verifica se o token atual eh 'Identifier'
             if(atual[0].contains("Identificador_")) {
-
-                this.analisadorSemantico.addNome(atual[1].trim(), atual[2].replaceAll(">", " ").trim());
                 
+                this.analisadorSemantico.addNome(atual[1].trim(), atual[2].replaceAll(">", " ").trim());
                 this.idTokenAtual++;                
                 this.procedureDeclarator1();
             } else {
@@ -2117,6 +2136,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh ';'
             if(atual[1].trim().equals(";")) {
 
+                this.analisadorSemantico.setIgnorarAtribuicao(false);
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh primeiro de <Expr>    
@@ -2133,6 +2153,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh ';'
                     if(atual2[1].trim().equals(";")) {
 
+                        this.analisadorSemantico.setIgnorarAtribuicao(false);
                         this.idTokenAtual++;
                     } else {
 
@@ -2185,7 +2206,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh ','
             if(atual[0].contains("Delimitador") && atual.length == 4) {
 
-                this.analisadorSemantico.addValor(",", linhaS);
+                this.analisadorSemantico.addValor(",", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedureAssignExpr();
                 this.procedureExpr1();
@@ -2217,9 +2238,19 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '='
             if(atual[1].trim().equals("=")) {
 
+                
                 this.idTokenAtual++;
-                this.procedureCondExpr();
-                this.procedureAssignExpr1();
+                if(this.analisadorSemantico.isInitializer()) {
+                    
+                    this.analisadorSemantico.addValor("=", atual[2].replaceAll(">", " ").trim(), "Op");
+                    this.procedureCondExpr();
+                    this.procedureAssignExpr1();
+                } else {
+                    
+                    this.procedureCondExpr();
+                    this.procedureAssignExpr1();
+                    this.analisadorSemantico.setInitializer2(false);
+                }                
             }
 
             // Vazio
@@ -2257,7 +2288,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '||'
             if(atual[1].trim().equals("||")) {
 
-                this.analisadorSemantico.addValor(",", linhaS);
+                this.analisadorSemantico.addValor("||", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedureLogicalAndExpr();
                 this.procedureLogicalOrExpr1();
@@ -2290,7 +2321,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '&&'
             if(atual[1].trim().equals("&&")) {
 
-                this.analisadorSemantico.addValor("&&", linhaS);
+                this.analisadorSemantico.addValor("&&", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedureEqualExpr();
                 this.procedureLogicalAndExpr1();
@@ -2506,37 +2537,37 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'Identifier'
             if(atual[0].contains("Identificador_")){
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS);
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Identificador");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'Number'    
             } else if(atual[0].contains("Numero")) {
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS);
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'Literal'    
             } else if(atual[0].contains("Cadeia_de_Caracteres")) {
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS);
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'true'    
             } else if(atual[1].trim().equals("true")) {
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS);
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'false'    
             } else if(atual[1].trim().equals("false")) {
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS);
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '('    
             } else if(atual[1].trim().equals("(")) {
 
-                this.analisadorSemantico.addValor("(", linhaS);
+                this.analisadorSemantico.addValor("(", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedureExpr();
                 if(this.idTokenAtual < this.tokens.getSize()) {
@@ -2546,7 +2577,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh ')'
                     if(atual2[1].trim().equals(")")) {
 
-                        this.analisadorSemantico.addValor(")", linhaS2);
+                        this.analisadorSemantico.addValor(")", linhaS, "Op");
                         this.idTokenAtual++;
                     } else {
 
@@ -2588,13 +2619,13 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '=='
             if(atual[1].trim().equals("==")){
 
-                this.analisadorSemantico.addValor("==", linhaS);
+                this.analisadorSemantico.addValor("==", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual é '!='    
             } else if(atual[1].trim().equals("!=")){
 
-                this.analisadorSemantico.addValor("!=", linhaS);
+                this.analisadorSemantico.addValor("!=", linhaS, "Op");
                 this.idTokenAtual++;
             } else{
 
@@ -2623,25 +2654,25 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '<'
             if(atual[1].trim().equals("<")){
 
-                this.analisadorSemantico.addValor("<", linhaS);
+                this.analisadorSemantico.addValor("<", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '>'    
             } else if(atual[1].trim().equals(">")){
 
-                this.analisadorSemantico.addValor(">", linhaS);
+                this.analisadorSemantico.addValor(">", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '<='    
             } else if(atual[1].trim().equals("<=")){
 
-                this.analisadorSemantico.addValor("<=", linhaS);
+                this.analisadorSemantico.addValor("<=", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '>='    
             } else if(atual[1].trim().equals(">=")){
 
-                this.analisadorSemantico.addValor(">=", linhaS);
+                this.analisadorSemantico.addValor(">=", linhaS, "Op");
                 this.idTokenAtual++;
             } else {
 
@@ -2670,13 +2701,13 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '+'
             if(atual[1].trim().equals("+")){
 
-                this.analisadorSemantico.addValor("+", linhaS);
+                this.analisadorSemantico.addValor("+", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '-'    
             } else if(atual[1].trim().equals("-")){
 
-                this.analisadorSemantico.addValor("-", linhaS);
+                this.analisadorSemantico.addValor("-", linhaS, "Op");
                 this.idTokenAtual++;            
             } else{
 
@@ -2705,13 +2736,13 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '*'
             if(atual[1].trim().equals("*")){
 
-                this.analisadorSemantico.addValor("*", linhaS);
+                this.analisadorSemantico.addValor("*", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '/'
             } else if(atual[1].trim().equals("/")){
 
-                this.analisadorSemantico.addValor("/", linhaS);
+                this.analisadorSemantico.addValor("/", linhaS, "Op");
                 this.idTokenAtual++;        
             } else{
 
@@ -2741,19 +2772,19 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh '++'
             if(atual[1].trim().equals("++")){
 
-                this.analisadorSemantico.addValor("++", linhaS);
+                this.analisadorSemantico.addValor("++", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '--'    
             } else if(atual[1].trim().equals("--")){
 
-                this.analisadorSemantico.addValor("--", linhaS);
+                this.analisadorSemantico.addValor("--", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh '!'    
             } else if(atual[1].trim().equals("!")){
 
-                this.analisadorSemantico.addValor("!", linhaS);
+                this.analisadorSemantico.addValor("!", linhaS, "Op");
                 this.idTokenAtual++;
             } else {
 
@@ -2782,19 +2813,19 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual é '++'
             if(atual[1].trim().equals("++")){
 
-                this.analisadorSemantico.addValor("++", linhaS);
+                this.analisadorSemantico.addValor("++", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual é '--'    
             } else if(atual[1].trim().equals("--")){
 
-                this.analisadorSemantico.addValor("--", linhaS);
+                this.analisadorSemantico.addValor("--", linhaS, "Op");
                 this.idTokenAtual++;
 
             // Verifica se o token atual é '['    
             } else if(atual[1].trim().equals("[")){
 
-                this.analisadorSemantico.addValor("[", linhaS);
+                this.analisadorSemantico.addValor("[", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedureExpr();
                 if(this.idTokenAtual < this.tokens.getSize()) {
@@ -2803,7 +2834,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual é ']'
                     if(atual2[1].trim().equals("]")){
 
-                        this.analisadorSemantico.addValor("]", linhaS);
+                        this.analisadorSemantico.addValor("]", atual2[2].replaceAll(">", " ").trim(), "Op");
                         this.idTokenAtual++;
                     } else {
 
@@ -2822,6 +2853,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual é '('      
             } else if(atual[1].trim().equals("(")){
 
+                this.analisadorSemantico.addValor("(", linhaS, "Op");
                 this.idTokenAtual++;
                 this.procedurePostfixOplf();  
 
@@ -2835,7 +2867,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual é um 'Identifier'
                     if(atual2[0].contains("Identificador_")){
 
-                        this.analisadorSemantico.atribuicao3(atual2[1].trim());
+                        this.analisadorSemantico.atribuicaoStruct(atual2[1].trim(), linhaS);
                         this.idTokenAtual++;
                     } else {
 
@@ -2876,6 +2908,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual é ')'
             if(atual[1].trim().equals(")")){
 
+                this.analisadorSemantico.addValor(")", atual[2].replaceAll(">", " ").trim(), "Op");
                 this.idTokenAtual++; 
 
             // Verifica se o token atual eh primeiro de <ArgumentList>
@@ -2892,6 +2925,7 @@ public class ControllerAnalisadorSintatico {
                     // Verifica se o token atual eh ')'
                     if(atual2[1].trim().equals(")")){
 
+                        this.analisadorSemantico.addValor(")", atual2[2].replaceAll(">", " ").trim(), "Op");
                         this.idTokenAtual++;
                     } else{
 
@@ -2941,6 +2975,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh ','
             if(atual[0].contains("Delimitador") && atual.length == 4) {
 
+                this.analisadorSemantico.addValor(",", atual[2].replaceAll(">", " ").trim(), "op");
                 this.idTokenAtual++;
                 this.procedureAssignExpr();
                 this.procedureArgumentList1();
@@ -3070,6 +3105,46 @@ public class ControllerAnalisadorSintatico {
             String linha = atual[2].replaceAll(">", " ");
             return Integer.parseInt(linha.trim());
         }        
+    }
+    
+    private void getConteudoFuncao(int idTokenInicio, int idTokenFim) {
+        
+        String conteudo = "";
+        boolean temReturn = false;
+        int tokenAtual = idTokenInicio;
+        
+        while(tokenAtual < idTokenFim) {
+            
+            String[] atual = this.tokens.getUnicToken(tokenAtual).split(",");
+            if(atual[1].trim().equals("return")) {
+                temReturn = true;
+            }             
+            conteudo += atual[1].trim();
+            tokenAtual++;
+        }
+        
+        this.analisadorSemantico.addConteudoFuncao(conteudo, temReturn);
+    }
+    
+    private void getConteudoProcedure(int idTokenInicio, int idTokenFim) {
+        
+        String conteudo = "";
+        boolean temReturn = false;
+        String linhaRetorno = "";
+        int tokenAtual = idTokenInicio;
+                
+        while(tokenAtual < idTokenFim) {
+            
+            String[] atual = this.tokens.getUnicToken(tokenAtual).split(",");            
+            if(atual[1].trim().equals("return")) {
+                temReturn = true;
+                linhaRetorno = atual[2].replaceAll(">", " ").trim();
+            }
+            conteudo += atual[1].trim();
+            tokenAtual++;
+        }
+        
+        this.analisadorSemantico.addConteudoProcedure(conteudo, temReturn, linhaRetorno);
     }
     
 }
