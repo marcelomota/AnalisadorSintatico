@@ -1,20 +1,8 @@
-const { int a; }
+function int f() {   
+    
+    var {int x;}
 
-procedure b () {
-
-    var { int x; }
-
-}
-
-procedure a () {
-
-    var { int x; }
+    x = 2;
 
     return x;
-}
-
-function int a () {
-
-    var { int x; }
-
 }

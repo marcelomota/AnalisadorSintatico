@@ -1,5 +1,6 @@
 package models;
 
+import models.nos.NoEscopo;
 import java.util.ArrayList;
 
 public class PilhaEscopo {

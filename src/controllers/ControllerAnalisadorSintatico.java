@@ -1,6 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
 import models.Token;
+import models.nos.NoRetorno;
 
 public class ControllerAnalisadorSintatico {
           
@@ -196,13 +198,13 @@ public class ControllerAnalisadorSintatico {
                 
                 this.procedureParameterList();
                 this.analisadorSemantico.removerContexto();
+                this.analisadorSemantico.declararParametrosFuncao();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(","); 
                     // Verifica se o token atual eh ')'
                     if(atual2[1].trim().equals(")")) {
-
-                        this.analisadorSemantico.removerContexto();
+                                                
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -264,6 +266,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh ')'
             } else if(atual[1].trim().equals(")")) {
 
+                this.analisadorSemantico.removerContexto(); // ')' '{'
                 this.idTokenAtual++;
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -419,12 +422,13 @@ public class ControllerAnalisadorSintatico {
                 this.analisadorSemantico.addContexto("procedure");
                 this.procedureParameterList();
                 this.analisadorSemantico.removerContexto();
+                this.analisadorSemantico.declararParametrosProcedure();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");        
                     // Verifica se o token atual eh ')'
                     if(atual2[1].trim().equals(")")) {
-
+                        
                         this.idTokenAtual++;
                         if(this.idTokenAtual < this.tokens.getSize()) {
 
@@ -1991,18 +1995,22 @@ public class ControllerAnalisadorSintatico {
     
         if(this.idTokenAtual < this.tokens.getSize()) {
             
+            int idTokenInicio = 0;
+            int idTokenFim = 0;
             String[] atual = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
             // Verifica se o token atual eh 'return'
             if(atual[1].trim().equals("return")) {
-
+                
                 this.idTokenAtual++;
+                idTokenInicio = this.idTokenAtual;
                 this.procedureExpr();
                 if(this.idTokenAtual < this.tokens.getSize()) {
 
                     String[] atual2 = this.tokens.getUnicToken(this.idTokenAtual).split(",");  
                     // Verifica se o token atual eh ';'
                     if(atual2[1].trim().equals(";")) {
-
+                        idTokenFim = this.idTokenAtual;
+                        this.addRetornoFuncao(idTokenInicio, idTokenFim, atual[2].replaceAll(">", " ").trim());
                         this.idTokenAtual++;
                     } else {
 
@@ -2543,7 +2551,7 @@ public class ControllerAnalisadorSintatico {
             // Verifica se o token atual eh 'Number'    
             } else if(atual[0].contains("Numero")) {
 
-                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Op");
+                this.analisadorSemantico.addValor(atual[1].trim(), linhaS, "Numero");
                 this.idTokenAtual++;
 
             // Verifica se o token atual eh 'Literal'    
@@ -3112,13 +3120,13 @@ public class ControllerAnalisadorSintatico {
         String conteudo = "";
         boolean temReturn = false;
         int tokenAtual = idTokenInicio;
-        
+                
         while(tokenAtual < idTokenFim) {
             
             String[] atual = this.tokens.getUnicToken(tokenAtual).split(",");
             if(atual[1].trim().equals("return")) {
                 temReturn = true;
-            }             
+            }            
             conteudo += atual[1].trim();
             tokenAtual++;
         }
@@ -3145,6 +3153,21 @@ public class ControllerAnalisadorSintatico {
         }
         
         this.analisadorSemantico.addConteudoProcedure(conteudo, temReturn, linhaRetorno);
+    }
+    
+    public void addRetornoFuncao(int idTokenInicio, int idTokenFim, String linha) {
+        
+        ArrayList<NoRetorno> retorno = new ArrayList();        
+        int tokenAtual = idTokenInicio;
+                
+        while(tokenAtual < idTokenFim) {
+            
+            String[] atual = this.tokens.getUnicToken(tokenAtual).split(",");                      
+            retorno.add(new NoRetorno(atual[0].replaceAll("<", " ").trim(), atual[1].trim()));
+            tokenAtual++;
+        }
+        
+        this.analisadorSemantico.addRetornoFuncao(retorno, linha);
     }
     
 }

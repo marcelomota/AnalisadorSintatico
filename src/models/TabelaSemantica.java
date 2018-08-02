@@ -1,5 +1,7 @@
 package models;
 
+import models.nos.NoSemantico;
+import models.nos.NoParametro;
 import java.util.ArrayList;
 
 public class TabelaSemantica {
@@ -70,29 +72,24 @@ public class TabelaSemantica {
     
     public boolean verificarNomeVar(String nome, String palavraReservadaEscopo, String identificadorEscopo) {        
         for (NoSemantico no : this.tabelaSemantica) {            
-            if(no.getDeclaracao().equals("var")) {                
+            if(no.getDeclaracao().equals("var") || no.getDeclaracao().equals("parametro")) {                
                 if(no.getPalavraReservadaEscopo().equals(palavraReservadaEscopo) && no.getIdentificadorEscopo().equals(identificadorEscopo)) {
-                    if(no.getNome().equals(nome)) {                        
-                        boolean trava = true;
+                    if(no.getNome().equals(nome)) {    
                         if(palavraReservadaEscopo.equals("function")) {                                                
                             for (NoSemantico f : this.funcoesPendentes) {                            
                                 if(f.getNome().equals(identificadorEscopo)) {                                   
-                                    trava = false;
+                                    return false;
                                 }                             
-                            }
+                            }                            
                         } else if(palavraReservadaEscopo.equals("procedure")) {
-
                             for (NoSemantico p : this.proceduresPendentes) {
-
                                 if(p.getNome().equals(identificadorEscopo)) {
-
-                                    trava = false;
+                                    return false;
                                 }                             
                             }
-                        } 
-                        if(trava)
-                            return true; 
-                    }   
+                        }
+                        return true; 
+                    }  
                 }                
             }
         }
@@ -184,26 +181,22 @@ public class TabelaSemantica {
     }
     
     public int verificarDeclaracao(String nome, String palavraReservadaEscopo, String identificadorEscopo) {
-        for(NoSemantico no : this.tabelaSemantica) {
-            
+        for(NoSemantico no : this.tabelaSemantica) {            
             if(no.getPalavraReservadaEscopo().equals(palavraReservadaEscopo) && no.getIdentificadorEscopo().equals(identificadorEscopo)) {
                 if(no.getNome().equals(nome)) {
                     return no.getId();
-                }
+                } 
             }            
         }
-        if(!palavraReservadaEscopo.equals("Global")) {
-            
-            for(NoSemantico no : this.tabelaSemantica) {
-            
+        if(!palavraReservadaEscopo.equals("Global")) {            
+            for(NoSemantico no : this.tabelaSemantica) {            
                 if(no.getPalavraReservadaEscopo().equals("Global")) {
                     if(no.getNome().equals(nome)) {
                         return no.getId();
                     }
                 }            
             }
-        }
-        
+        }        
         return 0;
     }
     
@@ -377,6 +370,37 @@ public class TabelaSemantica {
 
     public ArrayList<NoSemantico> getProceduresPendentes() {
         return proceduresPendentes;
+    }
+    
+    public NoSemantico getNoIdentificador(String identificador, String identificadorEscopo) {
+        for(NoSemantico no : this.tabelaSemantica) {
+            if(no.getIdentificadorEscopo().equals(identificadorEscopo) && no.getNome().equals(identificador)) {
+                return no;
+            }
+        }
+        
+        for(NoSemantico no : this.tabelaSemantica) {
+            if(no.getIdentificadorEscopo().equals("Global") && no.getNome().equals(identificador)) {
+                return no;
+            }
+        }
+        
+        return null;
+    }
+    
+    public void removeLastNo() {
+        this.tabelaSemantica.remove(this.getLastIndex());
+    }
+    
+    public boolean isParametro(String nome, String palavraReservadaEscopo, String identificadorEscopo) {
+        for(NoSemantico no : this.tabelaSemantica) {
+            if(no.getDeclaracao().equals("parametro") && no.getPalavraReservadaEscopo().equals(palavraReservadaEscopo)) {
+                if(no.getIdentificadorEscopo().equals(identificadorEscopo) && no.getNome().equals(nome)) {
+                    return true;
+                }
+            }            
+        }
+        return false;
     }
 
     /**

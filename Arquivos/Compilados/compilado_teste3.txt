@@ -7,8 +7,4 @@ Não foram encontrados erros Léxicos!
 Não foram encontrados erros Sintáticos!
 
 --- ERROS SEMÂNTICOS ---
-Erro #20 - Constante 'a' não inicializada na linha 1.
-Erro #03 - Erro na linha 9, já existe uma declaração no escopo atual com o nome 'a'.
-Erro #27 - Erro na linha 13, retorno inesperado na procedure 'a'.
-Erro #08 - Erro na linha 16, já existe uma declaração no escopo atual com o nome 'a'.
-Erro #26 - Retorno não encontrado na função 'a' declarada na linha 16.
+Não foram encontrados erros Semânticos!

@@ -1,6 +1,7 @@
-package models;
+package models.nos;
 
 import java.util.ArrayList;
+import models.TabelaSemantica;
 
 public class NoSemantico {
 

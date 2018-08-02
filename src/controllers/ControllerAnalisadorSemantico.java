@@ -1,12 +1,13 @@
 package controllers;
 
 import java.util.ArrayList;
-import models.NoParametro;
-import models.NoSemantico;
+import models.nos.NoParametro;
+import models.nos.NoSemantico;
 import models.PilhaContexto;
 import models.PilhaEscopo;
 import models.TabelaSemantica;
 import models.Token;
+import models.nos.NoRetorno;
 
 public class ControllerAnalisadorSemantico {
     
@@ -144,6 +145,34 @@ public class ControllerAnalisadorSemantico {
         no.setPalavraReservadaEscopo(this.pilhaEscopo.getLastPalavraReservada());
         no.setIdentificadorEscopo(this.pilhaEscopo.getLastIdentificador());
         this.tabelaSemantica.addNo(no);
+    }
+    
+    public void declararParametrosFuncao() {
+        NoSemantico noS = this.tabelaSemantica.getLastFunction();
+        for(NoParametro noP : noS.getParametros()) {
+            NoSemantico no = new NoSemantico();
+            no.setDeclaracao("parametro");
+            no.setLinhaDeclaracao(noS.getLinhaDeclaracao());
+            no.setTipo(noP.getTipo());
+            no.setNome(noP.getNome());
+            no.setPalavraReservadaEscopo("function");
+            no.setIdentificadorEscopo(noS.getNome());
+            this.tabelaSemantica.addNo(no);
+        }
+    }
+    
+    public void declararParametrosProcedure() {
+        NoSemantico noS = this.tabelaSemantica.getLastProcedure();
+        for(NoParametro noP : noS.getParametros()) {
+            NoSemantico no = new NoSemantico();
+            no.setDeclaracao("parametro");
+            no.setLinhaDeclaracao(noS.getLinhaDeclaracao());
+            no.setTipo(noP.getTipo());
+            no.setNome(noP.getNome());
+            no.setPalavraReservadaEscopo("procedure");
+            no.setIdentificadorEscopo(noS.getNome());
+            this.tabelaSemantica.addNo(no);
+        }
     }
     
     /**
@@ -303,34 +332,40 @@ public class ControllerAnalisadorSemantico {
                
                 if(this.tabelaSemantica.verificarNomeVar(nome, this.pilhaEscopo.getLastPalavraReservada(), this.pilhaEscopo.getLastIdentificador())){
                     
-                    this.errosSemanticos += "Erro #12 - Erro na linha "+linha+", já existe uma variável declarada como '"+nome+"'.\n";
-                    no.setErro(true);
+                    if(this.tabelaSemantica.isParametro(nome, this.pilhaEscopo.getLastPalavraReservada(), this.pilhaEscopo.getLastIdentificador())) {
+                        this.errosSemanticos += "Erro #12 - Erro na linha "+linha+", já existe uma variável declarada como '"+nome+"' nos parametros.\n";                   
+                    } else {
+                        this.errosSemanticos += "Erro #13 - Erro na linha "+linha+", já existe uma variável declarada como '"+nome+"'.\n";                   
+                    }
+                    
+                    this.tabelaSemantica.removeLastNo();
                 } else if(this.pilhaEscopo.getLastPalavraReservada().equals("Global")) {
                     
                     if(this.tabelaSemantica.verificarNomeEscopoAtual(nome, this.pilhaEscopo.getLastPalavraReservada(), this.pilhaEscopo.getLastIdentificador())) {    
-                        this.errosSemanticos += "Erro #13 - Erro na linha "+linha+", já existe uma declaração no escopo atual com o nome '"+nome+"'.\n";
-                        no.setErro(true);
+                        this.errosSemanticos += "Erro #14 - Erro na linha "+linha+", já existe uma declaração no escopo atual com o nome '"+nome+"'.\n";
+                        this.tabelaSemantica.removeLastNo();
                     }    
-                }
-                
-                if(no.getNome().isEmpty()) {
-                    
-                    this.tabelaSemantica.addNome(nome);
                 } else {
                     
-                    this.declararVar(no.getTipo(), linha);
-                    this.tabelaSemantica.addNome(nome);
-                }                
+                    if(no.getNome().isEmpty()) {
+                    
+                        this.tabelaSemantica.addNome(nome);
+                    } else {
+
+                        this.declararVar(no.getTipo(), linha);
+                        this.tabelaSemantica.addNome(nome);
+                    } 
+                }         
             } else if(no.getDeclaracao().equals("const")) {
                 
                 if(this.tabelaSemantica.verificarNomeConst(nome)) {
                     
                     no.setErro(true);
-                    this.errosSemanticos += "Erro #14 - Erro na linha "+linha+", já existe uma constante declarada como '"+nome+"'.\n";
+                    this.errosSemanticos += "Erro #15 - Erro na linha "+linha+", já existe uma constante declarada como '"+nome+"'.\n";
                 } else if(this.tabelaSemantica.verificarNomeEscopoAtual(nome, this.pilhaEscopo.getLastPalavraReservada(), this.pilhaEscopo.getLastIdentificador())){
                     
                     no.setErro(true);
-                    this.errosSemanticos += "Erro #15 - Erro na linha "+linha+", já existe uma declaração no escopo atual com o nome '"+nome+"'.\n";
+                    this.errosSemanticos += "Erro #16 - Erro na linha "+linha+", já existe uma declaração no escopo atual com o nome '"+nome+"'.\n";
                 }
                 this.tabelaSemantica.addNome(nome);
             } else {
@@ -344,8 +379,7 @@ public class ControllerAnalisadorSemantico {
         
         NoSemantico no = this.tabelaSemantica.getLastNo();
         if(this.initializer) {
-            
-                        
+                                    
             if(no.getValor().isEmpty()) {
 
                 this.tabelaSemantica.addValor(valor, 1); 
@@ -357,7 +391,7 @@ public class ControllerAnalisadorSemantico {
                         
             if(no.getDeclaracao().equals("const")) {
                 
-                this.errosSemanticos += "Erro #16 - Erro na linha "+linha+", a constante '"+no.getNome()+"' não pode ter o valor alterado.\n";
+                this.errosSemanticos += "Erro #17 - Erro na linha "+linha+", a constante '"+no.getNome()+"' não pode ter o valor alterado.\n";
                 this.ignorarAtribuicao = true;
             } else {
                 
@@ -366,7 +400,7 @@ public class ControllerAnalisadorSemantico {
                     if(noF != null) {
                      
                         if(!no.getTipo().equals(noF.getTipo())) {
-                            this.errosSemanticos += "Erro #17 - Erro na linha "+linha+", o tipo de retorno da função '"+noF.getNome()+"' não corresponde com o tipo da variável '"+no.getNome()+"'.\n";
+                            this.errosSemanticos += "Erro #18 - Erro na linha "+linha+", o tipo de retorno da função '"+noF.getNome()+"' não corresponde com o tipo da variável '"+no.getNome()+"'.\n";
                         }
                     }                    
                 }
@@ -384,7 +418,7 @@ public class ControllerAnalisadorSemantico {
                 int id = this.tabelaSemantica.verificarDeclaracao(valor, this.pilhaEscopo.getLastPalavraReservada(), this.pilhaEscopo.getLastIdentificador()); 
                 if(id == 0) {
 
-                    this.errosSemanticos += "Erro #18 - Erro na linha "+linha+", o identificador '"+valor+"' não foi inicializado.\n";
+                    this.errosSemanticos += "Erro #19 - Erro na linha "+linha+", o identificador '"+valor+"' não foi declarado.\n";
                     this.initializer2 = false;
                 } else {
 
@@ -394,17 +428,17 @@ public class ControllerAnalisadorSemantico {
                     }
                     this.initializer2 = true;
                 }
-            } else if(classe.equals("Palavra_Reservada")) {
+            } else {
                 
                 // ...
             }
         }
     }
-    
+      
     public void atribuicaoStruct(String nome, String linha) {
         
         if(!this.tabelaSemantica.verificarDeclaracaoStruct(nome)) {
-            this.errosSemanticos += "Erro #19 - Erro na linha "+linha+", o identificador '"+nome+"' não foi inicializado.\n";
+            this.errosSemanticos += "Erro #20 - Erro na linha "+linha+", o identificador '"+nome+"' não foi inicializado.\n";
         } 
     }
     
@@ -417,7 +451,7 @@ public class ControllerAnalisadorSemantico {
         NoSemantico no = this.tabelaSemantica.getLastNo();
         if(no.getValor().isEmpty()) {
             
-            this.errosSemanticos += "Erro #20 - Constante '"+no.getNome()+"' não inicializada na linha "+linha+".\n";
+            this.errosSemanticos += "Erro #21 - Constante '"+no.getNome()+"' não inicializada na linha "+linha+".\n";
         }
     }
     
@@ -431,18 +465,15 @@ public class ControllerAnalisadorSemantico {
         this.pilhaEscopo.addEscopo(no.getDeclaracao(), no.getNome());      
     }
     
-    public void removerEscopo() {
-        
+    public void removerEscopo() {        
         this.pilhaEscopo.removerLast();
     }
     
-    public void addContexto(String contexto) {
-        
+    public void addContexto(String contexto) {        
         this.pilhaContexto.addContexto(contexto);
     }
     
-    public void removerContexto() {        
-        
+    public void removerContexto() {                
         this.pilhaContexto.removerLast();
     }
     
@@ -459,13 +490,13 @@ public class ControllerAnalisadorSemantico {
                                     
                     if(this.compararParametros(noAtual.getParametros(), no.getParametros())) {
                         
-                        this.errosSemanticos += "Erro #21 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma funcao declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
+                        this.errosSemanticos += "Erro #22 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma funcao declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
                     } else if(!noAtual.getTipo().equals(no.getTipo())) {
                         
-                        this.errosSemanticos += "Erro #22 - Erro na linha "+no.getLinhaDeclaracao()+", os tipo de retorno da função não corresponde para uma sobrecarga.\n";
+                        this.errosSemanticos += "Erro #23 - Erro na linha "+no.getLinhaDeclaracao()+", os tipo de retorno da função não corresponde para uma sobrecarga.\n";
                     } else if(!noAtual.getValor().equals(no.getValor())) {
                         
-                        this.errosSemanticos += "Erro #23 - Erro na linha "+no.getLinhaDeclaracao()+", não é permitido a sobrescrita de funções.\n";
+                        this.errosSemanticos += "Erro #24 - Erro na linha "+no.getLinhaDeclaracao()+", não é permitido a sobrescrita de funções.\n";
                     }
                 }                
             }
@@ -477,10 +508,10 @@ public class ControllerAnalisadorSemantico {
                 NoSemantico noAtual = this.tabelaSemantica.getNo(no.getIdSobrecarga());
                 if(this.compararParametros(noAtual.getParametros(), no.getParametros())) {
                     
-                    this.errosSemanticos += "Erro #24 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma procedure declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
+                    this.errosSemanticos += "Erro #25 - Erro na linha "+no.getLinhaDeclaracao()+", já existe uma procedure declarada como '"+no.getNome()+"' e esta não é uma sobrecarga.\n";
                 } else if(!noAtual.getValor().equals(no.getValor())) {
 
-                    this.errosSemanticos += "Erro #25 - Erro na linha "+no.getLinhaDeclaracao()+", não é permitido a sobrescrita de procedures.\n";
+                    this.errosSemanticos += "Erro #26 - Erro na linha "+no.getLinhaDeclaracao()+", não é permitido a sobrescrita de procedures.\n";
                 }
             }
         ); 
@@ -507,12 +538,12 @@ public class ControllerAnalisadorSemantico {
         }       
         return false;
     }
-        
+              
     public void addConteudoFuncao(String conteudo, boolean temReturn) {
         
         NoSemantico no = this.tabelaSemantica.getLastFunction();
         if(!temReturn) {
-            this.errosSemanticos += "Erro #26 - Retorno não encontrado na função '"+no.getNome()+"' declarada na linha "+no.getLinhaDeclaracao()+".\n";
+            this.errosSemanticos += "Erro #27 - Retorno não encontrado na função '"+no.getNome()+"' declarada na linha "+no.getLinhaDeclaracao()+".\n";
         }
         no.setValor(conteudo);
     }
@@ -521,11 +552,74 @@ public class ControllerAnalisadorSemantico {
         
         NoSemantico no = this.tabelaSemantica.getLastProcedure();
         if(temReturn) {
-            this.errosSemanticos += "Erro #27 - Erro na linha "+linhaRetorno+", retorno inesperado na procedure '"+no.getNome()+"'.\n";
+            this.errosSemanticos += "Erro #28 - Erro na linha "+linhaRetorno+", retorno inesperado na procedure '"+no.getNome()+"'.\n";
         }
         this.tabelaSemantica.getLastNo().setValor(conteudo);
     }
     
+    public void addRetornoFuncao(ArrayList<NoRetorno> retorno, String linha) {
+        
+        NoSemantico noF = this.tabelaSemantica.getLastFunction();
+        if(!retorno.isEmpty()) {
+            
+            if(retorno.size() == 1 && retorno.get(0).getClasse().contains("Identificador")) {
+                NoSemantico no = this.tabelaSemantica.getNoIdentificador(retorno.get(0).getValor(), this.pilhaEscopo.getLastIdentificador());
+                if(no != null) {                
+                    switch(no.getDeclaracao()) {
+                        case "parametro": {
+                            if(!noF.getTipo().equals(no.getTipo())) {
+                                this.errosSemanticos += "Erro #29 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                            }
+                            break;
+                        }
+                        case "var": {
+                            if(!noF.getTipo().equals(no.getTipo())) {
+                                this.errosSemanticos += "Erro #30 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                            }
+                            break;
+                        }
+                        case "const": {
+                            if(!noF.getTipo().equals(no.getTipo())) {
+                                this.errosSemanticos += "Erro #31 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                            }
+                            break;
+                        }
+                        case "typedef": {
+                            if(!noF.getTipo().equals(no.getNome())) {
+                                this.errosSemanticos += "Erro #32 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                            }
+                            break;
+                        } 
+                        default: {
+                            this.errosSemanticos += "Erro #33 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                        }
+                    }
+                } else {
+                    this.errosSemanticos += "Erro #34 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                }   
+            } else {
+                
+                boolean erro = false;
+                for(NoRetorno noR : retorno) {
+                    
+                    //noR.getClasse().contains("Numero")
+                    if(noR.getClasse().contains("Identificador")) {
+                        NoSemantico noZ = this.tabelaSemantica.getNoIdentificador(noR.getValor(), noF.getNome());
+                        if(!noZ.getTipo().equals(noF.getTipo())){
+                            erro = true;
+                        }
+                    }
+                }
+                if(erro) {
+                    this.errosSemanticos += "Erro #35 - Erro na linha "+linha+", tipo de retorno inválido.\n";
+                } else if(false) {
+                    // IMPLEMENTAR O RESTNATE DAS VERIFICAÇÕES
+                }
+            }
+        }
+        // O Else eh erro sintatico.
+    }
+            
     public void setInitializer(boolean initializer) {
         this.initializer = initializer;
     }
